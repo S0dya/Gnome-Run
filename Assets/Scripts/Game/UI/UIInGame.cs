@@ -29,6 +29,10 @@ public class UIInGame : MonoBehaviour
     public void Init()
     {
         LevelManager.Default.OnLevelStarted += OnStartLevel;
+
+        LevelManager.Default.OnLevelFinishedVictory += OnFinishLevel;
+        LevelManager.Default.OnLevelFinishedGameover += OnFinishLevel;
+        LevelManager.Default.OnLevelRestarted += OnFinishLevel;
     }
 
     public void OnExitButton()
@@ -78,6 +82,15 @@ public class UIInGame : MonoBehaviour
         foreach (var element in inGameUIElements)
         {
             element.SetActive(true);
+        }
+
+        curLevelText.text = "Level " + LevelManager.Default.CurrentLevelIndex.ToString();
+    }
+    private void OnFinishLevel()
+    {
+        foreach (var element in inGameUIElements)
+        {
+            element.SetActive(false);
         }
     }
 }

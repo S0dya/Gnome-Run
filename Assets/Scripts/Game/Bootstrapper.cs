@@ -1,9 +1,11 @@
 using ButchersGames;
+using System.ComponentModel;
 using UnityEngine;
 using Zenject;
 
 public class Bootstrapper : MonoBehaviour
 {
+    [SerializeField] private PlayerAnimator playerAnimator;
     private DiContainer _container;
 
     [Inject]
@@ -18,5 +20,8 @@ public class Bootstrapper : MonoBehaviour
         _container.Resolve<GameManager>().Init();
         _container.Resolve<UIGameMain>().Init();
         _container.Resolve<UIInGame>().Init();
+        _container.Resolve<UIGameFinish>().Init();
+
+        playerAnimator.Init();
     }
 }

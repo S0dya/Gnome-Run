@@ -6,23 +6,39 @@ using ButchersGames;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private int maxMoneyAmountOnLevel;
-    [SerializeField] private int curMoneyAmount;
+    [SerializeField] private int currentMoneyAmount;
 
     [SerializeField] private int[] curMoneyGoals;
     [SerializeField] private int curGoalIndex;
 
+    const string MoneyAmount_PrefsKey = "Money Amount";
+    public static int MoneyAmount { get { return PlayerPrefs.GetInt(MoneyAmount_PrefsKey); } set { PlayerPrefs.SetInt(MoneyAmount_PrefsKey, value); } }
+
     private Player _player;
+    private UIGameMain _uiGameMain;
     private UIInGame _uiInGame;
+    private UIGameFinish _uiGameFinish;
+
 
     [Inject]
-    public void Construct(Player player, UIInGame uiInGame)
+    public void Construct(Player player, UIGameMain uiGameMain, UIInGame uiInGame, UIGameFinish uiGameFinish)
     {
         _player = player;
+        _uiGameMain = uiGameMain;
         _uiInGame = uiInGame;
+        _uiGameFinish = uiGameFinish;
     }
     public void Init()
     {
         LevelManager.Default.OnLevelStarted += OnStartLevel;
+
+        LevelManager.Default.OnLevelFinishedVictory += OnFinishLevelVictory;
+        LevelManager.Default.OnLevelFinishedGameover += OnFinishLevelGameover;
+    }
+
+    public void SetPlayerSpawnPosition(Vector3 position)
+    {
+        _player.transform.position = position;
     }
 
     public void ChangeMoneyAmount(int value)
@@ -31,50 +47,74 @@ public class GameManager : MonoBehaviour
 
         if (value > 0)
         {
-            curMoneyAmount = Math.Min(maxMoneyAmountOnLevel, curMoneyAmount + value);
+            currentMoneyAmount = Math.Min(maxMoneyAmountOnLevel, currentMoneyAmount + value);
 
-            if (curGoalIndex < curMoneyGoals.Length - 1 && curMoneyAmount >= curMoneyGoals[curGoalIndex + 1])
+            if (curGoalIndex < curMoneyGoals.Length - 1 && currentMoneyAmount >= curMoneyGoals[curGoalIndex + 1])
             {
                 curGoalIndex++;
                 setsNewStatus = true;
-                Debug.Log("New level");
             }
         }
         else
         {
-            curMoneyAmount = Math.Max(0, curMoneyAmount + value);
+            currentMoneyAmount = Math.Max(0, currentMoneyAmount + value);
 
-            if (curGoalIndex > 0 && curMoneyAmount < curMoneyGoals[curGoalIndex - 1])
+            if (curGoalIndex > 0 && currentMoneyAmount <= curMoneyGoals[curGoalIndex - 1])
             {
                 curGoalIndex--;
-                setsNewStatus = true;
-                Debug.Log("New level");
             }
         }
 
-        if (curMoneyAmount == 0)
+        if (currentMoneyAmount == 0)
         {
-            Debug.Log("GameOver");
+            LevelManager.Default.FinishLevelGameover();
         }
 
         _uiInGame.OnMoneyCollected(value);
-        _uiInGame.SetCurMoneyAmount(curMoneyAmount);
-        _uiInGame.SetProgressBar((float)curMoneyAmount / (float)maxMoneyAmountOnLevel);
+        _uiInGame.SetCurMoneyAmount(currentMoneyAmount);
+        _uiInGame.SetProgressBar((float)currentMoneyAmount / (float)maxMoneyAmountOnLevel);
         if (setsNewStatus) _uiInGame.SetNewStatus(curGoalIndex);
     }
 
     public bool FinishReached(int finishIndex)
     {
-        if (curGoalIndex == finishIndex)
+        bool finishReached = curGoalIndex == finishIndex;
+
+        if (finishReached)
         {
-            Debug.Log("Stop game");
+            if (curGoalIndex > 0)
+            {
+                currentMoneyAmount *= curGoalIndex + 1;
+                _uiGameFinish.SetProgressOnVictory(currentMoneyAmount);
+
+                LevelManager.Default.FinishLevelVictory();
+            }
+            else LevelManager.Default.FinishLevelGameover();
         }
 
-        return curGoalIndex == finishIndex;
+        return finishReached;
     }
+
+
+    public void OnReciveMoney()
+    {
+        MoneyAmount += currentMoneyAmount;
+
+        _uiGameMain.SetMoney();
+    }
+
 
     private void OnStartLevel()
     {
         _player.enabled = true;
+    }
+
+    private void OnFinishLevelVictory()
+    {
+        _player.enabled = false;
+    }
+    private void OnFinishLevelGameover()
+    {
+        _player.enabled = false;
     }
 }

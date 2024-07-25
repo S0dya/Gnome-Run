@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using System;
 using System.Linq;
+using Zenject;
 
 namespace ButchersGames
 {
@@ -31,6 +32,18 @@ namespace ButchersGames
 
         public event Action OnLevelStarted;
 
+        public event Action OnLevelFinishedVictory;
+        public event Action OnLevelFinishedGameover;
+
+        public event Action OnLevelRestarted;
+
+        private GameManager _gameManager;
+
+        [Inject]
+        public void Construct(GameManager gameManager)
+        {
+            _gameManager = gameManager;
+        }
 
         public void Init()
         {
@@ -60,14 +73,24 @@ namespace ButchersGames
         {
             OnLevelStarted?.Invoke();
         }
+        public void FinishLevelVictory()
+        {
+            OnLevelFinishedVictory?.Invoke();
+        }
+        public void FinishLevelGameover()
+        {
+            OnLevelFinishedGameover?.Invoke();
+        }
 
         public void RestartLevel()
         {
+            OnLevelRestarted?.Invoke();
             SelectLevel(CurrentLevelIndex, false);
         }
 
         public void NextLevel()
         {
+            OnLevelRestarted?.Invoke();
             if (!editorMode) CurrentLevel++;
             SelectLevel(CurrentLevelIndex + 1);
         }
@@ -133,6 +156,8 @@ namespace ButchersGames
 #else
                 Instantiate(level, transform);
 #endif
+
+                _gameManager.SetPlayerSpawnPosition(level.GetSpawnPosition());
             }
         }
 
