@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -16,7 +14,7 @@ public class PlayerTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var interactable = other.GetComponent<IInteractable>();
+        IInteractable interactable = other.GetComponent<IInteractable>();
         if (interactable != null)
         {
             _gameManager.ChangeMoneyAmount(interactable.GetInfluenceValue());
@@ -25,19 +23,21 @@ public class PlayerTrigger : MonoBehaviour
             return;
         }
 
-        var triggerableFinish = other.GetComponent<ITriggerableFinish>();
-        if (triggerableFinish != null)
+        switch(other.gameObject.tag)
         {
-            bool finishReached = _gameManager.FinishReached(triggerableFinish.GetFinishIndex());
+            case "TriggerableFinish":
+                ITriggerableFinish triggerableFinish = other.GetComponent<ITriggerableFinish>();
+                bool finishReached = _gameManager.FinishReached(triggerableFinish.GetFinishIndex());
 
-            if (finishReached) triggerableFinish.OnTriggered();
-            return;
-        }
+                if (finishReached) triggerableFinish.OnTriggered();
+                break;
+            case "TriggerableRotate":
 
-        var triggerable = other.GetComponent<ITriggerable>();
-        if (triggerable != null)
-        {
-            triggerable.OnTriggered();
+                break;
+            default:
+                var triggerable = other.GetComponent<ITriggerable>();
+                triggerable.OnTriggered();
+                break;
         }
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Zenject;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,21 +12,50 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int[] curMoneyGoals;
     [SerializeField] private int curGoalIndex;
 
+    private UIInGame _uiInGame;
 
+    [Inject]
+    public void Construct(UIInGame uiInGame)
+    {
+        _uiInGame = uiInGame;
+    }
 
     public void ChangeMoneyAmount(int value)
     {
-        curMoneyAmount = Math.Max(0, Math.Min(maxMoneyAmountOnLevel, curMoneyAmount + value));
+        bool setsNewStatus = false;
+
+        if (value > 0)
+        {
+            curMoneyAmount = Math.Min(maxMoneyAmountOnLevel, curMoneyAmount + value);
+
+            if (curGoalIndex < curMoneyGoals.Length - 1 && curMoneyAmount >= curMoneyGoals[curGoalIndex + 1])
+            {
+                curGoalIndex++;
+                setsNewStatus = true;
+                Debug.Log("New level");
+            }
+        }
+        else
+        {
+            curMoneyAmount = Math.Max(0, curMoneyAmount + value);
+
+            if (curGoalIndex > 0 && curMoneyAmount < curMoneyGoals[curGoalIndex - 1])
+            {
+                curGoalIndex--;
+                setsNewStatus = true;
+                Debug.Log("New level");
+            }
+        }
 
         if (curMoneyAmount == 0)
         {
             Debug.Log("GameOver");
         }
-        else if (curMoneyAmount >= curMoneyGoals[curGoalIndex + 1])
-        {
-            curGoalIndex++;
-            Debug.Log("New level");
-        }
+
+        _uiInGame.OnMoneyCollected(value);
+        _uiInGame.SetCurMoneyAmount(curMoneyAmount);
+        _uiInGame.SetProgressBar((float)curMoneyAmount / (float)maxMoneyAmountOnLevel);
+        if (setsNewStatus) _uiInGame.SetNewStatus(curGoalIndex);
     }
 
     public bool FinishReached(int finishIndex)
