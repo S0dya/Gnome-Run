@@ -18,15 +18,17 @@ public class GameManager : MonoBehaviour
     private UIGameMain _uiGameMain;
     private UIInGame _uiInGame;
     private UIGameFinish _uiGameFinish;
+    private PlayerAnimator _playerAnimator;
 
 
     [Inject]
-    public void Construct(Player player, UIGameMain uiGameMain, UIInGame uiInGame, UIGameFinish uiGameFinish)
+    public void Construct(Player player, UIGameMain uiGameMain, UIInGame uiInGame, UIGameFinish uiGameFinish, PlayerAnimator playerAnimator)
     {
         _player = player;
         _uiGameMain = uiGameMain;
         _uiInGame = uiInGame;
         _uiGameFinish = uiGameFinish;
+        _playerAnimator = playerAnimator;
     }
     public void Init()
     {
@@ -52,6 +54,7 @@ public class GameManager : MonoBehaviour
             if (curGoalIndex < curMoneyGoals.Length - 1 && currentMoneyAmount >= curMoneyGoals[curGoalIndex + 1])
             {
                 curGoalIndex++;
+                _playerAnimator.SetStatus(curGoalIndex);
                 setsNewStatus = true;
             }
         }
@@ -62,6 +65,7 @@ public class GameManager : MonoBehaviour
             if (curGoalIndex > 0 && currentMoneyAmount <= curMoneyGoals[curGoalIndex - 1])
             {
                 curGoalIndex--;
+                _playerAnimator.SetStatus(curGoalIndex);
             }
         }
 

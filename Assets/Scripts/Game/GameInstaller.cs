@@ -8,6 +8,7 @@ public class GameInstaller : MonoInstaller
     [SerializeField] private UIInGame uiInGame;
     [SerializeField] private UIGameMain uiGameMain;
     [SerializeField] private UIGameFinish uiGameFinish;
+    [SerializeField] private PlayerAnimator playerAnimator;
 
     public override void InstallBindings()
     {
@@ -16,5 +17,6 @@ public class GameInstaller : MonoInstaller
         Container.Bind<UIGameMain>().FromInstance(uiGameMain).AsSingle().NonLazy();
         Container.Bind<UIInGame>().FromInstance(uiInGame).AsSingle().NonLazy();
         Container.Bind<UIGameFinish>().FromInstance(uiGameFinish).AsSingle().NonLazy();
+        Container.Bind<PlayerAnimator>().FromInstance(playerAnimator).AsSingle().NonLazy();
     }
 }

@@ -4,6 +4,9 @@ using Zenject;
 public class PlayerTrigger : MonoBehaviour
 {
 
+    [SerializeField] ParticleSystem GoodCollectEffect;
+    [SerializeField] ParticleSystem BadCollectEffect;
+
     private GameManager _gameManager;
 
     [Inject]
@@ -17,8 +20,13 @@ public class PlayerTrigger : MonoBehaviour
         IInteractable interactable = other.GetComponent<IInteractable>();
         if (interactable != null)
         {
-            _gameManager.ChangeMoneyAmount(interactable.GetInfluenceValue());
+            var influence = interactable.GetInfluenceValue();
+
+            _gameManager.ChangeMoneyAmount(influence);
             interactable.OnInteracted();
+
+            if (influence > 0) GoodCollectEffect.Play();
+            else BadCollectEffect.Play();
 
             return;
         }

@@ -5,7 +5,10 @@ using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour
 {
+    [SerializeField] private SkinnedMeshRenderer[] statusMeshes;
     [SerializeField] private Animator animator;
+
+    private int _lastStatus = 1;
 
     public void Init()
     {
@@ -15,6 +18,16 @@ public class PlayerAnimator : MonoBehaviour
         LevelManager.Default.OnLevelFinishedGameover += OnFinishLevelGameover;
         
         LevelManager.Default.OnLevelRestarted += OnRestartLevel;
+    }
+
+    public void SetStatus(int index)
+    {
+        index++;
+
+        statusMeshes[_lastStatus].enabled = false;
+        statusMeshes[index].enabled = true;
+
+        _lastStatus = index;
     }
 
     private void OnStartLevel()
