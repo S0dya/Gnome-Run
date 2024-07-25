@@ -79,6 +79,10 @@ public class UIInGame : MonoBehaviour
 
     private void OnStartLevel()
     {
+        SetCurLevelIndex(0);
+        SetCurMoneyAmount(0);
+        SetProgressBar(0);
+
         foreach (var element in inGameUIElements)
         {
             element.SetActive(true);

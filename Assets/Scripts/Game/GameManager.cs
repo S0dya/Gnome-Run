@@ -110,6 +110,9 @@ public class GameManager : MonoBehaviour
 
     private void OnStartLevel()
     {
+        currentMoneyAmount = 0;
+        curGoalIndex = 0;
+        
         _player.enabled = true;
     }
 
