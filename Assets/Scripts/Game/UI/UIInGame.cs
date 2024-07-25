@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using DG.Tweening;
+using ButchersGames;
 
 public class UIInGame : MonoBehaviour
 {
@@ -23,6 +24,12 @@ public class UIInGame : MonoBehaviour
     [SerializeField] private UIMoneyCollect BadMoneyCollect;
 
     private Color _curPlayerPregressBarColor;
+
+
+    public void Init()
+    {
+        LevelManager.Default.OnLevelStarted += OnStartLevel;
+    }
 
     public void OnExitButton()
     {
@@ -58,11 +65,19 @@ public class UIInGame : MonoBehaviour
     {
         if (value > 0)
         {
-            GoodMoneyCollect.AnimateCollect(value.ToString());
+            GoodMoneyCollect.AnimateCollect('+' + value.ToString());
         }
         else
         {
             BadMoneyCollect.AnimateCollect(value.ToString());
+        }
+    }
+
+    private void OnStartLevel()
+    {
+        foreach (var element in inGameUIElements)
+        {
+            element.SetActive(true);
         }
     }
 }

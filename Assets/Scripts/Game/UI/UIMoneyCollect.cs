@@ -29,6 +29,8 @@ public class UIMoneyCollect : MonoBehaviour
 
         rectTransform.localScale = InitialScale;
         rectTransform.anchoredPosition = _initialPosition;
+
+        text.text = valueText;
         canvasGroup.alpha = 1;
 
         _tweener = DOTween.Sequence()

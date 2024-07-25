@@ -35,10 +35,11 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (Math.Abs(_movementDirection) > 0.01f)
+        if (Math.Abs(_movementDirection) > 0.04f)
         {
             _movementDirection = Mathf.Lerp(_movementDirection, 0, movementLerpSensitivity * Time.deltaTime);
         }
+        else _movementDirection = 0;
 
         Vector3 newPosition = transform.position + new Vector3(_movementDirection, 0, 1) * movementSpeed * Time.deltaTime;
         newPosition.x = Mathf.Clamp(newPosition.x, -movementBoundsRange, movementBoundsRange);

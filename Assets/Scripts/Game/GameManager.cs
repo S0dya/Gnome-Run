@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Zenject;
+using ButchersGames;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,12 +11,18 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int[] curMoneyGoals;
     [SerializeField] private int curGoalIndex;
 
+    private Player _player;
     private UIInGame _uiInGame;
 
     [Inject]
-    public void Construct(UIInGame uiInGame)
+    public void Construct(Player player, UIInGame uiInGame)
     {
+        _player = player;
         _uiInGame = uiInGame;
+    }
+    public void Init()
+    {
+        LevelManager.Default.OnLevelStarted += OnStartLevel;
     }
 
     public void ChangeMoneyAmount(int value)
@@ -66,5 +71,10 @@ public class GameManager : MonoBehaviour
         }
 
         return curGoalIndex == finishIndex;
+    }
+
+    private void OnStartLevel()
+    {
+        _player.enabled = true;
     }
 }
