@@ -14,7 +14,7 @@ public class UILevelFinish : MonoBehaviour
 
     public void Open()
     {
-        canvasGroup.DOFade(1, 1).OnComplete(() =>
+        canvasGroup.DOFade(1, 0.25f).OnComplete(() =>
         {
             canvasGroup.blocksRaycasts = true;
         });
