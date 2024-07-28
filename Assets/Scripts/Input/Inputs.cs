@@ -28,9 +28,18 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
             ""id"": ""6132ea99-6211-4093-b92f-46a5311fd4f2"",
             ""actions"": [
                 {
-                    ""name"": ""Move"",
+                    ""name"": ""MobileMove"",
                     ""type"": ""Value"",
                     ""id"": ""f95bde58-a182-478b-ba5f-4b57f5096777"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PCMove"",
+                    ""type"": ""Value"",
+                    ""id"": ""a487d9cd-4af1-4b5f-8d72-19d7c2bb943f"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -45,7 +54,18 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""MobileMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ea7e8a2b-d62b-4240-8c75-330b824cf8fb"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PCMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -56,7 +76,8 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
 }");
         // InGame
         m_InGame = asset.FindActionMap("InGame", throwIfNotFound: true);
-        m_InGame_Move = m_InGame.FindAction("Move", throwIfNotFound: true);
+        m_InGame_MobileMove = m_InGame.FindAction("MobileMove", throwIfNotFound: true);
+        m_InGame_PCMove = m_InGame.FindAction("PCMove", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -118,12 +139,14 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
     // InGame
     private readonly InputActionMap m_InGame;
     private List<IInGameActions> m_InGameActionsCallbackInterfaces = new List<IInGameActions>();
-    private readonly InputAction m_InGame_Move;
+    private readonly InputAction m_InGame_MobileMove;
+    private readonly InputAction m_InGame_PCMove;
     public struct InGameActions
     {
         private @Inputs m_Wrapper;
         public InGameActions(@Inputs wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Move => m_Wrapper.m_InGame_Move;
+        public InputAction @MobileMove => m_Wrapper.m_InGame_MobileMove;
+        public InputAction @PCMove => m_Wrapper.m_InGame_PCMove;
         public InputActionMap Get() { return m_Wrapper.m_InGame; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -133,16 +156,22 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_InGameActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_InGameActionsCallbackInterfaces.Add(instance);
-            @Move.started += instance.OnMove;
-            @Move.performed += instance.OnMove;
-            @Move.canceled += instance.OnMove;
+            @MobileMove.started += instance.OnMobileMove;
+            @MobileMove.performed += instance.OnMobileMove;
+            @MobileMove.canceled += instance.OnMobileMove;
+            @PCMove.started += instance.OnPCMove;
+            @PCMove.performed += instance.OnPCMove;
+            @PCMove.canceled += instance.OnPCMove;
         }
 
         private void UnregisterCallbacks(IInGameActions instance)
         {
-            @Move.started -= instance.OnMove;
-            @Move.performed -= instance.OnMove;
-            @Move.canceled -= instance.OnMove;
+            @MobileMove.started -= instance.OnMobileMove;
+            @MobileMove.performed -= instance.OnMobileMove;
+            @MobileMove.canceled -= instance.OnMobileMove;
+            @PCMove.started -= instance.OnPCMove;
+            @PCMove.performed -= instance.OnPCMove;
+            @PCMove.canceled -= instance.OnPCMove;
         }
 
         public void RemoveCallbacks(IInGameActions instance)
@@ -162,6 +191,7 @@ public partial class @Inputs: IInputActionCollection2, IDisposable
     public InGameActions @InGame => new InGameActions(this);
     public interface IInGameActions
     {
-        void OnMove(InputAction.CallbackContext context);
+        void OnMobileMove(InputAction.CallbackContext context);
+        void OnPCMove(InputAction.CallbackContext context);
     }
 }

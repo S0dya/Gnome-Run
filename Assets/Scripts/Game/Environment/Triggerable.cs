@@ -11,6 +11,5 @@ public class Triggerable : MonoBehaviour, ITriggerable
 
     public void OnTriggered()
     {
-        Debug.Log("Triggered");
     }
 }

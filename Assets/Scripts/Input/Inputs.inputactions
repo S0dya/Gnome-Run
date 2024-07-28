@@ -6,9 +6,18 @@
             "id": "6132ea99-6211-4093-b92f-46a5311fd4f2",
             "actions": [
                 {
-                    "name": "Move",
+                    "name": "MobileMove",
                     "type": "Value",
                     "id": "f95bde58-a182-478b-ba5f-4b57f5096777",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "PCMove",
+                    "type": "Value",
+                    "id": "a487d9cd-4af1-4b5f-8d72-19d7c2bb943f",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -23,7 +32,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "MobileMove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ea7e8a2b-d62b-4240-8c75-330b824cf8fb",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PCMove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
