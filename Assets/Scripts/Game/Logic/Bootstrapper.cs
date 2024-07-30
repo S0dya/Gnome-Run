@@ -3,7 +3,6 @@ using Zenject;
 
 public class Bootstrapper : MonoBehaviour
 {
-    [SerializeField] private PlayerAnimator playerAnimator;
     private DiContainer _container;
 
     [Inject]
@@ -14,12 +13,7 @@ public class Bootstrapper : MonoBehaviour
 
     private void Awake()
     {
-        LevelManager.Default.Init();
-        _container.Resolve<GameManager>().Init();
+        _container.Resolve<LevelManager>().Init();
         _container.Resolve<UIGameMain>().Init();
-        _container.Resolve<UIInGame>().Init();
-        _container.Resolve<UIGameFinish>().Init();
-
-        playerAnimator.Init();
     }
 }

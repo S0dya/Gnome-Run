@@ -3,19 +3,26 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Movement")]
     [SerializeField] private float movementSpeed = 4;
     [SerializeField] private float movementBoundsRange = 3;
     [SerializeField] private float movementInputSensitivity = 0.1f;
     [SerializeField] private float movementLerpSensitivity = 1;
 
+    [Header("Rotation")]
     [SerializeField] private float rotationSpeed = 5;
     [SerializeField] private float rotationBoundsRange = 30;
     [SerializeField] private float rotationLerpSensitivity = 10;
 
+    [Header("Other")]
     [SerializeField] private Transform CharacterTransform;
 
     private Inputs _inputs;
     private float _movementDirection;
+
+    //reusable
+    private Vector3 _curMovementPosition;
+    private Quaternion _curTargetRotation;
 
     private void OnEnable()
     {
@@ -39,6 +46,8 @@ public class PlayerMovement : MonoBehaviour
 #endif
 
         _inputs.Disable();
+
+        CharacterTransform.rotation = _curTargetRotation = Quaternion.identity;
     }
 
     private void Update()
@@ -49,13 +58,13 @@ public class PlayerMovement : MonoBehaviour
         }
         else _movementDirection = 0;
 
-        Vector3 newPosition = transform.position + new Vector3(_movementDirection, 0, 1) * movementSpeed * Time.deltaTime;
-        newPosition.x = Mathf.Clamp(newPosition.x, -movementBoundsRange, movementBoundsRange);
+        _curMovementPosition = transform.position + new Vector3(_movementDirection, 0, 1) * movementSpeed * Time.deltaTime;
+        _curMovementPosition.x = Mathf.Clamp(_curMovementPosition.x, -movementBoundsRange, movementBoundsRange);
 
-        transform.position = newPosition;
+        transform.position = _curMovementPosition;
 
-        Quaternion targetRotation = Quaternion.Euler(0, Mathf.Clamp(_movementDirection * rotationSpeed, -rotationBoundsRange, rotationBoundsRange), 0);
-        CharacterTransform.rotation = Quaternion.Lerp(CharacterTransform.rotation, targetRotation, rotationLerpSensitivity * Time.deltaTime);
+        _curTargetRotation = Quaternion.Euler(0, Mathf.Clamp(_movementDirection * rotationSpeed, -rotationBoundsRange, rotationBoundsRange), 0);
+        CharacterTransform.rotation = Quaternion.Lerp(CharacterTransform.rotation, _curTargetRotation, rotationLerpSensitivity * Time.deltaTime);
     }
 
     public void Move(Vector2 direction)

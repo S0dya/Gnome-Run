@@ -1,7 +1,10 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Zenject;
 
-public class UIGameFinish : MonoBehaviour
+public class UIGameFinish : SubjectMonoBehaviour
 {
     [SerializeField] private UILevelFinish victoryFinish;
     [SerializeField] private UILevelFinish gameoverFinish;
@@ -9,26 +12,42 @@ public class UIGameFinish : MonoBehaviour
     [SerializeField] private TextMeshProUGUI moneyAmountText;
     [SerializeField] private TextMeshProUGUI levelIndexText;
 
-    public void Init()
+    private LevelManager _levelManager;
+
+    [Inject]
+    public void Constuct(LevelManager levelManager)
     {
-        LevelManager.Default.OnLevelFinishedVictory += OnFinishLevelVictory;
-        LevelManager.Default.OnLevelFinishedGameover += OnFinishLevelGameover;
+        _levelManager = levelManager;
+    }
+
+    private void Awake()
+    {
+
+        Init(new Dictionary<EventEnum, Action>
+        {
+            { EventEnum.LevelFinishedVictory, OnFinishLevelVictory},
+            { EventEnum.LevelFinishedGameover, OnFinishLevelGameover},
+        });
     }
 
     public void SetProgressOnVictory(int moneyAmount)
     {
         moneyAmountText.text = moneyAmount.ToString();
-        levelIndexText.text = "Level " + LevelManager.Default.CurrentLevelIndex.ToString();
+        levelIndexText.text = "Level " + _levelManager.CurrentLevelIndex.ToString();
     }
 
     public void OnNextLevelButton()
     {
-        LevelManager.Default.NextLevel();
+        Observer.OnHandleEvent(EventEnum.LevelRestarted);
+
+        _levelManager.NextLevel();
+
         victoryFinish.Close();
     }
     public void OnRestartGameButton()
     {
-        LevelManager.Default.RestartLevel();
+        Observer.OnHandleEvent(EventEnum.LevelRestarted);
+
         gameoverFinish.Close();
     }
 

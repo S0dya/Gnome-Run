@@ -1,8 +1,10 @@
 using DG.Tweening;
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class UIGameMain : MonoBehaviour
+public class UIGameMain : SubjectMonoBehaviour
 {
     [SerializeField] private GameObject gameMenuUIElement;
     [SerializeField] private TextMeshProUGUI moneyText;
@@ -14,11 +16,19 @@ public class UIGameMain : MonoBehaviour
 
     Vector3 _tutorialInitialPos;
 
+
+    private void Awake()
+    {
+
+        Init(new Dictionary<EventEnum, Action>
+        {
+            { EventEnum.LevelStarted, OnStartLevel},
+            { EventEnum.LevelRestarted, OnRestartLevel},
+        });
+    }
+
     public void Init()
     {
-        LevelManager.Default.OnLevelStarted += OnStartLevel;
-        LevelManager.Default.OnLevelRestarted += OnRestartLevel;
-
         SetMoney();
 
         _tutorialInitialPos = tutorialTransform.anchoredPosition;
@@ -32,7 +42,7 @@ public class UIGameMain : MonoBehaviour
 
     public void OnPressedToStartButton()
     {
-        LevelManager.Default.StartLevel();
+        Observer.OnHandleEvent(EventEnum.LevelStarted);
     }
 
     private void OnStartLevel()
@@ -60,7 +70,6 @@ public class UIGameMain : MonoBehaviour
     }
     private void StopTutorial()
     {
-        if (_tutorialTweener != null && _tutorialTweener.IsPlaying())
-            _tutorialTweener.Kill();
+        _tutorialTweener?.Kill();
     }
 }

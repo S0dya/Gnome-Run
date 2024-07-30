@@ -3,7 +3,6 @@ using Zenject;
 
 public class PlayerTrigger : MonoBehaviour
 {
-
     [SerializeField] ParticleSystem GoodCollectEffect;
     [SerializeField] ParticleSystem BadCollectEffect;
 
@@ -17,35 +16,32 @@ public class PlayerTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        IInteractable interactable = other.GetComponent<IInteractable>();
-        if (interactable != null)
+        if (other.TryGetComponent<IInteractable>(out IInteractable iInteractable))
+            HandleInteractable(iInteractable, iInteractable.GetInfluenceValue());
+
+        else if (other.TryGetComponent<ITriggerable>(out ITriggerable iTriggerable))
+            HandleTriggerable(iTriggerable, iTriggerable.GetTriggerableType());
+    }
+
+    private void HandleInteractable(IInteractable iInteractable, int influence)
+    {
+        _gameManager.ChangeMoneyAmount(influence);
+        iInteractable.OnInteracted();
+
+        if (influence > 0) GoodCollectEffect.Play();
+        else BadCollectEffect.Play();
+    }
+
+    private void HandleTriggerable(ITriggerable iTriggerable, TriggerableTypeEnum triggerableType)
+    {
+        switch (triggerableType)
         {
-            var influence = interactable.GetInfluenceValue();
+            case TriggerableTypeEnum.Finish:
+                bool finishReached = _gameManager.FinishReached((iTriggerable as TriggerableFinish).GetFinishIndex());
 
-            _gameManager.ChangeMoneyAmount(influence);
-            interactable.OnInteracted();
-
-            if (influence > 0) GoodCollectEffect.Play();
-            else BadCollectEffect.Play();
-
-            return;
-        }
-
-        switch(other.gameObject.tag)
-        {
-            case "TriggerableFinish":
-                ITriggerableFinish triggerableFinish = other.GetComponent<ITriggerableFinish>();
-                bool finishReached = _gameManager.FinishReached(triggerableFinish.GetFinishIndex());
-
-                if (finishReached) triggerableFinish.OnTriggered();
+                if (finishReached) iTriggerable.OnTriggered();
                 break;
-            case "TriggerableRotate":
-
-                break;
-            default:
-                var triggerable = other.GetComponent<ITriggerable>();
-                triggerable.OnTriggered();
-                break;
+            default: iTriggerable.OnTriggered(); break;
         }
     }
 }

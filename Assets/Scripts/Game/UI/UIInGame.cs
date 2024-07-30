@@ -1,8 +1,11 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
+using System.Collections.Generic;
+using Zenject;
 
-public class UIInGame : MonoBehaviour
+public class UIInGame : SubjectMonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI moneyText;
 
@@ -21,16 +24,26 @@ public class UIInGame : MonoBehaviour
     [SerializeField] private UIMoneyCollect GoodMoneyCollect;
     [SerializeField] private UIMoneyCollect BadMoneyCollect;
 
+    private LevelManager _levelManager;
+    
     private Color _curPlayerPregressBarColor;
 
-
-    public void Init()
+    [Inject]
+    public void Construct(LevelManager levelManager)
     {
-        LevelManager.Default.OnLevelStarted += OnStartLevel;
+        _levelManager = levelManager;
+    }
 
-        LevelManager.Default.OnLevelFinishedVictory += OnFinishLevel;
-        LevelManager.Default.OnLevelFinishedGameover += OnFinishLevel;
-        LevelManager.Default.OnLevelRestarted += OnFinishLevel;
+    private void Awake()
+    {
+
+        Init(new Dictionary<EventEnum, Action>
+        {
+            { EventEnum.LevelStarted, OnStartLevel},
+            { EventEnum.LevelFinishedVictory, OnFinishLevel},
+            { EventEnum.LevelFinishedGameover, OnFinishLevel},
+            { EventEnum.LevelRestarted, OnFinishLevel},
+        });
     }
 
     public void OnExitButton()
@@ -86,7 +99,7 @@ public class UIInGame : MonoBehaviour
             element.SetActive(true);
         }
 
-        curLevelText.text = "Level " + LevelManager.Default.CurrentLevelIndex.ToString();
+        curLevelText.text = "Level " + _levelManager.CurrentLevelIndex.ToString();
     }
     private void OnFinishLevel()
     {

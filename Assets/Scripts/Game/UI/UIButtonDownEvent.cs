@@ -4,10 +4,7 @@ using UnityEngine.EventSystems;
 
 public class UIButtonDownEvent : MonoBehaviour, IPointerDownHandler
 {
-    [SerializeField] UnityEvent eventToInvoke;
+    [SerializeField] private UnityEvent eventToInvoke;
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        eventToInvoke.Invoke();
-    }
+    public void OnPointerDown(PointerEventData eventData) => eventToInvoke.Invoke();
 }

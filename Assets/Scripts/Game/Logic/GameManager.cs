@@ -1,8 +1,10 @@
 using UnityEngine;
 using System;
 using Zenject;
+using System.Collections.Generic;
+using static UnityEngine.Rendering.DebugUI;
 
-public class GameManager : MonoBehaviour
+public class GameManager : SubjectMonoBehaviour
 {
     [SerializeField] private int maxMoneyAmountOnLevel;
     [SerializeField] private int currentMoneyAmount;
@@ -13,39 +15,45 @@ public class GameManager : MonoBehaviour
     const string MoneyAmount_PrefsKey = "Money Amount";
     public static int MoneyAmount { get { return PlayerPrefs.GetInt(MoneyAmount_PrefsKey); } set { PlayerPrefs.SetInt(MoneyAmount_PrefsKey, value); } }
 
-    private PlayerMovement _playerMovement;
+    private Player _player;
     private UIGameMain _uiGameMain;
     private UIInGame _uiInGame;
     private UIGameFinish _uiGameFinish;
-    private PlayerAnimator _playerAnimator;
-
 
     [Inject]
-    public void Construct(PlayerMovement playerMovement, UIGameMain uiGameMain, UIInGame uiInGame, UIGameFinish uiGameFinish, PlayerAnimator playerAnimator)
+    public void Construct(Player player, UIGameMain uiGameMain, UIInGame uiInGame, UIGameFinish uiGameFinish)
     {
-        _playerMovement = playerMovement;
+        _player = player;
+
         _uiGameMain = uiGameMain;
         _uiInGame = uiInGame;
         _uiGameFinish = uiGameFinish;
-        _playerAnimator = playerAnimator;
     }
-    public void Init()
+    private void Awake()
     {
-        LevelManager.Default.OnLevelStarted += OnStartLevel;
 
-        LevelManager.Default.OnLevelFinishedVictory += OnFinishLevelVictory;
-        LevelManager.Default.OnLevelFinishedGameover += OnFinishLevelGameover;
+        Init(new Dictionary<EventEnum, Action>
+        {
+            { EventEnum.LevelStarted, OnStartLevel},
+        });
     }
 
-    public void SetPlayerSpawnPosition(Vector3 position)
-    {
-        _playerMovement.transform.position = position;
-    }
 
     public void ChangeMoneyAmount(int value)
     {
-        bool setsNewStatus = false;
+        HandleChangeMoney(value);
 
+        if (currentMoneyAmount == 0)
+        {
+            Observer.OnHandleEvent(EventEnum.LevelFinishedGameover); return;
+        }
+
+        _uiInGame.OnMoneyCollected(value);
+        _uiInGame.SetCurMoneyAmount(currentMoneyAmount);
+        _uiInGame.SetProgressBar((float)currentMoneyAmount / (float)maxMoneyAmountOnLevel);
+    }
+    private void HandleChangeMoney(int value)
+    {
         if (value > 0)
         {
             currentMoneyAmount = Math.Min(maxMoneyAmountOnLevel, currentMoneyAmount + value);
@@ -53,8 +61,9 @@ public class GameManager : MonoBehaviour
             if (curGoalIndex < curMoneyGoals.Length - 1 && currentMoneyAmount >= curMoneyGoals[curGoalIndex + 1])
             {
                 curGoalIndex++;
-                _playerAnimator.SetStatus(curGoalIndex);
-                setsNewStatus = true;
+
+                _player.SetStatus(curGoalIndex);
+                _uiInGame.SetNewStatus(curGoalIndex);
             }
         }
         else
@@ -64,19 +73,10 @@ public class GameManager : MonoBehaviour
             if (curGoalIndex > 0 && currentMoneyAmount <= curMoneyGoals[curGoalIndex - 1])
             {
                 curGoalIndex--;
-                _playerAnimator.SetStatus(curGoalIndex);
+
+                _player.SetStatus(curGoalIndex);
             }
         }
-
-        if (currentMoneyAmount == 0)
-        {
-            LevelManager.Default.FinishLevelGameover();
-        }
-
-        _uiInGame.OnMoneyCollected(value);
-        _uiInGame.SetCurMoneyAmount(currentMoneyAmount);
-        _uiInGame.SetProgressBar((float)currentMoneyAmount / (float)maxMoneyAmountOnLevel);
-        if (setsNewStatus) _uiInGame.SetNewStatus(curGoalIndex);
     }
 
     public bool FinishReached(int finishIndex)
@@ -90,9 +90,10 @@ public class GameManager : MonoBehaviour
                 currentMoneyAmount *= curGoalIndex + 1;
                 _uiGameFinish.SetProgressOnVictory(currentMoneyAmount);
 
-                LevelManager.Default.FinishLevelVictory();
+                Observer.OnHandleEvent(EventEnum.LevelFinishedVictory);
             }
-            else LevelManager.Default.FinishLevelGameover();
+            else 
+                Observer.OnHandleEvent(EventEnum.LevelFinishedGameover);
         }
 
         return finishReached;
@@ -111,16 +112,5 @@ public class GameManager : MonoBehaviour
     {
         currentMoneyAmount = 0;
         curGoalIndex = 0;
-
-        _playerMovement.enabled = true;
-    }
-
-    private void OnFinishLevelVictory()
-    {
-        _playerMovement.enabled = false;
-    }
-    private void OnFinishLevelGameover()
-    {
-        _playerMovement.enabled = false;
     }
 }
