@@ -13,11 +13,15 @@ public class PlayerAnimator : SubjectMonoBehaviour
     //hash
     private int _animatorIDIdle;
     private int _animatorIDWalk;
+    private int _animatorIDVictory;
+    private int _animatorIDLose;
 
     private void Awake()
     {
         _animatorIDIdle = Animator.StringToHash("Idle");
         _animatorIDWalk = Animator.StringToHash("Walk");
+        _animatorIDVictory = Animator.StringToHash("Victory");
+        _animatorIDLose = Animator.StringToHash("Lose");
 
         Init(new Dictionary<EventEnum, Action>
         {
@@ -44,9 +48,11 @@ public class PlayerAnimator : SubjectMonoBehaviour
     }
     private void OnFinishLevelVictory()
     {
+        animator.Play(_animatorIDVictory);
     }
     private void OnFinishLevelGameover()
     {
+        animator.Play(_animatorIDLose);
     }
     private void OnRestartLevel()
     {

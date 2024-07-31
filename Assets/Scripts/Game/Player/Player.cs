@@ -5,8 +5,16 @@ using UnityEngine;
 
 public class Player : SubjectMonoBehaviour
 {
+    [Header("Settings")]
+    [SerializeField] private float spinningSpeed = 12;
+
+    [Header("Other")]
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private PlayerAnimator playerAnimator;
+
+    [SerializeField] private Transform characterTransform;
+
+    private Coroutine _spinPlayerCoroutine;
 
     private void Awake()
     {
@@ -17,6 +25,17 @@ public class Player : SubjectMonoBehaviour
             { EventEnum.LevelFinishedVictory, OnFinishLevelVictory},
             { EventEnum.LevelFinishedGameover, OnFinishLevelGameover},
         });
+    }
+
+    private void Start()
+    {
+        SpinPlayer(180);
+    }
+
+    public void SpinPlayer(float targetRotation)
+    {
+        StopRoutine(_spinPlayerCoroutine);
+        _spinPlayerCoroutine = StartCoroutine(LerpRotateTransform(characterTransform, spinningSpeed, targetRotation));
     }
 
     public void SetPlayerSpawnPosition(Vector3 position)
@@ -30,7 +49,6 @@ public class Player : SubjectMonoBehaviour
 
         playerAnimator.SetStatus(statusIndex);
     }
-
 
     private void OnStartLevel()
     {
