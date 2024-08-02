@@ -38,6 +38,11 @@ public class GameManager : SubjectMonoBehaviour
         });
     }
 
+    public void AssignNewLevel(int maxMoney)
+    {
+        maxMoneyAmountOnLevel = maxMoney;
+    }
+
 
     public void ChangeMoneyAmount(int value)
     {

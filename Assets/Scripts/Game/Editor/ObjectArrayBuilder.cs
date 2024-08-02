@@ -30,10 +30,15 @@ namespace EditorLogics
             serializedObject.ApplyModifiedProperties();
         }
 
-        protected void CreateArray(GameObject[] prefabs, Vector3 direction, int n, bool randomize, Transform parent)
+        protected private void CreateArray(GameObject[] prefabs, Vector3 direction, int n, bool randomize, Transform parent)
         {
             int prefabsN = prefabs.Length;
 
+            var objectsInfos = GetObjectArrayInfo(prefabs, prefabsN, direction);
+            SpawnArrayObjects(objectsInfos, prefabsN, n, randomize, parent);
+        }
+        protected private ObjectArrayPrefabInfo[] GetObjectArrayInfo(GameObject[] prefabs, int prefabsN, Vector3 direction)
+        {
             var objectsInfos = new ObjectArrayPrefabInfo[prefabsN];
 
             for (int i = 0; i < prefabsN; i++)
@@ -48,6 +53,10 @@ namespace EditorLogics
                 objectsInfos[i] = new ObjectArrayPrefabInfo(prefabs[i], scaledDirecton);
             }
 
+            return objectsInfos;
+        }
+        protected private void SpawnArrayObjects(ObjectArrayPrefabInfo[] objectsInfos, int prefabsN, int n, bool randomize, Transform parent)
+        {
             for (int i = 0; i < n * prefabsN; i++)
             {
                 var curObjectInfo = objectsInfos[randomize ? Random.Range(0, prefabsN) : i % prefabsN];
@@ -59,6 +68,7 @@ namespace EditorLogics
                 gO.transform.SetPositionAndRotation(pos, rot);
             }
         }
+
 
         protected private void ClearObjects(Transform parentTransform)
         {
@@ -78,7 +88,7 @@ namespace EditorLogics
         {
             return Prefab.transform.position;
         }
-        public UnityEngine.Quaternion GetRotation()
+        public Quaternion GetRotation()
         {
             return Prefab.transform.rotation;
         }

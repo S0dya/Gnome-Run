@@ -27,11 +27,13 @@ public class LevelManager : SubjectMonoBehaviour
     private List<Level> _curLevels = new();
     private GameObject _curLocation;
 
+    private GameManager _gameManager;
     private Player _player;
 
     [Inject]
-    public void Construct(Player player)
+    public void Construct(GameManager gameManager, Player player)
     {
+        _gameManager = gameManager;
         _player = player;
     }
 
@@ -122,7 +124,8 @@ public class LevelManager : SubjectMonoBehaviour
 
             Instantiate(level, levelParent);
 
-            _player.SetPlayerSpawnPosition(level.GetSpawnPosition());
+            _gameManager.AssignNewLevel(level.MaxMoney);
+            _player.SetPlayerSpawnPosition(level.PlayerSpawnPoint.position);
         }
     }
 }
