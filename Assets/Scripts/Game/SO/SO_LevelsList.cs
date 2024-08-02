@@ -1,9 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Data/Lvls List")]
-public class SO_LevelsList : ScriptableObject
+namespace LevelsRelated 
 {
-    public bool randomizedLvls;
-    public List<Level> lvls;
+    [CreateAssetMenu(menuName = "Data/Levels List")]
+    public class SO_LocationAndLevels : ScriptableObject
+    {
+        public bool randomizedLevels;
+        public List<Level> levelsList;
+
+        public GameObject locationPrefab;
+    }
 }

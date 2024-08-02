@@ -10,17 +10,18 @@ namespace EditorLogics
         {
             base.OnInspectorGUI();
             serializedObject.Update();
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
             RandomInitializer randomInitializer = (RandomInitializer)target;
 
             if (GUILayout.Button("Clear Objects", GUILayout.Width(100), GUILayout.Height(20)))
             {
-                ClearObjects(randomInitializer);
+                ClearObjects(randomInitializer.transform);
             }
 
             if (GUILayout.Button("Create Objects"))
             {
-                ClearObjects(randomInitializer);
+                ClearObjects(randomInitializer.transform);
 
                 var size = CalculateMeshSize(randomInitializer.GetMesh());
 
@@ -32,10 +33,10 @@ namespace EditorLogics
         }
         private Vector3[] CalculateMeshSize(MeshFilter meshFilter)
         {
-            Bounds bounds = meshFilter.sharedMesh.bounds;
+            var bounds = meshFilter.sharedMesh.bounds;
 
-            Vector3 min = meshFilter.transform.TransformPoint(bounds.min);
-            Vector3 max = meshFilter.transform.TransformPoint(bounds.max);
+            var min = meshFilter.transform.TransformPoint(bounds.min);
+            var max = meshFilter.transform.TransformPoint(bounds.max);
 
             return new Vector3[2] { min, max };
         }
@@ -51,17 +52,18 @@ namespace EditorLogics
                         var pos = new Vector3(i + Random.value, yOffset, j + Random.value);
                         var rot = rotated ? Quaternion.Euler(0, Random.Range(0, 360), 0) : Quaternion.identity;
 
-                        Instantiate(objs[objs.Length == 1 ? 0 : Random.Range(0, objs.Length)], pos, rot, parent);
+                        var gO = (GameObject)PrefabUtility.InstantiatePrefab(objs[objs.Length == 1 ? 0 : Random.Range(0, objs.Length)], parent);
+                        gO.transform.SetPositionAndRotation(pos, rot);
                     }
                 }
             }
         }
 
-        private void ClearObjects(RandomInitializer randomInitializer)
+        private void ClearObjects(Transform parentTransform)
         {
-            while (randomInitializer.transform.childCount > 0)
-                foreach (Transform transform in randomInitializer.transform)
-                    DestroyImmediate(transform.gameObject);
+            while (parentTransform.childCount > 0)
+                foreach (Transform childTransform in parentTransform)
+                    DestroyImmediate(childTransform.gameObject);
         }
     }
 }

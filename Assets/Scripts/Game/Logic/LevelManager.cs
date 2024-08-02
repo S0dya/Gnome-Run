@@ -5,23 +5,27 @@ using System;
 using System.Linq;
 using Zenject;
 
+using LevelsRelated;
+
 public class LevelManager : SubjectMonoBehaviour
 {
-    const string CurrentLevel_PrefsKey = "Current Level";
-    const string CompleteLevelCount_PrefsKey = "Complete Lvl Count";
-    const string LastLevelIndex_PrefsKey = "Last Level Index";
-    const string CurrentAttempt_PrefsKey = "Current Attempt";
-
-    private int _currentLevel { get { return (CompleteLevelCount < _levels.Count ? CurrentLevelIndex : CompleteLevelCount) + 1; ; } set { PlayerPrefs.SetInt(CurrentLevel_PrefsKey, value); } }
-    private int CompleteLevelCount { get { return PlayerPrefs.GetInt(CompleteLevelCount_PrefsKey); } set { PlayerPrefs.SetInt(CompleteLevelCount_PrefsKey, value); } }
-    private int LastLevelIndex { get { return PlayerPrefs.GetInt(LastLevelIndex_PrefsKey); } set { PlayerPrefs.SetInt(LastLevelIndex_PrefsKey, value); } }
-    private int CurrentAttempt { get { return PlayerPrefs.GetInt(CurrentAttempt_PrefsKey); } set { PlayerPrefs.SetInt(CurrentAttempt_PrefsKey, value); } }
-
     public int CurrentLevelIndex { get; private set; }
 
-    [SerializeField] bool editorMode = false;
-    [SerializeField] SO_LevelsList levels;
-    private List<Level> _levels => levels.lvls;
+    [Header("Settings")]
+    [SerializeField] private SO_LocationAndLevels[] locationsAndLevels;
+
+    [Header("Other")]
+    [SerializeField] private Transform locationParent;
+    [SerializeField] private Transform levelParent;
+
+    private int _currentLevel { get { return (_completeLevelCount < _curLevels.Count ? CurrentLevelIndex : _completeLevelCount) + 1; ; } set { PlayerPrefs.SetInt(Settings.CurrentLevel_PrefsKey, value); } }
+    private int _completeLevelCount { get { return PlayerPrefs.GetInt(Settings.CompleteLevelCount_PrefsKey); } set { PlayerPrefs.SetInt(Settings.CompleteLevelCount_PrefsKey, value); } }
+    private int _lastLevelIndex { get { return PlayerPrefs.GetInt(Settings.LastLevelIndex_PrefsKey); } set { PlayerPrefs.SetInt(Settings.LastLevelIndex_PrefsKey, value); } }
+    private int _currentLocation { get { return PlayerPrefs.GetInt(Settings.CurrentLocation_PrefsKey); } set { PlayerPrefs.SetInt(Settings.CurrentLocation_PrefsKey, value); } }
+    private int _currentAttempt { get { return PlayerPrefs.GetInt(Settings.CurrentAttempt_PrefsKey); } set { PlayerPrefs.SetInt(Settings.CurrentAttempt_PrefsKey, value); } }
+
+    private List<Level> _curLevels = new();
+    private GameObject _curLocation;
 
     private Player _player;
 
@@ -43,21 +47,25 @@ public class LevelManager : SubjectMonoBehaviour
 
     public void Init()
     {
-#if !UNITY_EDITOR
-        editorMode = false;
-#endif
-        if (!editorMode) SelectLevel(LastLevelIndex);
-        if (LastLevelIndex != _currentLevel) CurrentAttempt = 0;
+        _currentLocation = 0;
+
+        _curLevels = locationsAndLevels[_currentLocation].levelsList;
+        _curLocation = locationsAndLevels[_currentLocation].locationPrefab;// change later
+
+        Instantiate(_curLocation, locationParent);
+
+        SelectLevel(_lastLevelIndex);
+        if (_lastLevelIndex != _currentLevel) _currentAttempt = 0;
     }
 
     private void OnDestroy()
     {
-        LastLevelIndex = CurrentLevelIndex;
+        _lastLevelIndex = CurrentLevelIndex;
     }
 
     private void OnApplicationQuit()
     {
-        LastLevelIndex = CurrentLevelIndex;
+        _lastLevelIndex = CurrentLevelIndex;
     }
 
 
@@ -68,7 +76,7 @@ public class LevelManager : SubjectMonoBehaviour
 
     public void NextLevel()
     {
-        if (!editorMode) _currentLevel++;
+        _currentLevel++;
         SelectLevel(CurrentLevelIndex + 1);
     }
 
@@ -77,12 +85,7 @@ public class LevelManager : SubjectMonoBehaviour
         if (indexCheck)
             levelIndex = GetCorrectedIndex(levelIndex);
 
-        if (_levels[levelIndex] == null)
-        {
-            Debug.Log("<color=red>There is no prefab attached!</color>"); return;
-        }
-
-        var level = _levels[levelIndex];
+        var level = _curLevels[levelIndex];
 
         if (level)
         {
@@ -95,55 +98,31 @@ public class LevelManager : SubjectMonoBehaviour
 
     private int GetCorrectedIndex(int levelIndex)
     {
-        if (editorMode)
-            return levelIndex > _levels.Count - 1 || levelIndex <= 0 ? 0 : levelIndex;
-        else
+        int levelId = _currentLevel;
+        if (levelId > _curLevels.Count - 1)
         {
-            int levelId = _currentLevel;
-            if (levelId > _levels.Count - 1)
+            if (locationsAndLevels[_currentLocation].randomizedLevels)
             {
-                if (levels.randomizedLvls)
-                {
-                    List<int> lvls = Enumerable.Range(0, levels.lvls.Count).ToList();
-                    lvls.RemoveAt(CurrentLevelIndex);
+                var levels = Enumerable.Range(0, locationsAndLevels[_currentLocation].levelsList.Count).ToList();
+                levels.RemoveAt(CurrentLevelIndex);
 
-                    return lvls[UnityEngine.Random.Range(0, lvls.Count)];
-                }
-                else 
-                    return levelIndex % levels.lvls.Count;
+                return levels[UnityEngine.Random.Range(0, levels.Count)];
             }
-            return levelId;
+            else 
+                return levelIndex % locationsAndLevels[_currentLocation].levelsList.Count;
         }
+        return levelId;
     }
 
     private void SelLevelParams(Level level)
     {
         if (level)
         {
-            ClearChilds();
-#if UNITY_EDITOR
-            if (Application.isPlaying)
-            {
-                Instantiate(level, transform);
-            }
-            else
-            {
-                PrefabUtility.InstantiatePrefab(level, transform);
-            }
-#else
-            Instantiate(level, transform);
-#endif
+            ClearChildren(levelParent);
+
+            Instantiate(level, levelParent);
 
             _player.SetPlayerSpawnPosition(level.GetSpawnPosition());
-        }
-    }
-
-    private void ClearChilds()
-    {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            GameObject destroyObject = transform.GetChild(i).gameObject;
-            DestroyImmediate(destroyObject);
         }
     }
 }

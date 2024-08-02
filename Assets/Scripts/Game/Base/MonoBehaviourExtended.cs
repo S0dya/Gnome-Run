@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MonoBehaviourExtended : MonoBehaviour
@@ -10,7 +9,14 @@ public class MonoBehaviourExtended : MonoBehaviour
         if (coroutine != null) StopCoroutine(coroutine);
     }
 
-
+    
+    protected void ClearChildren() => ClearChildren(transform);
+    protected void ClearChildren(Transform transformParent)
+    {
+        while (transformParent.childCount > 0)
+            foreach (Transform transformChild in transformParent)
+                DestroyImmediate(transformChild.gameObject);
+    }
 
     protected IEnumerator LerpRotateTransform(Transform transform, float speed, float targetRotation)
     {

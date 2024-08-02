@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8605004712801091526}
   - component: {fileID: 7784740327553224223}
   m_Layer: 0
-  m_Name: Initializer
+  m_Name: RandomInitializer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,8 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshFilter: {fileID: 0}
-  ObjectsToInstantiate:
-  - {fileID: 0}
+  ObjectsToInstantiate: []
   SpawnChance: 1
   Step: 0
+  YOffset: 1
   Rotated: 0

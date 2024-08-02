@@ -20,10 +20,11 @@ namespace EditorLogics
         private void OnDrawGizmosSelected()
         {
             MeshFilter meshFilter = GetMesh();
+
             if (meshFilter != null)
             {
-                Gizmos.color = Color.green;
-                Gizmos.DrawWireCube(transform.position, meshFilter.sharedMesh.bounds.size);
+                Gizmos.color = Color.blue;
+                Gizmos.DrawWireCube(meshFilter.transform.position, meshFilter.transform.TransformPoint(meshFilter.sharedMesh.bounds.size));
             }
         }
     }
