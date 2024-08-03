@@ -2,7 +2,6 @@ using UnityEngine;
 using System;
 using Zenject;
 using System.Collections.Generic;
-using static UnityEngine.Rendering.DebugUI;
 
 public class GameManager : SubjectMonoBehaviour
 {

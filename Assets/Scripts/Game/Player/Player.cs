@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,6 +23,7 @@ public class Player : SubjectMonoBehaviour
             { EventEnum.LevelStarted, OnStartLevel},
             { EventEnum.LevelFinishedVictory, OnFinishLevelVictory},
             { EventEnum.LevelFinishedGameover, OnFinishLevelGameover},
+            { EventEnum.LevelRestarted, OnRestartLevel},
         });
     }
 
@@ -55,11 +55,15 @@ public class Player : SubjectMonoBehaviour
         playerMovement.enabled = true;
     }
 
-    private void OnFinishLevelVictory()
+    private void OnFinishLevelVictory()//rewrite later
     {
         playerMovement.enabled = false;
     }
     private void OnFinishLevelGameover()
+    {
+        playerMovement.enabled = false;
+    }
+    private void OnRestartLevel()
     {
         playerMovement.enabled = false;
     }

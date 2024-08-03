@@ -11,18 +11,24 @@ public class UIInGame : SubjectMonoBehaviour
 
     [SerializeField] private GameObject[] inGameUIElements;
 
+    [Header("Head")]
     [SerializeField] private TextMeshProUGUI curLevelText;
     [SerializeField] private TextMeshProUGUI curMoneyText;
 
+    [Header("Progress")]
     [SerializeField] private TextMeshProUGUI playerProgressBarText;
     [SerializeField] private string[] playerProgressStatuses;
     [SerializeField] private Image playerProgressBarImage;
     [SerializeField] private Gradient playerProgressBarColor;
 
-    [SerializeField] private UITextPopUp playerStatusTestPopUp;
+    [Header("Pop up")]
+    [SerializeField] private UITextPopUp playerStatusTextPopUp;
 
     [SerializeField] private UIMoneyCollect GoodMoneyCollect;
     [SerializeField] private UIMoneyCollect BadMoneyCollect;
+
+    [Header("Other")]
+    [SerializeField] private GameObject PauseUIObj;
 
     private LevelManager _levelManager;
     
@@ -46,9 +52,22 @@ public class UIInGame : SubjectMonoBehaviour
         });
     }
 
-    public void OnExitButton()
+    //buttons
+    public void OnPauseButton()
     {
+        Time.timeScale = 0;
+        PauseUIObj.SetActive(true);
+    }
+    public void OnPauseResumeButton()
+    {
+        PauseUIObj.SetActive(false);
+        Time.timeScale = 1;
+    }
+    public void OnPauseLeaveButton()
+    {
+        Observer.OnHandleEvent(EventEnum.LevelRestarted);
 
+        OnPauseResumeButton();
     }
 
     public void SetCurLevelIndex(int value)
@@ -71,7 +90,7 @@ public class UIInGame : SubjectMonoBehaviour
 
     public void SetNewStatus(int index)
     {
-        playerStatusTestPopUp.AnimateNewStatus(_curPlayerPregressBarColor, playerProgressStatuses[index]);
+        playerStatusTextPopUp.AnimateNewStatus(_curPlayerPregressBarColor, playerProgressStatuses[index]);
 
         playerProgressBarText.text = playerProgressStatuses[index];
     }

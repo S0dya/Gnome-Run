@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using System.Collections.Generic;
 using LevelsRelated;
 
 namespace EditorLogics
@@ -105,12 +106,32 @@ namespace EditorLogics
                 }
             }
 
-            foreach (var iInteractable in levelGo.GetComponentsInChildren<IInteractable>())
+            List<float> interactablesZPositionsList = new();
+            foreach (var interactable in levelGo.GetComponentsInChildren<Interactable>())
             {
-                var influenceVal = iInteractable.GetInfluenceValue();
+                var influenceVal = interactable.GetInfluenceValue();
 
-                if (influenceVal > 0) level.MaxMoney += influenceVal;
+                if (influenceVal > 0)
+                {
+                    float curZPos = interactable.transform.position.z;
+
+                    if (ZPositionIsReachable(interactablesZPositionsList, curZPos))
+                    {
+                        level.MaxMoney += influenceVal;
+
+                        interactablesZPositionsList.Add(curZPos);
+                    }
+                }
             }
         }
+        private bool ZPositionIsReachable(List<float> listZPositions, float curZPos)
+        {
+            foreach (var listZPos in listZPositions)
+                if (Mathf.Abs(listZPos - curZPos) < 0.1f) 
+                    return false;
+
+            return true;
+        }
+
     }
 }
