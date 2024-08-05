@@ -11,9 +11,6 @@ public class GameManager : SubjectMonoBehaviour
     [SerializeField] private int[] curMoneyGoals;
     [SerializeField] private int curGoalIndex;
 
-    const string MoneyAmount_PrefsKey = "Money Amount";
-    public static int MoneyAmount { get { return PlayerPrefs.GetInt(MoneyAmount_PrefsKey); } set { PlayerPrefs.SetInt(MoneyAmount_PrefsKey, value); } }
-
     private Player _player;
     private UIGameMain _uiGameMain;
     private UIInGame _uiInGame;
@@ -106,7 +103,7 @@ public class GameManager : SubjectMonoBehaviour
 
     public void OnReciveMoney()
     {
-        MoneyAmount += currentMoneyAmount;
+        Settings.MoneyAmount += currentMoneyAmount;
 
         _uiGameMain.SetMoney();
     }

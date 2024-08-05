@@ -1,0 +1,117 @@
+using System.Linq;
+using UnityEngine;
+using YG;
+using Zenject;
+
+namespace Saving
+{
+    public class SaveManager : MonoBehaviour
+    {
+
+
+        //game
+        private const string MoneyAmount_Key = "Money Amount";
+
+        //level
+        private const string CurrentLevel_Key = "Current Level";
+        private const string CompleteLevelCount_Key = "Complete Lvl Count";
+        private const string LastLevelIndex_Key = "Last Level Index";
+        private const string CurrentLocation_Key = "Current Location Index";
+        private const string CurrentAttempt_Key = "Current Attempt";
+
+        //shop
+        private const string SetCharacterI_Key = "Set Character Index";
+        private const string ShopUnlockedCharacters_Key = "Shop Unlocked Characters";
+
+        private ISaveSystem _saveSystem;
+
+        private LevelManager _levelManager;
+
+        [Inject]
+        public void Construct(LevelManager levelManager)
+        {
+            _levelManager = levelManager;
+        }
+
+        public void Init()
+        {
+            if (YandexGame.SDKEnabled)
+            {
+                _saveSystem = new YandexSave();
+            }
+            else
+            {
+                _saveSystem = new JsonSave();
+            }
+
+            Load();
+        }
+        private void OnEnable()
+        {
+            if (YandexGame.SDKEnabled) YandexGame.GetDataEvent += Load;
+        }
+        private void OnDisable()
+        {
+            if (YandexGame.SDKEnabled) YandexGame.GetDataEvent -= Load;
+        }
+    
+        private void OnDestroy()
+        {
+            Save();
+        }
+        private void OnApplicationQuit()
+        {
+            Save();
+        }
+
+        public void Save()
+        {
+            _saveSystem.Save(GetGameData());
+        }
+        public void Load()
+        {
+            SetGameData(_saveSystem.Load());
+        }
+
+        private GameData GetGameData()
+        {
+            GameData gameData = new();
+
+            //game
+            gameData.IntDict.Add(MoneyAmount_Key, Settings.MoneyAmount);
+
+            //level
+            gameData.IntDict.Add(CurrentLevel_Key, Settings.CurrentLevel);
+            gameData.IntDict.Add(CompleteLevelCount_Key, Settings.CompleteLevelCount);
+            gameData.IntDict.Add(LastLevelIndex_Key, _levelManager.CurrentLevelIndex);
+            gameData.IntDict.Add(CurrentLocation_Key, Settings.CurrentLocation);
+            gameData.IntDict.Add(CurrentAttempt_Key, Settings.CurrentAttempt);
+
+            //shop
+            gameData.IntDict.Add(SetCharacterI_Key, Settings.SetCharacterI);
+            gameData.IntsDict.Add(ShopUnlockedCharacters_Key, Settings.ShopUnlockedCharacters.ToArray());
+            
+            return gameData;
+        }
+        private void SetGameData(GameData gameData)
+        {
+            if (gameData == null) return;
+
+            //game
+            gameData.IntDict.TryGetValue(MoneyAmount_Key, out Settings.MoneyAmount);
+
+            //level
+            gameData.IntDict.TryGetValue(CurrentLevel_Key, out Settings.CurrentLevel);
+            gameData.IntDict.TryGetValue(CompleteLevelCount_Key, out Settings.CompleteLevelCount);
+            gameData.IntDict.TryGetValue(LastLevelIndex_Key, out Settings.LastLevelIndex);
+            gameData.IntDict.TryGetValue(CurrentLocation_Key, out Settings.CurrentLocation);
+            gameData.IntDict.TryGetValue(CurrentAttempt_Key, out Settings.CurrentAttempt);
+
+            //shop
+            gameData.IntDict.TryGetValue(SetCharacterI_Key, out Settings.SetCharacterI);
+            if (gameData.IntsDict.TryGetValue(ShopUnlockedCharacters_Key, out int[] shopUnlockedCharactersArray))
+                Settings.ShopUnlockedCharacters = shopUnlockedCharactersArray.ToList();
+
+        }
+    }
+}

@@ -1,9 +1,21 @@
 
+using System.Collections.Generic;
+
 public static class Settings
 {
-    public const string CurrentLevel_PrefsKey = "Current Level";
-    public const string CompleteLevelCount_PrefsKey = "Complete Lvl Count";
-    public const string LastLevelIndex_PrefsKey = "Last Level Index";
-    public const string CurrentLocation_PrefsKey = "Current Location Index";
-    public const string CurrentAttempt_PrefsKey = "Current Attempt";
+    
+    //game
+    public static int MoneyAmount;
+
+    //level
+    public static int CurrentLevel;
+    public static int CompleteLevelCount;
+    public static int LastLevelIndex;
+    public static int CurrentLocation;
+    public static int CurrentAttempt;
+
+    //shop
+    public static int SetCharacterI;
+    public static List<int> ShopUnlockedCharacters = new();
+
 }

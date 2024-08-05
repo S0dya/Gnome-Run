@@ -4,18 +4,34 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+using Random = UnityEngine.Random;
+
 public class UIGameMain : SubjectMonoBehaviour
 {
+    [Header("Menu")]
     [SerializeField] private GameObject gameMenuUIElement;
     [SerializeField] private TextMeshProUGUI moneyText;
 
+    [Header("Tutorial")]
     [SerializeField] private RectTransform tutorialTransform;
     [SerializeField] private float tutorialDistance = -170f;
 
-    Tween _tutorialTweener;
+    [Header("Settings")]
+    [SerializeField] private CanvasGroup SettingsVibrationCG;
+    [SerializeField] private CanvasGroup SettingsSoundCG;
+    [SerializeField] private CanvasGroup SettingsMusicCG;
 
-    Vector3 _tutorialInitialPos;
+    [Header("Shop")]
+    [SerializeField] private UIShopCharacter[] charactersVisual;
 
+    [Header("Other")]
+    [SerializeField] private GameObject SettingsUIObj;
+    [SerializeField] private GameObject ShopUIObj;
+
+    private Vector3 _tutorialInitialPos;
+    private Tween _tutorialTweener;
+
+    private int _curShopCharacterI;
 
     private void Awake()
     {
@@ -26,18 +42,81 @@ public class UIGameMain : SubjectMonoBehaviour
             { EventEnum.LevelRestarted, OnRestartLevel},
         });
     }
-
     public void Init()
     {
+        //menu
         SetMoney();
 
+        //tutorial
         _tutorialInitialPos = tutorialTransform.anchoredPosition;
         AnimateTutorial();
+
+        //shop
+        foreach (int i in Settings.ShopUnlockedCharacters)
+        {
+            charactersVisual[i].UnlockCharacter();
+        }
+        _curShopCharacterI = Settings.SetCharacterI;
     }
 
+    //buttons
+    public void OnShopButton()
+    {
+        ShopUIObj.SetActive(true);
+    }
+    public void OnSettingsButton()
+    {
+        SettingsUIObj.SetActive(true);
+    }
+
+    //shop buttons
+    public void OnSelectCharacter(int i)
+    {
+        if (_curShopCharacterI == i) return;
+
+        charactersVisual[_curShopCharacterI].DeselectCharacter();
+        _curShopCharacterI = i;
+        charactersVisual[_curShopCharacterI].SelectCharacter();
+    }
+    public void OnShopBuyButton()
+    {
+        int randomI = Random.Range(0, charactersVisual.Length);
+
+        Settings.ShopUnlockedCharacters.Add(randomI);
+        charactersVisual[randomI].UnlockCharacter();
+
+    }
+    public void OnShopWatchAdButton()
+    {
+
+    }
+    public void OnCloseShopButton()
+    {
+        ShopUIObj.SetActive(false);
+    }
+
+    //settings buttons
+    public void OnSettingsVibrationButton()
+    {
+
+    }
+    public void OnSettingsSoundButton()
+    {
+
+    }
+    public void OnSettingsMusicButton()
+    {
+
+    }
+    public void OnCloseSettingsButton()
+    {
+        SettingsUIObj.SetActive(false);
+    }
+
+    //main methods
     public void SetMoney()
     {
-        moneyText.text = GameManager.MoneyAmount.ToString();
+        moneyText.text = Settings.MoneyAmount.ToString();
     }
 
     public void OnPressedToStartButton()

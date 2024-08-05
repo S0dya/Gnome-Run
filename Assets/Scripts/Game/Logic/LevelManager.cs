@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using System;
 using System.Linq;
@@ -17,12 +16,6 @@ public class LevelManager : SubjectMonoBehaviour
     [Header("Other")]
     [SerializeField] private Transform locationParent;
     [SerializeField] private Transform levelParent;
-
-    private int _currentLevel { get { return (_completeLevelCount < _curLevels.Count ? CurrentLevelIndex : _completeLevelCount) + 1; ; } set { PlayerPrefs.SetInt(Settings.CurrentLevel_PrefsKey, value); } }
-    private int _completeLevelCount { get { return PlayerPrefs.GetInt(Settings.CompleteLevelCount_PrefsKey); } set { PlayerPrefs.SetInt(Settings.CompleteLevelCount_PrefsKey, value); } }
-    private int _lastLevelIndex { get { return PlayerPrefs.GetInt(Settings.LastLevelIndex_PrefsKey); } set { PlayerPrefs.SetInt(Settings.LastLevelIndex_PrefsKey, value); } }
-    private int _currentLocation { get { return PlayerPrefs.GetInt(Settings.CurrentLocation_PrefsKey); } set { PlayerPrefs.SetInt(Settings.CurrentLocation_PrefsKey, value); } }
-    private int _currentAttempt { get { return PlayerPrefs.GetInt(Settings.CurrentAttempt_PrefsKey); } set { PlayerPrefs.SetInt(Settings.CurrentAttempt_PrefsKey, value); } }
 
     private List<Level> _curLevels = new();
     private GameObject _curLocation;
@@ -49,28 +42,16 @@ public class LevelManager : SubjectMonoBehaviour
 
     public void Init()
     {
-        _currentLocation = 0;
+        Settings.CurrentLocation = 0;
 
-        _curLevels = locationsAndLevels[_currentLocation].levelsList;
-        _curLocation = locationsAndLevels[_currentLocation].locationPrefab;// change later
+        _curLevels = locationsAndLevels[Settings.CurrentLocation].levelsList;
+        _curLocation = locationsAndLevels[Settings.CurrentLocation].locationPrefab;// change later
 
         Instantiate(_curLocation, locationParent);
 
-        SelectLevel(_lastLevelIndex);
-        if (_lastLevelIndex != _currentLevel) _currentAttempt = 0;
+        SelectLevel(Settings.LastLevelIndex);
+        if (Settings.LastLevelIndex != Settings.CurrentLevel) Settings.CurrentAttempt = 0;
     }
-
-    private void OnDestroy()
-    {
-        _lastLevelIndex = CurrentLevelIndex;
-    }
-
-    private void OnApplicationQuit()
-    {
-        _lastLevelIndex = CurrentLevelIndex;
-    }
-
-
     public void OnRestartLevel()
     {
         SelectLevel(CurrentLevelIndex, false);
@@ -78,7 +59,7 @@ public class LevelManager : SubjectMonoBehaviour
 
     public void NextLevel()
     {
-        _currentLevel++;
+        Settings.CurrentLevel++;
         SelectLevel(CurrentLevelIndex + 1);
     }
 
@@ -100,18 +81,18 @@ public class LevelManager : SubjectMonoBehaviour
 
     private int GetCorrectedIndex(int levelIndex)
     {
-        int levelId = _currentLevel;
+        int levelId = Settings.CurrentLevel;
         if (levelId > _curLevels.Count - 1)
         {
-            if (locationsAndLevels[_currentLocation].randomizedLevels)
+            if (locationsAndLevels[Settings.CurrentLocation].randomizedLevels)
             {
-                var levels = Enumerable.Range(0, locationsAndLevels[_currentLocation].levelsList.Count).ToList();
+                var levels = Enumerable.Range(0, locationsAndLevels[Settings.CurrentLocation].levelsList.Count).ToList();
                 levels.RemoveAt(CurrentLevelIndex);
 
                 return levels[UnityEngine.Random.Range(0, levels.Count)];
             }
             else 
-                return levelIndex % locationsAndLevels[_currentLocation].levelsList.Count;
+                return levelIndex % locationsAndLevels[Settings.CurrentLocation].levelsList.Count;
         }
         return levelId;
     }

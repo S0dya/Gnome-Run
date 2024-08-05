@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace YG
 {
     [System.Serializable]
@@ -18,7 +20,8 @@ namespace YG
 
         // Ваши сохранения
 
-        // ...
+        public Dictionary<string, int> IntDict = new();
+        public Dictionary<string, int[]> IntsDict = new();
 
         // Поля (сохранения) можно удалять и создавать новые. При обновлении игры сохранения ломаться не должны
 
