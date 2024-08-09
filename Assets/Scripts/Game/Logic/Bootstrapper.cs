@@ -17,7 +17,9 @@ public class Bootstrapper : MonoBehaviour
     {
         _container.Resolve<SaveManager>().Init();
 
+        _container.Resolve<Player>().Init();
         _container.Resolve<LevelManager>().Init();
         _container.Resolve<UIGameMain>().Init();
+
     }
 }

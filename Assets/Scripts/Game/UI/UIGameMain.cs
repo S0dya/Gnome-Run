@@ -56,13 +56,19 @@ public class UIGameMain : SubjectMonoBehaviour
         {
             charactersVisual[i].UnlockCharacter();
         }
-        _curShopCharacterI = Settings.SetCharacterI;
+        _curShopCharacterI = Settings.CurCharacterI;
     }
 
     //buttons
+    public void OnPressedToStartButton()
+    {
+        Observer.OnHandleEvent(EventEnum.LevelStarted);
+    }
     public void OnShopButton()
     {
         ShopUIObj.SetActive(true);
+
+        Observer.OnHandleEvent(EventEnum.ShopOpened);
     }
     public void OnSettingsButton()
     {
@@ -88,11 +94,13 @@ public class UIGameMain : SubjectMonoBehaviour
     }
     public void OnShopWatchAdButton()
     {
-
+        //sdk._RewardShow(1);
     }
     public void OnCloseShopButton()
     {
         ShopUIObj.SetActive(false);
+
+        Observer.OnHandleEvent(EventEnum.ShopClosed);
     }
 
     //settings buttons
@@ -119,11 +127,12 @@ public class UIGameMain : SubjectMonoBehaviour
         moneyText.text = Settings.MoneyAmount.ToString();
     }
 
-    public void OnPressedToStartButton()
+    public void RerwardPlayerForWatchingAd()
     {
-        Observer.OnHandleEvent(EventEnum.LevelStarted);
+        Settings.MoneyAmount += 1000; SetMoney();
     }
 
+    //events
     private void OnStartLevel()
     {
         StopTutorial();
@@ -137,6 +146,7 @@ public class UIGameMain : SubjectMonoBehaviour
         AnimateTutorial();
     }
 
+    //other
     private void AnimateTutorial()
     {
         StopTutorial();

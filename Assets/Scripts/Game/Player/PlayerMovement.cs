@@ -1,4 +1,5 @@
 using System;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -15,7 +16,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float rotationLerpSensitivity = 10;
 
     [Header("Other")]
-    [SerializeField] private Transform CharacterTransform;
+    [SerializeField] private CharacterController characterController;
+    [SerializeField] private Transform characterTransform;
+
+    private Transform _characterMeshesParentTransform;
 
     private Inputs _inputs;
     private float _movementDirection;
@@ -47,26 +51,35 @@ public class PlayerMovement : MonoBehaviour
 
         _inputs.Disable();
 
-        CharacterTransform.rotation = _curTargetRotation = Quaternion.identity;
+        _characterMeshesParentTransform.rotation = _curTargetRotation = Quaternion.identity;
     }
 
     private void Update()
     {
-        if (Math.Abs(_movementDirection) > 0.04f)
-        {
-            _movementDirection = Mathf.Lerp(_movementDirection, 0, movementLerpSensitivity * Time.deltaTime);
-        }
-        else _movementDirection = 0;
+        _movementDirection = Math.Abs(_movementDirection) < 0.04f ? 0 
+            : Mathf.Lerp(_movementDirection, 0, movementLerpSensitivity * Time.deltaTime);
 
-        _curMovementPosition = transform.position + new Vector3(_movementDirection, 0, 1) * movementSpeed * Time.deltaTime;
+        _curMovementPosition = characterTransform.position + new Vector3(_movementDirection, 0, 1) * movementSpeed * Time.deltaTime;
         _curMovementPosition.x = Mathf.Clamp(_curMovementPosition.x, -movementBoundsRange, movementBoundsRange);
 
-        transform.position = _curMovementPosition;
+        characterController.Move(_curMovementPosition - characterTransform.position);
 
         _curTargetRotation = Quaternion.Euler(0, Mathf.Clamp(_movementDirection * rotationSpeed, -rotationBoundsRange, rotationBoundsRange), 0);
-        CharacterTransform.rotation = Quaternion.Lerp(CharacterTransform.rotation, _curTargetRotation, rotationLerpSensitivity * Time.deltaTime);
+        _characterMeshesParentTransform.rotation = Quaternion.Lerp(_characterMeshesParentTransform.rotation, _curTargetRotation, rotationLerpSensitivity * Time.deltaTime);
     }
 
+    public void SetNewCharacter(Transform transform)
+    {
+        _characterMeshesParentTransform = transform;
+    }
+
+    public void MoveCharacter(Vector3 pos)
+    {
+        Vector3 displacement = pos - characterController.transform.position;
+        characterController.Move(displacement);
+    }
+
+    //input
     public void Move(Vector2 direction)
     {
         _movementDirection = direction.x * movementInputSensitivity;

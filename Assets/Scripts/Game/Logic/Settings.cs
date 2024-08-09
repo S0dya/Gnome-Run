@@ -15,7 +15,7 @@ public static class Settings
     public static int CurrentAttempt;
 
     //shop
-    public static int SetCharacterI;
+    public static int CurCharacterI;
     public static List<int> ShopUnlockedCharacters = new();
 
 }

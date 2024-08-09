@@ -2,10 +2,26 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class CharacterStats
+{
+    public GameObject CharacterObj;
+    public Transform CharacterMeshesParentTransform;
+
+    public Animator CharacterAnimator;
+    public SkinnedMeshRenderer[] CharacterStatusMeshes;
+
+    public Transform CameraFollowPoint;
+}
+
 public class PlayerAnimator : SubjectMonoBehaviour
 {
-    [SerializeField] private SkinnedMeshRenderer[] statusMeshes;
-    [SerializeField] private Animator animator;
+    [SerializeField] private CharacterStats[] charactersStats;
+
+    [SerializeField] private GameObject curCharacterObj;
+
+    [SerializeField] private SkinnedMeshRenderer[] curStatusMeshes;
+    [SerializeField] private Animator curAnimator;
 
     //reusable
     private int _lastStatus = 1;
@@ -32,30 +48,44 @@ public class PlayerAnimator : SubjectMonoBehaviour
         });
     }
 
+    public void SetCharacter(int i, out Transform characterMeshesParentTransform, out Transform cameraFollowPoint)
+    {
+        if (curCharacterObj != null) curCharacterObj.SetActive(false);
+
+        curCharacterObj = charactersStats[i].CharacterObj;
+        curAnimator = charactersStats[i].CharacterAnimator;
+        curStatusMeshes = charactersStats[i].CharacterStatusMeshes;
+
+        characterMeshesParentTransform = charactersStats[i].CharacterMeshesParentTransform; 
+        cameraFollowPoint = charactersStats[i].CameraFollowPoint;
+
+        curCharacterObj.SetActive(true);
+    }
+
     public void SetStatus(int index)
     {
         index++;
 
-        statusMeshes[_lastStatus].enabled = false;
-        statusMeshes[index].enabled = true;
+        curStatusMeshes[_lastStatus].enabled = false;
+        curStatusMeshes[index].enabled = true;
 
         _lastStatus = index;
     }
 
     private void OnStartLevel()
     {
-        animator.Play(_animatorIDWalk);
+        curAnimator.Play(_animatorIDWalk);
     }
     private void OnFinishLevelVictory()
     {
-        animator.Play(_animatorIDVictory);
+        curAnimator.Play(_animatorIDVictory);
     }
     private void OnFinishLevelGameover()
     {
-        animator.Play(_animatorIDLose);
+        curAnimator.Play(_animatorIDLose);
     }
     private void OnRestartLevel()
     {
-        animator.Play(_animatorIDIdle);
+        curAnimator.Play(_animatorIDIdle);
     }
 }

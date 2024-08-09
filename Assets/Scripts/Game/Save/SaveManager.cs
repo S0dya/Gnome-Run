@@ -20,7 +20,7 @@ namespace Saving
         private const string CurrentAttempt_Key = "Current Attempt";
 
         //shop
-        private const string SetCharacterI_Key = "Set Character Index";
+        private const string CurCharacterI_Key = "Current Character Index";
         private const string ShopUnlockedCharacters_Key = "Shop Unlocked Characters";
 
         private ISaveSystem _saveSystem;
@@ -88,7 +88,7 @@ namespace Saving
             gameData.IntDict.Add(CurrentAttempt_Key, Settings.CurrentAttempt);
 
             //shop
-            gameData.IntDict.Add(SetCharacterI_Key, Settings.SetCharacterI);
+            gameData.IntDict.Add(CurCharacterI_Key, Settings.CurCharacterI);
             gameData.IntsDict.Add(ShopUnlockedCharacters_Key, Settings.ShopUnlockedCharacters.ToArray());
             
             return gameData;
@@ -108,7 +108,7 @@ namespace Saving
             gameData.IntDict.TryGetValue(CurrentAttempt_Key, out Settings.CurrentAttempt);
 
             //shop
-            gameData.IntDict.TryGetValue(SetCharacterI_Key, out Settings.SetCharacterI);
+            gameData.IntDict.TryGetValue(CurCharacterI_Key, out Settings.CurCharacterI);
             if (gameData.IntsDict.TryGetValue(ShopUnlockedCharacters_Key, out int[] shopUnlockedCharactersArray))
                 Settings.ShopUnlockedCharacters = shopUnlockedCharactersArray.ToList();
 

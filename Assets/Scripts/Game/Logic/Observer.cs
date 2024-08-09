@@ -5,7 +5,9 @@ public enum EventEnum
     LevelFinishedVictory,
     LevelFinishedGameover,
     LevelRestarted,
-
+    
+    ShopOpened,
+    ShopClosed,
 }
 
 public static class Observer

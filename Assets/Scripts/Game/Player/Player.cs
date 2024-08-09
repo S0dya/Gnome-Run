@@ -10,13 +10,23 @@ public class Player : SubjectMonoBehaviour
     [Header("Other")]
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private PlayerAnimator playerAnimator;
+    [SerializeField] private CameraController cameraController;
 
-    [SerializeField] private Transform characterTransform;
+    [Header("Characters")]
+    [SerializeField] private Transform characterHolderTransform;
+
+    [SerializeField] private Transform[] charactersTransforms;
+    [SerializeField] private Transform charactersParentTransform;
+
+    private Transform _characterMeshesParentTransform;
+
+    private int _curCharacterI = -1;
 
     private Coroutine _spinPlayerCoroutine;
 
-    private void Awake()
+    public void Init()
     {
+        SetCharacter(Settings.CurCharacterI);
 
         Init(new Dictionary<EventEnum, Action>
         {
@@ -24,29 +34,40 @@ public class Player : SubjectMonoBehaviour
             { EventEnum.LevelFinishedVictory, OnFinishLevelVictory},
             { EventEnum.LevelFinishedGameover, OnFinishLevelGameover},
             { EventEnum.LevelRestarted, OnRestartLevel},
+            { EventEnum.ShopOpened, OnShopOpened},
+            { EventEnum.ShopClosed, OnShopClosed},
         });
     }
 
-    private void Start()
+    public void SetCharacter(int i)
     {
-        SpinPlayer(180);
+        if (_curCharacterI > 0) charactersTransforms[_curCharacterI].SetParent(charactersParentTransform);
+        _curCharacterI = i;
+        charactersTransforms[_curCharacterI].SetParent(characterHolderTransform);
+
+        playerAnimator.SetCharacter(i, 
+            out Transform newCharacterMeshesParentTransform, out Transform newCameraFollowPoint);
+
+        _characterMeshesParentTransform = newCharacterMeshesParentTransform;
+
+        playerMovement.SetNewCharacter(newCharacterMeshesParentTransform);
+        cameraController.SetNewCharacter(newCameraFollowPoint);
     }
 
     public void SpinPlayer(float targetRotation)
     {
         StopRoutine(_spinPlayerCoroutine);
-        _spinPlayerCoroutine = StartCoroutine(LerpRotateTransform(characterTransform, spinningSpeed, targetRotation));
+        _spinPlayerCoroutine = StartCoroutine(LerpRotateTransform(_characterMeshesParentTransform , spinningSpeed, targetRotation));
     }
 
     public void SetPlayerSpawnPosition(Vector3 position)
     {
-        playerMovement.transform.position = position;
+        playerMovement.MoveCharacter(position);
+        playerMovement.transform.position = new Vector3(position.x, transform.position.y, position.z);
     }
 
     public void SetStatus(int statusIndex)
     {
-        //myb do a little spin
-
         playerAnimator.SetStatus(statusIndex);
     }
 
@@ -66,5 +87,14 @@ public class Player : SubjectMonoBehaviour
     private void OnRestartLevel()
     {
         playerMovement.enabled = false;
+    }
+
+    private void OnShopOpened()
+    {
+        SpinPlayer(180);
+    }
+    private void OnShopClosed()
+    {
+        SpinPlayer(0);
     }
 }

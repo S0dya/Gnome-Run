@@ -46,7 +46,7 @@ namespace EditorLogics
 
             CreateLevelsPartsAndFlags(levelPartsPrefabs, direction, levelPartsAmount, levelRandomize, levelParent, flagsPartPrefabArray, ref curPartPos);
 
-            CreateArrayAndGetLastPosition(gatesPartsPrefabs, direction, 1, false, levelParent, curPartPos);
+            CreateArrayAndGetLastPosition(gatesPartsPrefabs, direction, gatesPartsPrefabs.Length, false, levelParent, curPartPos);
         }
 
 

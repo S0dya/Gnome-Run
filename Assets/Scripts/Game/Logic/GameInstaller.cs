@@ -5,7 +5,6 @@ using Saving;
 
 public class GameInstaller : MonoInstaller
 {
-    [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private Player player;
     [SerializeField] private SaveManager saveManager;
     [SerializeField] private GameManager gameManager;
@@ -13,13 +12,10 @@ public class GameInstaller : MonoInstaller
     [SerializeField] private UIInGame uiInGame;
     [SerializeField] private UIGameMain uiGameMain;
     [SerializeField] private UIGameFinish uiGameFinish;
-    [SerializeField] private PlayerAnimator playerAnimator;
 
     public override void InstallBindings()
     {
         Container.Bind<Player>().FromInstance(player).AsSingle().NonLazy();
-        Container.Bind<PlayerMovement>().FromInstance(playerMovement).AsSingle().NonLazy();
-        Container.Bind<PlayerAnimator>().FromInstance(playerAnimator).AsSingle().NonLazy();
 
         Container.Bind<SaveManager>().FromInstance(saveManager).AsSingle().NonLazy();
         Container.Bind<GameManager>().FromInstance(gameManager).AsSingle().NonLazy();
