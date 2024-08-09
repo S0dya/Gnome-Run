@@ -1,9 +1,13 @@
 
+using System;
+
 namespace AdsSystem
 {
     public interface IAdsService
     {
-        void ShowAd();
-        void ShowRewardedAd();
+        public event Action OnRewardAdCompleted;
+
+        public void ShowAd();
+        public void ShowRewardedAd();
     }
 }

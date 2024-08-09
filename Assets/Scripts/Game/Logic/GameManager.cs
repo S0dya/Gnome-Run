@@ -31,6 +31,7 @@ public class GameManager : SubjectMonoBehaviour
         Init(new Dictionary<EventEnum, Action>
         {
             { EventEnum.LevelStarted, OnStartLevel},
+            { EventEnum.LevelRestarted, OnRestartLevel},
         });
     }
 
@@ -93,15 +94,24 @@ public class GameManager : SubjectMonoBehaviour
 
                 Observer.OnHandleEvent(EventEnum.LevelFinishedVictory);
             }
-            else 
+            else
+            {
+                currentMoneyAmount = 0;
+
                 Observer.OnHandleEvent(EventEnum.LevelFinishedGameover);
+            }
         }
 
         return finishReached;
     }
 
+    public void MultiplyEarnedMoney(int n)
+    {
+        currentMoneyAmount *= n;
 
-    public void OnReciveMoney()
+        _uiGameFinish.SetProgressOnVictory(currentMoneyAmount);
+    }
+    public void OnRestartLevel()
     {
         Settings.MoneyAmount += currentMoneyAmount;
 

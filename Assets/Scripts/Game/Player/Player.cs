@@ -14,13 +14,10 @@ public class Player : SubjectMonoBehaviour
 
     [Header("Characters")]
     [SerializeField] private Transform characterHolderTransform;
-
-    [SerializeField] private Transform[] charactersTransforms;
     [SerializeField] private Transform charactersParentTransform;
 
+    private Transform _curCharacterTransform;
     private Transform _characterMeshesParentTransform;
-
-    private int _curCharacterI = -1;
 
     private Coroutine _spinPlayerCoroutine;
 
@@ -41,12 +38,12 @@ public class Player : SubjectMonoBehaviour
 
     public void SetCharacter(int i)
     {
-        if (_curCharacterI > 0) charactersTransforms[_curCharacterI].SetParent(charactersParentTransform);
-        _curCharacterI = i;
-        charactersTransforms[_curCharacterI].SetParent(characterHolderTransform);
-
-        playerAnimator.SetCharacter(i, 
+        playerAnimator.SetCharacter(i, out Transform newCharacterTransform, 
             out Transform newCharacterMeshesParentTransform, out Transform newCameraFollowPoint);
+
+        if (_curCharacterTransform != null) _curCharacterTransform.SetParent(charactersParentTransform);
+        _curCharacterTransform = newCharacterTransform;
+        _curCharacterTransform.SetParent(characterHolderTransform);
 
         _characterMeshesParentTransform = newCharacterMeshesParentTransform;
 
@@ -63,7 +60,6 @@ public class Player : SubjectMonoBehaviour
     public void SetPlayerSpawnPosition(Vector3 position)
     {
         playerMovement.MoveCharacter(position);
-        playerMovement.transform.position = new Vector3(position.x, transform.position.y, position.z);
     }
 
     public void SetStatus(int statusIndex)

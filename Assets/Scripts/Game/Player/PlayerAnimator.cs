@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class CharacterStats
+class CharacterStats
 {
     public GameObject CharacterObj;
     public Transform CharacterMeshesParentTransform;
@@ -18,10 +18,10 @@ public class PlayerAnimator : SubjectMonoBehaviour
 {
     [SerializeField] private CharacterStats[] charactersStats;
 
-    [SerializeField] private GameObject curCharacterObj;
+    private GameObject _curCharacterObj;
 
-    [SerializeField] private SkinnedMeshRenderer[] curStatusMeshes;
-    [SerializeField] private Animator curAnimator;
+    private SkinnedMeshRenderer[] _curStatusMeshes;
+    private Animator _curAnimator;
 
     //reusable
     private int _lastStatus = 1;
@@ -48,44 +48,48 @@ public class PlayerAnimator : SubjectMonoBehaviour
         });
     }
 
-    public void SetCharacter(int i, out Transform characterMeshesParentTransform, out Transform cameraFollowPoint)
+    public void SetCharacter(int i, out Transform characterTransform, out Transform characterMeshesParentTransform, out Transform cameraFollowPoint)
     {
-        if (curCharacterObj != null) curCharacterObj.SetActive(false);
+        if (_curCharacterObj != null) _curCharacterObj.SetActive(false);
 
-        curCharacterObj = charactersStats[i].CharacterObj;
-        curAnimator = charactersStats[i].CharacterAnimator;
-        curStatusMeshes = charactersStats[i].CharacterStatusMeshes;
+        _curCharacterObj = charactersStats[i].CharacterObj;
+        _curAnimator = charactersStats[i].CharacterAnimator;
+        _curStatusMeshes = charactersStats[i].CharacterStatusMeshes;
 
+        characterTransform = _curCharacterObj.transform;
         characterMeshesParentTransform = charactersStats[i].CharacterMeshesParentTransform; 
         cameraFollowPoint = charactersStats[i].CameraFollowPoint;
 
-        curCharacterObj.SetActive(true);
+        _curCharacterObj.SetActive(true);
     }
 
     public void SetStatus(int index)
     {
         index++;
 
-        curStatusMeshes[_lastStatus].enabled = false;
-        curStatusMeshes[index].enabled = true;
+        _curStatusMeshes[_lastStatus].enabled = false;
+        _curStatusMeshes[index].enabled = true;
 
         _lastStatus = index;
     }
 
+    //events
     private void OnStartLevel()
     {
-        curAnimator.Play(_animatorIDWalk);
+        _curAnimator.Play(_animatorIDWalk);
     }
     private void OnFinishLevelVictory()
     {
-        curAnimator.Play(_animatorIDVictory);
+        _curAnimator.Play(_animatorIDVictory);
     }
     private void OnFinishLevelGameover()
     {
-        curAnimator.Play(_animatorIDLose);
+        _curAnimator.Play(_animatorIDLose);
     }
     private void OnRestartLevel()
     {
-        curAnimator.Play(_animatorIDIdle);
+        _curAnimator.Play(_animatorIDIdle);
+
+        SetStatus(0);
     }
 }

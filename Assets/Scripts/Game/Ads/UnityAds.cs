@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.Advertisements;
 
@@ -8,37 +7,36 @@ namespace AdsSystem
     public class UnityAds : IAdsService, IUnityAdsInitializationListener, IUnityAdsLoadListener, IUnityAdsShowListener
     {
 #if UNITY_IOS
-    const string rewardedVideo = "Rewarded_iOS";
-    string gameId = "5671246";
+        private const string _interstitialVideo = "Interstitial_iOS";
+        private const string _rewardedVideo = "Rewarded_iOS";
+        private string _gameId = "5671246";
 #else
-        const string rewardedVideo = "Rewarded_Android";
-        string gameId = "5671247";
+        private const string _interstitialVideo = "Interstitial_Android";
+        private const string _rewardedVideo = "Rewarded_Android";
+        private string _gameId = "5671247";
 #endif
+
+        public event Action OnRewardAdCompleted;
 
         public UnityAds()
         {
-            Advertisement.Initialize(gameId, true, this);
-        }
-
-        public void LoadRewardedAd()
-        {
-            Advertisement.Load(rewardedVideo, this);
+            Advertisement.Initialize(_gameId, true, this);
         }
 
         public void ShowAd()
         {
-
+            Advertisement.Show(_interstitialVideo, this);
         }
         public void ShowRewardedAd()
         {
-            Advertisement.Show(rewardedVideo, this);
+            Advertisement.Show(_rewardedVideo, this);
         }
 
 
         #region Unity Ads Interface Implementations
         public void OnInitializationComplete()
         {
-            LoadRewardedAd();
+            Advertisement.Load(_rewardedVideo, this);
         }
 
         public void OnInitializationFailed(UnityAdsInitializationError error, string message)
@@ -70,7 +68,8 @@ namespace AdsSystem
 
         public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState)
         {
-
+            if (showCompletionState == UnityAdsShowCompletionState.COMPLETED && placementId == _rewardedVideo) 
+                OnRewardAdCompleted?.Invoke(); 
         }
         #endregion
 

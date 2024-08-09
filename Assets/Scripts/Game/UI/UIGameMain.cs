@@ -1,9 +1,12 @@
+using AdsSystem;
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
-
+using UnityEngine.UIElements;
+using Zenject;
 using Random = UnityEngine.Random;
 
 public class UIGameMain : SubjectMonoBehaviour
@@ -28,10 +31,18 @@ public class UIGameMain : SubjectMonoBehaviour
     [SerializeField] private GameObject SettingsUIObj;
     [SerializeField] private GameObject ShopUIObj;
 
+    AdsManager _adsManager;
+
     private Vector3 _tutorialInitialPos;
     private Tween _tutorialTweener;
 
     private int _curShopCharacterI;
+
+    [Inject]
+    public void Construct(AdsManager adsManager)
+    {
+        _adsManager = adsManager;
+    }
 
     private void Awake()
     {
@@ -53,10 +64,8 @@ public class UIGameMain : SubjectMonoBehaviour
 
         //shop
         foreach (int i in Settings.ShopUnlockedCharacters)
-        {
             charactersVisual[i].UnlockCharacter();
-        }
-        _curShopCharacterI = Settings.CurCharacterI;
+        OnSelectCharacter(Settings.CurCharacterI);
     }
 
     //buttons
@@ -86,15 +95,17 @@ public class UIGameMain : SubjectMonoBehaviour
     }
     public void OnShopBuyButton()
     {
-        int randomI = Random.Range(0, charactersVisual.Length);
+        var lockedCharactersList = Enumerable.Range(0, charactersVisual.Length).ToList();
+        for (int i = 0; i < Settings.ShopUnlockedCharacters.Count; i++) lockedCharactersList.Remove(i);
+        
+        int randomI = lockedCharactersList[Random.Range(0, charactersVisual.Length)];
 
         Settings.ShopUnlockedCharacters.Add(randomI);
         charactersVisual[randomI].UnlockCharacter();
-
     }
     public void OnShopWatchAdButton()
     {
-        //sdk._RewardShow(1);
+        _adsManager.ShowRewardAd(OnShopRewardAdWatched);
     }
     public void OnCloseShopButton()
     {
@@ -130,6 +141,16 @@ public class UIGameMain : SubjectMonoBehaviour
     public void RerwardPlayerForWatchingAd()
     {
         Settings.MoneyAmount += 1000; SetMoney();
+    }
+
+    //actions
+
+    //shop
+    private void OnShopRewardAdWatched()
+    {
+        Settings.MoneyAmount += 2000;
+
+        SetMoney();
     }
 
     //events
