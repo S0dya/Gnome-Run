@@ -19,9 +19,14 @@ namespace Saving
         private const string CurrentLocation_Key = "Current Location Index";
         private const string CurrentAttempt_Key = "Current Attempt";
 
+        //settings
+        private const string HasVibration_Key = "Has Vibration";
+        private const string HasSound_Key = "Has Sound";
+
         //shop
         private const string CurCharacterI_Key = "Current Character Index";
         private const string ShopUnlockedCharacters_Key = "Shop Unlocked Characters";
+
 
         private ISaveSystem _saveSystem;
 
@@ -87,10 +92,14 @@ namespace Saving
             gameData.IntDict.Add(CurrentLocation_Key, Settings.CurrentLocation);
             gameData.IntDict.Add(CurrentAttempt_Key, Settings.CurrentAttempt);
 
+            //settings
+            gameData.boolDict.Add(HasVibration_Key, Settings.HasVibration);
+            gameData.boolDict.Add(HasSound_Key, Settings.HasSound);
+
             //shop
             gameData.IntDict.Add(CurCharacterI_Key, Settings.CurCharacterI);
             gameData.IntsDict.Add(ShopUnlockedCharacters_Key, Settings.ShopUnlockedCharacters.ToArray());
-            
+
             return gameData;
         }
         private void SetGameData(GameData gameData)
@@ -107,11 +116,14 @@ namespace Saving
             gameData.IntDict.TryGetValue(CurrentLocation_Key, out Settings.CurrentLocation);
             gameData.IntDict.TryGetValue(CurrentAttempt_Key, out Settings.CurrentAttempt);
 
+            //settings
+            gameData.boolDict.TryGetValue(HasVibration_Key, out Settings.HasVibration);
+            gameData.boolDict.TryGetValue(HasSound_Key, out Settings.HasSound);
+
             //shop
             gameData.IntDict.TryGetValue(CurCharacterI_Key, out Settings.CurCharacterI);
             if (gameData.IntsDict.TryGetValue(ShopUnlockedCharacters_Key, out int[] shopUnlockedCharactersArray))
                 Settings.ShopUnlockedCharacters = shopUnlockedCharactersArray.ToList();
-
         }
     }
 }

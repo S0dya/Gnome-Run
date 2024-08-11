@@ -18,4 +18,9 @@ public static class Settings
     public static int CurCharacterI;
     public static List<int> ShopUnlockedCharacters = new();
 
+    //settings
+    public static bool HasVibration;
+    public static bool HasSound;
+    public static int LanguageIndex = -1;
+
 }

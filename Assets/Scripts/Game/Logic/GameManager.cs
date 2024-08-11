@@ -38,11 +38,16 @@ public class GameManager : SubjectMonoBehaviour
     public void AssignNewLevel(int maxMoney)
     {
         maxMoneyAmountOnLevel = maxMoney;
+
+        for (int i = 0; i < 4; i++)
+            curMoneyGoals[i] = (int)((float)maxMoneyAmountOnLevel * (i+1) * 0.25f);
     }
 
 
     public void ChangeMoneyAmount(int value)
     {
+        if (Settings.HasVibration) Handheld.Vibrate();
+
         HandleChangeMoney(value);
 
         if (currentMoneyAmount == 0)
@@ -51,8 +56,7 @@ public class GameManager : SubjectMonoBehaviour
         }
 
         _uiInGame.OnMoneyCollected(value);
-        _uiInGame.SetCurMoneyAmount(currentMoneyAmount);
-        _uiInGame.SetProgressBar((float)currentMoneyAmount / (float)maxMoneyAmountOnLevel);
+        _uiInGame.SetCurMoneyAmountAndBar(currentMoneyAmount, (float)currentMoneyAmount / (float)maxMoneyAmountOnLevel);
     }
     private void HandleChangeMoney(int value)
     {
@@ -64,8 +68,7 @@ public class GameManager : SubjectMonoBehaviour
             {
                 curGoalIndex++;
 
-                _player.SetStatus(curGoalIndex);
-                _uiInGame.SetNewStatus(curGoalIndex);
+                _player.SetStatus(curGoalIndex); _uiInGame.SetNewStatus(curGoalIndex);
             }
         }
         else
@@ -76,7 +79,7 @@ public class GameManager : SubjectMonoBehaviour
             {
                 curGoalIndex--;
 
-                _player.SetStatus(curGoalIndex);
+                _player.SetStatus(curGoalIndex); _uiInGame.SetStatus(curGoalIndex);
             }
         }
     }
@@ -121,7 +124,10 @@ public class GameManager : SubjectMonoBehaviour
 
     private void OnStartLevel()
     {
-        currentMoneyAmount = 0;
-        curGoalIndex = 0;
+        curGoalIndex = 1;
+        currentMoneyAmount = curMoneyGoals[curGoalIndex];
+
+        _uiInGame.SetStatus(curGoalIndex);
+        _uiInGame.SetCurMoneyAmountAndBar(currentMoneyAmount, (float)currentMoneyAmount / (float)maxMoneyAmountOnLevel);
     }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public enum TriggerableTypeEnum
 {
@@ -16,8 +17,19 @@ public interface ITriggerable
 
 public class Triggerable : MonoBehaviour, ITriggerable
 {
-    [SerializeField] TriggerableTypeEnum triggerableType;
+    [Header("Settings")]
+    [SerializeField] private bool playsAnimation = true;
+    [SerializeField] private string animationName;
+
+    [SerializeField] private TriggerableTypeEnum triggerableType;
     [SerializeField] private Animator animator;
+
+    private int _aniamtorIDAnimationName;
+
+    private void Start()
+    {
+        _aniamtorIDAnimationName = Animator.StringToHash(animationName);
+    }
 
     public TriggerableTypeEnum GetTriggerableType()
     {
@@ -26,6 +38,6 @@ public class Triggerable : MonoBehaviour, ITriggerable
 
     public void OnTriggered()
     {
-
+        if (playsAnimation) animator.Play(_aniamtorIDAnimationName);
     }
 }

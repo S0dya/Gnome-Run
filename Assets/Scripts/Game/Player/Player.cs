@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class Player : SubjectMonoBehaviour
 {
@@ -16,10 +17,18 @@ public class Player : SubjectMonoBehaviour
     [SerializeField] private Transform characterHolderTransform;
     [SerializeField] private Transform charactersParentTransform;
 
+    private AudioManager _audioManager;
+
     private Transform _curCharacterTransform;
     private Transform _characterMeshesParentTransform;
 
     private Coroutine _spinPlayerCoroutine;
+
+    [Inject]
+    public void Construct(AudioManager audioManager)
+    {
+        _audioManager = audioManager;
+    }
 
     public void Init()
     {
@@ -62,6 +71,9 @@ public class Player : SubjectMonoBehaviour
         playerMovement.MoveCharacter(position);
     }
 
+    public void OnPlayFootstep() => _audioManager.PlayOneShot(SoundEventEnum.PlayerFootstep);
+
+    //events
     public void SetStatus(int statusIndex)
     {
         playerAnimator.SetStatus(statusIndex);

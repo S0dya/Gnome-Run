@@ -65,12 +65,9 @@ public class PlayerAnimator : SubjectMonoBehaviour
 
     public void SetStatus(int index)
     {
-        index++;
-
         _curStatusMeshes[_lastStatus].enabled = false;
-        _curStatusMeshes[index].enabled = true;
-
         _lastStatus = index;
+        _curStatusMeshes[_lastStatus].enabled = true;
     }
 
     //events
@@ -90,6 +87,6 @@ public class PlayerAnimator : SubjectMonoBehaviour
     {
         _curAnimator.Play(_animatorIDIdle);
 
-        SetStatus(0);
+        SetStatus(1);
     }
 }

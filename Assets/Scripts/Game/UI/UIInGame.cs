@@ -74,12 +74,31 @@ public class UIInGame : SubjectMonoBehaviour
     {
         curLevelText.text = value.ToString();
     }
-    public void SetCurMoneyAmount(int value)
+    public void SetCurMoneyAmountAndBar(int moneyAmount, float barValue)
     {
-        curMoneyText.text = value.ToString();
+        curMoneyText.text = moneyAmount.ToString();
+
+        SetProgressBar(barValue);
     }
 
-    public void SetProgressBar(float value)
+
+    public void SetNewStatus(int index)
+    {
+        playerStatusTextPopUp.AnimateNewStatus(_curPlayerPregressBarColor, playerProgressStatuses[index]);
+
+        SetStatus(index);
+    }
+    public void SetStatus(int index) => playerProgressBarText.text = playerProgressStatuses[index];
+
+    public void OnMoneyCollected(int value)
+    {
+        if (value > 0)
+            GoodMoneyCollect.AnimateCollect('+' + value.ToString());
+        else
+            BadMoneyCollect.AnimateCollect(value.ToString());
+    }
+
+    private void SetProgressBar(float value)
     {
         playerProgressBarImage.fillAmount = value;
 
@@ -87,31 +106,9 @@ public class UIInGame : SubjectMonoBehaviour
 
         playerProgressBarImage.color = playerProgressBarText.color = _curPlayerPregressBarColor;
     }
-
-    public void SetNewStatus(int index)
-    {
-        playerStatusTextPopUp.AnimateNewStatus(_curPlayerPregressBarColor, playerProgressStatuses[index]);
-
-        playerProgressBarText.text = playerProgressStatuses[index];
-    }
-
-    public void OnMoneyCollected(int value)
-    {
-        if (value > 0)
-        {
-            GoodMoneyCollect.AnimateCollect('+' + value.ToString());
-        }
-        else
-        {
-            BadMoneyCollect.AnimateCollect(value.ToString());
-        }
-    }
-
     private void OnStartLevel()
     {
-        SetCurLevelIndex(0);
-        SetCurMoneyAmount(0);
-        SetProgressBar(0);
+        SetCurLevelIndex(Settings.CurrentLevel);
 
         foreach (var element in inGameUIElements)
         {

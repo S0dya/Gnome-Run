@@ -37,9 +37,9 @@ public class PlayerTrigger : MonoBehaviour
         switch (triggerableType)
         {
             case TriggerableTypeEnum.Finish:
-                bool finishReached = _gameManager.FinishReached((iTriggerable as TriggerableFinish).GetFinishIndex());
+                bool finishReached = _gameManager.FinishReached((iTriggerable as ITriggerableFinish).GetFinishIndex());
 
-                if (finishReached) iTriggerable.OnTriggered();
+                if (!finishReached) iTriggerable.OnTriggered();
                 break;
             default: iTriggerable.OnTriggered(); break;
         }

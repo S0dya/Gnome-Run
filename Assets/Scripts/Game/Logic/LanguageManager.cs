@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
@@ -5,21 +6,29 @@ using YG;
 
 public class LanguageManager : MonoBehaviour
 {
+    [SerializeField] private string[] languages;
 
-    Coroutine _changeLanguageCoroutine;
+    private Coroutine _changeLanguageCoroutine;
 
     private void Start()
     {
-        YandexGame.LanguageRequest();
-
-        //YandexGame.lang;
+        if (Settings.LanguageIndex == -1)
+        {
+            YandexGame.LanguageRequest();
+            Settings.LanguageIndex = Array.IndexOf(languages, YandexGame.lang);
+        }
     }
 
-    public bool ChangeLanguageIfPossible(int i)
+    public bool ChangeLanguageIfPossible()
     {
         bool canChangeLanguage = _changeLanguageCoroutine == null;
 
-        if (canChangeLanguage) _changeLanguageCoroutine = StartCoroutine(ChangeLanguageCoroutine(i));
+        if (canChangeLanguage)
+        {
+            Settings.LanguageIndex = Settings.LanguageIndex == languages.Length - 1 ? 0 : Settings.LanguageIndex + 1;
+
+            _changeLanguageCoroutine = StartCoroutine(ChangeLanguageCoroutine(Settings.LanguageIndex));
+        }
 
         return canChangeLanguage;
     }

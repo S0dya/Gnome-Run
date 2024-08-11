@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 using Zenject;
+
 using Random = UnityEngine.Random;
 
 public class UIGameMain : SubjectMonoBehaviour
@@ -20,9 +21,13 @@ public class UIGameMain : SubjectMonoBehaviour
     [SerializeField] private float tutorialDistance = -170f;
 
     [Header("Settings")]
-    [SerializeField] private CanvasGroup SettingsVibrationCG;
-    [SerializeField] private CanvasGroup SettingsSoundCG;
-    [SerializeField] private CanvasGroup SettingsMusicCG;
+    [SerializeField] private Image vibrationImage;
+    [SerializeField] private Image soundImage;
+    [SerializeField] private Image languageImage;
+
+    [SerializeField] private Sprite[] vibrationSprites;
+    [SerializeField] private Sprite[] soundSprites;
+    [SerializeField] private Sprite[] languageSprites;
 
     [Header("Shop")]
     [SerializeField] private UIShopCharacter[] charactersVisual;
@@ -31,36 +36,42 @@ public class UIGameMain : SubjectMonoBehaviour
     [SerializeField] private GameObject SettingsUIObj;
     [SerializeField] private GameObject ShopUIObj;
 
-    AdsManager _adsManager;
+    private AdsManager _adsManager;
+    private LanguageManager _languageManager;
+    private AudioManager _audioManager;
 
     private Vector3 _tutorialInitialPos;
     private Tween _tutorialTweener;
 
-    private int _curShopCharacterI;
+    private int _curShopCharacterI = -1;
 
     [Inject]
-    public void Construct(AdsManager adsManager)
+    public void Construct(AdsManager adsManager, LanguageManager languageManager, AudioManager audioManager)
     {
         _adsManager = adsManager;
+        _languageManager = languageManager;
+        _audioManager = audioManager;
     }
 
-    private void Awake()
+    public void Init()
     {
-
         Init(new Dictionary<EventEnum, Action>
         {
             { EventEnum.LevelStarted, OnStartLevel},
             { EventEnum.LevelRestarted, OnRestartLevel},
         });
-    }
-    public void Init()
-    {
+
         //menu
         SetMoney();
 
         //tutorial
         _tutorialInitialPos = tutorialTransform.anchoredPosition;
         AnimateTutorial();
+
+        //settings
+        SetSettingImage(vibrationImage, vibrationSprites, Settings.HasVibration);
+        SetSettingImage(soundImage, soundSprites, Settings.HasSound);
+        if (Settings.LanguageIndex != -1) SetSettingLanguageImage();
 
         //shop
         foreach (int i in Settings.ShopUnlockedCharacters)
@@ -89,15 +100,16 @@ public class UIGameMain : SubjectMonoBehaviour
     {
         if (_curShopCharacterI == i) return;
 
-        charactersVisual[_curShopCharacterI].DeselectCharacter();
+        if (_curShopCharacterI != -1) charactersVisual[_curShopCharacterI].DeselectCharacter();
         _curShopCharacterI = i;
         charactersVisual[_curShopCharacterI].SelectCharacter();
     }
     public void OnShopBuyButton()
     {
         var lockedCharactersList = Enumerable.Range(0, charactersVisual.Length).ToList();
-        for (int i = 0; i < Settings.ShopUnlockedCharacters.Count; i++) lockedCharactersList.Remove(i);
-        
+        foreach (int unlockedCharacterI in Settings.ShopUnlockedCharacters) lockedCharactersList.Remove(unlockedCharacterI);
+        if (lockedCharactersList.Count == 0) return;
+
         int randomI = lockedCharactersList[Random.Range(0, charactersVisual.Length)];
 
         Settings.ShopUnlockedCharacters.Add(randomI);
@@ -117,15 +129,21 @@ public class UIGameMain : SubjectMonoBehaviour
     //settings buttons
     public void OnSettingsVibrationButton()
     {
+        Settings.HasVibration = !Settings.HasVibration;
 
+        SetSettingImage(vibrationImage, vibrationSprites, Settings.HasVibration);
     }
     public void OnSettingsSoundButton()
     {
+        Settings.HasSound = !Settings.HasSound;
 
+        SetSettingImage(soundImage, soundSprites, Settings.HasSound);
+
+        _audioManager.ToggleSound(Settings.HasSound);
     }
-    public void OnSettingsMusicButton()
+    public void OnSettingsLanguageButton()
     {
-
+        if (_languageManager.ChangeLanguageIfPossible()) SetSettingLanguageImage();
     }
     public void OnCloseSettingsButton()
     {
@@ -182,4 +200,7 @@ public class UIGameMain : SubjectMonoBehaviour
     {
         _tutorialTweener?.Kill();
     }
+
+    private void SetSettingImage(Image image, Sprite[] sprites, bool value) => image.sprite = sprites[value ? 1 : 0];
+    private void SetSettingLanguageImage() => languageImage.sprite = languageSprites[Settings.LanguageIndex];
 }
