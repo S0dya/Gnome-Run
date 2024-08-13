@@ -6,20 +6,29 @@ public interface IInteractable
     public void OnInteracted();
 }
 
-public class Interactable : MonoBehaviour, IInteractable
+public class Interactable : MonoBehaviour, IInteractable, ICharacterRelatedChange
 {
+    [Header("Interactable")]
     [SerializeField] private int playerMoneyInfluenceValue;
 
     [SerializeField] private bool destroyOnInteracted;
 
-    public int GetInfluenceValue()
+    [Header("Character related details")]
+    [SerializeField] private GameObject[] characterRelatedObjs;
+
+    private int _curCharacterRelatedObjI = -1;
+
+    public int GetInfluenceValue() => playerMoneyInfluenceValue;
+
+    public virtual void OnInteracted()
     {
-        return playerMoneyInfluenceValue;
+        if (destroyOnInteracted) Destroy(gameObject);
     }
 
-    public void OnInteracted()
+    public void CharacterChanged(int characterIndex)
     {
-        if (destroyOnInteracted)
-            Destroy(gameObject);
+        if (_curCharacterRelatedObjI != -1) characterRelatedObjs[_curCharacterRelatedObjI].SetActive(false);
+        _curCharacterRelatedObjI = characterIndex;
+        characterRelatedObjs[_curCharacterRelatedObjI].SetActive(true);
     }
 }

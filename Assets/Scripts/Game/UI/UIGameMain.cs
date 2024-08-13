@@ -39,6 +39,8 @@ public class UIGameMain : SubjectMonoBehaviour
     private AdsManager _adsManager;
     private LanguageManager _languageManager;
     private AudioManager _audioManager;
+    private Player _player;
+    private LevelManager _levelManager;
 
     private Vector3 _tutorialInitialPos;
     private Tween _tutorialTweener;
@@ -46,11 +48,13 @@ public class UIGameMain : SubjectMonoBehaviour
     private int _curShopCharacterI = -1;
 
     [Inject]
-    public void Construct(AdsManager adsManager, LanguageManager languageManager, AudioManager audioManager)
+    public void Construct(AdsManager adsManager, LanguageManager languageManager, AudioManager audioManager, Player player, LevelManager levelManager)
     {
         _adsManager = adsManager;
         _languageManager = languageManager;
         _audioManager = audioManager;
+        _player = player;
+        _levelManager = levelManager;
     }
 
     public void Init()
@@ -101,8 +105,11 @@ public class UIGameMain : SubjectMonoBehaviour
         if (_curShopCharacterI == i) return;
 
         if (_curShopCharacterI != -1) charactersVisual[_curShopCharacterI].DeselectCharacter();
-        _curShopCharacterI = i;
+        Settings.CurCharacterI = _curShopCharacterI = i;
         charactersVisual[_curShopCharacterI].SelectCharacter();
+
+        _player.SetCharacter();
+        _levelManager.SetCharacter();
     }
     public void OnShopBuyButton()
     {

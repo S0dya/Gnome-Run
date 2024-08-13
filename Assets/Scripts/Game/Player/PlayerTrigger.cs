@@ -1,17 +1,33 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class PlayerTrigger : MonoBehaviour
+public class PlayerTrigger : SubjectMonoBehaviour
 {
+    [SerializeField] Player player;
+
     [SerializeField] ParticleSystem GoodCollectEffect;
     [SerializeField] ParticleSystem BadCollectEffect;
 
     private GameManager _gameManager;
 
+    private bool _inLevel;
+
     [Inject]
     public void Construct(GameManager gameManager)
     {
         _gameManager = gameManager;
+    }
+
+    private void Awake()
+    {
+        Init(new Dictionary<EventEnum, Action>
+        {
+            { EventEnum.LevelStarted, OnStartLevel},
+            { EventEnum.LevelFinishedVictory, OnFinishLevel},
+            { EventEnum.LevelFinishedGameover, OnFinishLevel},
+        });
     }
 
     private void OnTriggerEnter(Collider other)
@@ -28,6 +44,17 @@ public class PlayerTrigger : MonoBehaviour
         _gameManager.ChangeMoneyAmount(influence);
         iInteractable.OnInteracted();
 
+        switch (iInteractable)
+        {
+            case IInteractableStopping iInteractableStopping:
+                iInteractableStopping.OnStopInteraction += MovePlayer;
+
+                if (influence > 0) player.GoodInteractionStopMovement();
+                else player.BadInteractionStopMovement();
+                break;
+            default: break;
+        }
+
         if (influence > 0) GoodCollectEffect.Play();
         else BadCollectEffect.Play();
     }
@@ -43,5 +70,20 @@ public class PlayerTrigger : MonoBehaviour
                 break;
             default: iTriggerable.OnTriggered(); break;
         }
+    }
+
+    //actions
+    private void MovePlayer()
+    {
+        if (_inLevel) player.InteractionStopMovementStopped();
+    }
+
+    private void OnStartLevel()
+    {
+        _inLevel = true;
+    }
+    private void OnFinishLevel()
+    {
+        _inLevel = false;
     }
 }

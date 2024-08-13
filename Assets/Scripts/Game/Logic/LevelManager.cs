@@ -18,6 +18,7 @@ public class LevelManager : SubjectMonoBehaviour
     [SerializeField] private Transform levelParent;
 
     private List<Level> _curLevels = new();
+    private Level _curLevel;
     private GameObject _curLocation;
 
     private GameManager _gameManager;
@@ -52,11 +53,6 @@ public class LevelManager : SubjectMonoBehaviour
         SelectLevel(Settings.LastLevelIndex);
         if (Settings.LastLevelIndex != Settings.CurrentLevel) Settings.CurrentAttempt = 0;
     }
-    public void OnRestartLevel()
-    {
-        SelectLevel(CurrentLevelIndex, false);
-    }
-
     public void NextLevel()
     {
         Settings.CurrentLevel++;
@@ -77,8 +73,15 @@ public class LevelManager : SubjectMonoBehaviour
         }
     }
 
-    public void PrevLevel() => SelectLevel(CurrentLevelIndex - 1);
+    public void SetCharacter()
+    {
+        _curLevel.SetInteractionDetails(Settings.CurCharacterI);
+    }
 
+    private void OnRestartLevel()
+    {
+        SelectLevel(CurrentLevelIndex, false);
+    }
     private int GetCorrectedIndex(int levelIndex)
     {
         int levelId = Settings.CurrentLevel;
@@ -103,7 +106,7 @@ public class LevelManager : SubjectMonoBehaviour
         {
             ClearChildren(levelParent);
 
-            Instantiate(level, levelParent);
+            _curLevel = Instantiate(level, levelParent).GetComponent<Level>();
 
             _gameManager.AssignNewLevel(level.MaxMoney);
             _player.SetPlayerSpawnPosition(level.PlayerSpawnPoint.position);

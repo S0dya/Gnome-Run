@@ -32,8 +32,6 @@ public class Player : SubjectMonoBehaviour
 
     public void Init()
     {
-        SetCharacter(Settings.CurCharacterI);
-
         Init(new Dictionary<EventEnum, Action>
         {
             { EventEnum.LevelStarted, OnStartLevel},
@@ -45,9 +43,9 @@ public class Player : SubjectMonoBehaviour
         });
     }
 
-    public void SetCharacter(int i)
+    public void SetCharacter()
     {
-        playerAnimator.SetCharacter(i, out Transform newCharacterTransform, 
+        playerAnimator.SetCharacter(Settings.CurCharacterI, out Transform newCharacterTransform, 
             out Transform newCharacterMeshesParentTransform, out Transform newCameraFollowPoint);
 
         if (_curCharacterTransform != null) _curCharacterTransform.SetParent(charactersParentTransform);
@@ -71,6 +69,26 @@ public class Player : SubjectMonoBehaviour
         playerMovement.MoveCharacter(position);
     }
 
+    public void BadInteractionStopMovement()
+    {
+        playerAnimator.OnBadInteraction();
+
+        ToggleMovement(false);
+    }
+    public void GoodInteractionStopMovement()
+    {
+        playerAnimator.OnGoodInteraction();
+
+        ToggleMovement(false);
+    }
+    public void InteractionStopMovementStopped()
+    {
+        playerAnimator.OnInteractionStopped();
+
+        ToggleMovement(true);
+    }
+
+    public void ToggleMovement(bool toggle) => playerMovement.enabled = toggle;
     public void OnPlayFootstep() => _audioManager.PlayOneShot(SoundEventEnum.PlayerFootstep);
 
     //events
@@ -81,20 +99,20 @@ public class Player : SubjectMonoBehaviour
 
     private void OnStartLevel()
     {
-        playerMovement.enabled = true;
+        ToggleMovement(true);
     }
 
     private void OnFinishLevelVictory()//rewrite later
     {
-        playerMovement.enabled = false;
+        ToggleMovement(false);
     }
     private void OnFinishLevelGameover()
     {
-        playerMovement.enabled = false;
+        ToggleMovement(false);
     }
     private void OnRestartLevel()
     {
-        playerMovement.enabled = false;
+        ToggleMovement(false);
     }
 
     private void OnShopOpened()

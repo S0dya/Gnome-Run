@@ -106,7 +106,9 @@ namespace EditorLogics
                 }
             }
 
-            List<float> interactablesZPositionsList = new();
+            var interactablesZPositionsList = new List<float>();
+            var characterDetails = new List<Interactable>();
+
             foreach (var interactable in levelGo.GetComponentsInChildren<Interactable>())
             {
                 var influenceVal = interactable.GetInfluenceValue();
@@ -122,7 +124,13 @@ namespace EditorLogics
                         interactablesZPositionsList.Add(curZPos);
                     }
                 }
+
+                //goodCollectParticleSystemsCharacterDetails .Add(GetChildWithTag(interactable.transform, "InteractableGoodCollect")?.GetComponent<ParticleSystem>());
+                var characterRelatedChange = interactable.GetComponent<ICharacterRelatedChange>();
+                if (characterRelatedChange != null) characterDetails.Add(interactable);
             }
+
+            level.InitInteractionDetails(characterDetails.ToArray());
         }
         private bool ZPositionIsReachable(List<float> listZPositions, float curZPos)
         {
@@ -133,5 +141,17 @@ namespace EditorLogics
             return true;
         }
 
+        /*
+        private GameObject GetChildWithTag(Transform parent, string tag)
+        {
+            foreach (Transform transform in parent)
+            {
+                if (transform.tag == tag) return transform.gameObject;
+                else if (transform.childCount > 0 && GetChildWithTag(transform, tag) != null) return transform.gameObject;
+            }
+
+            return null;
+        }
+        */
     }
 }
