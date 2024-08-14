@@ -44,15 +44,16 @@ public class PlayerTrigger : SubjectMonoBehaviour
         _gameManager.ChangeMoneyAmount(influence);
         iInteractable.OnInteracted();
 
-        switch (iInteractable)
+        if (iInteractable is IInteractablePatrol iInteractablePatrol)
         {
-            case IInteractableStopping iInteractableStopping:
-                iInteractableStopping.OnStopInteraction += MovePlayer;
+            iInteractablePatrol.OnInteracted(transform.position);
+        }
+        if (iInteractable is IInteractableStopping iInteractableStopping)
+        {
+            iInteractableStopping.OnStopInteraction += MovePlayer;
 
-                if (influence > 0) player.GoodInteractionStopMovement();
-                else player.BadInteractionStopMovement();
-                break;
-            default: break;
+            if (influence > 0) player.GoodInteractionStopMovement();
+            else player.BadInteractionStopMovement();
         }
 
         if (influence > 0) GoodCollectEffect.Play();

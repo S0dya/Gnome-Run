@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
+using System.Linq;
 
 public enum SoundEventEnum
 {
@@ -9,6 +10,7 @@ public enum SoundEventEnum
     PlayerFootstep,
     GoodCollect,
     BadCollect,
+    Music,
 }
 
 [System.Serializable]
@@ -31,15 +33,19 @@ public class AudioManager : SubjectMonoBehaviour
     [SerializeField] private KeyValueSound[] kvSounds;
     [SerializeField] private EnumValueSound[] evSounds;
 
-    private Dictionary<SoundEventEnum, EventInstance> _eventInstancesDict = new();
-    private Dictionary<EventEnum, EventInstance> _enumInstancesDict = new();
+    [Header("Other")]
+    [SerializeField] private LevelMusic levelMusic;
+
+    private Dictionary<SoundEventEnum, EventInstance> _enumInstancesDict = new();
+    private Dictionary<EventEnum, EventInstance> _eventInstancesDict = new();
 
     //initialization
     public void Init()
     {
+        foreach (var kvSound in kvSounds) _enumInstancesDict.Add(kvSound.SoundEvent, CreateInstance(kvSound.Sound));
+        foreach (var evSound in evSounds) _eventInstancesDict.Add(evSound.eventEnum, CreateInstance(evSound.Sound));
 
-        foreach (var kvSound in kvSounds) _eventInstancesDict.Add(kvSound.SoundEvent, CreateInstance(kvSound.Sound));
-        foreach (var evSound in evSounds) _enumInstancesDict.Add(evSound.eventEnum, CreateInstance(evSound.Sound));
+        levelMusic.Init(_enumInstancesDict[SoundEventEnum.Music]);
     }
 
     private EventInstance CreateInstance(EventReference sound)
@@ -48,14 +54,22 @@ public class AudioManager : SubjectMonoBehaviour
     }
 
     //main methods
-    public void PlayOneShot(SoundEventEnum soundEventEnum) => _eventInstancesDict[soundEventEnum].start();
+    public void PlayOneShot(SoundEventEnum soundEventEnum)
+    {
+        if (Settings.HasSound) _enumInstancesDict[soundEventEnum].start();
+    }
     public void PlayOneShot(EventEnum enumAction)
     {
-        if (_enumInstancesDict.ContainsKey(enumAction)) _enumInstancesDict[enumAction].start();
+        if (Settings.HasSound && _eventInstancesDict.ContainsKey(enumAction)) _eventInstancesDict[enumAction].start();
     }
 
     protected override void OnEvent(EventEnum actionEnum) => PlayOneShot(actionEnum);
 
     //settings
-    public void ToggleSound(bool toggle) => RuntimeManager.GetBus("bus:/").setVolume(toggle ? 1 : 0);
+    public void ToggleSound(bool toggle)
+    {
+        RuntimeManager.GetBus("bus:/").setVolume(toggle ? 1 : 0);
+
+        levelMusic.enabled = toggle;
+    }
 }

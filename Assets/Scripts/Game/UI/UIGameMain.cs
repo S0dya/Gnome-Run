@@ -160,7 +160,7 @@ public class UIGameMain : SubjectMonoBehaviour
     //main methods
     public void SetMoney()
     {
-        moneyText.text = Settings.MoneyAmount.ToString();
+        moneyText.text = Math.Min(Settings.MoneyAmount, 9999).ToString();
     }
 
     public void RerwardPlayerForWatchingAd()

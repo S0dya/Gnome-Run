@@ -73,10 +73,7 @@ public class LevelManager : SubjectMonoBehaviour
         }
     }
 
-    public void SetCharacter()
-    {
-        _curLevel.SetInteractionDetails(Settings.CurCharacterI);
-    }
+    public void SetCharacter() => _curLevel.SetInteractionDetails(Settings.CurCharacterI);
 
     private void OnRestartLevel()
     {
@@ -110,6 +107,7 @@ public class LevelManager : SubjectMonoBehaviour
 
             _gameManager.AssignNewLevel(level.MaxMoney);
             _player.SetPlayerSpawnPosition(level.PlayerSpawnPoint.position);
+            SetCharacter();
         }
     }
 }

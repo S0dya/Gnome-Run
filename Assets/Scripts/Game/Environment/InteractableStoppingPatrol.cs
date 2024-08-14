@@ -1,13 +1,18 @@
 using UnityEngine;
 
-public class InteractableStoppingPatrol : InteractableStopping, IInteractable
+public interface IInteractablePatrol : IInteractable
+{
+    public void OnInteracted(Vector3 playerPosition);
+}
+
+public class InteractableStoppingPatrol : InteractableStopping, IInteractablePatrol, ICharacterRelatedChange
 {
     [Header("Settings")]
     [SerializeField] private float movementSpeed;
     [SerializeField] private Vector3 movementDirection;
 
-    [Header("Settings")]
-    [SerializeField] private Animator animator;
+    [Header("Character related details")]
+    [SerializeField] private Animator[] characterRelatedAnimators;
 
     private Vector3[] _targetPositions;
     private Vector3 _curTargetPosition;
@@ -17,10 +22,12 @@ public class InteractableStoppingPatrol : InteractableStopping, IInteractable
 
     //hash
     private int _animatorIDIdle;
+    private int _animatorIDWalk;
 
     private void Awake()
     {
         _animatorIDIdle = Animator.StringToHash("Idle");
+        _animatorIDWalk = Animator.StringToHash("Walk");
     }
 
     private void Start()
@@ -51,14 +58,21 @@ public class InteractableStoppingPatrol : InteractableStopping, IInteractable
         transform.rotation = Quaternion.LookRotation(_directionToTarget);
     }
 
-    public override void OnInteracted()
+    public void OnInteracted(Vector3 playerPosition)
     {
-        base.OnInteracted();
+        OnInteracted();
 
         this.enabled = false;
 
-        transform.rotation = Quaternion.LookRotation(Vector3.zero);
+        var directionToPlayer = (playerPosition - transform.position).normalized;
+        transform.rotation = Quaternion.LookRotation(new Vector3(directionToPlayer.x, 0, directionToPlayer.z));
 
-        animator?.Play(_animatorIDIdle);
+        characterRelatedAnimators[_curCharacterRelatedObjI].Play(_animatorIDIdle);
+    }
+    public override void CharacterChanged(int characterIndex)
+    {
+        base.CharacterChanged(characterIndex);
+
+        characterRelatedAnimators[_curCharacterRelatedObjI].Play(_animatorIDWalk);
     }
 }

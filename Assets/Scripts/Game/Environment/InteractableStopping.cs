@@ -9,18 +9,19 @@ public interface IInteractableStopping : IInteractable
 
 public class InteractableStopping : Interactable, IInteractableStopping
 {
+    [Header("Settings")]
     [SerializeField] private float interactionStopDuration = 1;
+
+    [Header("OTher")]
+    [SerializeField] private BoxCollider interactionCollider;
 
     public event Action OnStopInteraction;
 
-    private bool _isInteracted;
-
-    new public virtual void OnInteracted()
+    public override void OnInteracted()
     {
-        if (_isInteracted) return;
-        _isInteracted = true;
+        interactionCollider.enabled = false;
 
-        StartCoroutine(InteractionStopCoroutine());
+        StartInteractionStop();
     }
 
     public void StopInteraction()
@@ -28,6 +29,7 @@ public class InteractableStopping : Interactable, IInteractableStopping
         OnStopInteraction?.Invoke();
     }
 
+    private protected void StartInteractionStop() => StartCoroutine(InteractionStopCoroutine());
     private IEnumerator InteractionStopCoroutine()
     {
         yield return new WaitForSeconds(interactionStopDuration);
