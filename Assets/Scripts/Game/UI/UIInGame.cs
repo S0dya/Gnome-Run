@@ -30,14 +30,14 @@ public class UIInGame : SubjectMonoBehaviour
     [Header("Other")]
     [SerializeField] private GameObject PauseUIObj;
 
-    private LevelManager _levelManager;
-    
+    private LanguageManager _languageManager;
+
     private Color _curPlayerPregressBarColor;
 
     [Inject]
-    public void Construct(LevelManager levelManager)
+    public void Construct(LanguageManager languageManager)
     {
-        _levelManager = levelManager;
+        _languageManager = languageManager;
     }
 
     private void Awake()
@@ -70,10 +70,6 @@ public class UIInGame : SubjectMonoBehaviour
         OnPauseResumeButton();
     }
 
-    public void SetCurLevelIndex(int value)
-    {
-        curLevelText.text = value.ToString();
-    }
     public void SetCurMoneyAmountAndBar(int moneyAmount, float barValue)
     {
         curMoneyText.text = moneyAmount.ToString();
@@ -84,11 +80,11 @@ public class UIInGame : SubjectMonoBehaviour
 
     public void SetNewStatus(int index)
     {
-        playerStatusTextPopUp.AnimateNewStatus(_curPlayerPregressBarColor, playerProgressStatuses[index]);
+        playerStatusTextPopUp.AnimateNewStatus(_curPlayerPregressBarColor, GetLocalizedString(playerProgressStatuses[index]));
 
         SetStatus(index);
     }
-    public void SetStatus(int index) => playerProgressBarText.text = playerProgressStatuses[index];
+    public void SetStatus(int index) => playerProgressBarText.text = GetLocalizedString(playerProgressStatuses[index]);
 
     public void OnMoneyCollected(int value)
     {
@@ -108,20 +104,22 @@ public class UIInGame : SubjectMonoBehaviour
     }
     private void OnStartLevel()
     {
-        SetCurLevelIndex(Settings.CurrentLevel);
+        ToggleInGameElements(true);
 
-        foreach (var element in inGameUIElements)
-        {
-            element.SetActive(true);
-        }
-
-        curLevelText.text = "Level " + _levelManager.CurrentLevelIndex.ToString();
+        curLevelText.text = GetLocalizedString("Level") + " " + Settings.CurrentLevel.ToString();
     }
     private void OnFinishLevel()
     {
-        foreach (var element in inGameUIElements)
-        {
-            element.SetActive(false);
-        }
+        ToggleInGameElements(false);
+    }
+
+    private string GetLocalizedString(string str)
+    {
+        return _languageManager.GetLocalizedString(str);
+    }
+
+    private void ToggleInGameElements(bool toggle)
+    {
+        foreach (var element in inGameUIElements) element.SetActive(toggle);
     }
 }

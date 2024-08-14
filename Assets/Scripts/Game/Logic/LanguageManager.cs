@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
+using UnityEngine.Localization.Tables;
 using YG;
 
 public class LanguageManager : MonoBehaviour
 {
     [SerializeField] private string[] languages;
+    [SerializeField] private LocalizationTable localizationTable;
 
     private Coroutine _changeLanguageCoroutine;
 
@@ -31,6 +33,13 @@ public class LanguageManager : MonoBehaviour
         }
 
         return canChangeLanguage;
+    }
+
+    public string GetLocalizedString(string key)
+    {
+        var stringTable = LocalizationSettings.StringDatabase.GetTable(localizationTable.TableCollectionName);
+
+        return stringTable.GetEntry(key).GetLocalizedString();
     }
 
     IEnumerator ChangeLanguageCoroutine(int localeId)

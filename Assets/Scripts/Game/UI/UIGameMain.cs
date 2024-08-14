@@ -15,6 +15,7 @@ public class UIGameMain : SubjectMonoBehaviour
     [Header("Menu")]
     [SerializeField] private GameObject gameMenuUIElement;
     [SerializeField] private TextMeshProUGUI moneyText;
+    [SerializeField] private TextMeshProUGUI curLevelText;
 
     [Header("Tutorial")]
     [SerializeField] private RectTransform tutorialTransform;
@@ -66,7 +67,7 @@ public class UIGameMain : SubjectMonoBehaviour
         });
 
         //menu
-        SetMoney();
+        SetMoney(); SetLevel();
 
         //tutorial
         _tutorialInitialPos = tutorialTransform.anchoredPosition;
@@ -160,13 +161,18 @@ public class UIGameMain : SubjectMonoBehaviour
     //main methods
     public void SetMoney()
     {
-        moneyText.text = Math.Min(Settings.MoneyAmount, 9999).ToString();
+        moneyText.text = Math.Min(Settings.MoneyAmount, 999999).ToString();
+    }
+    public void SetLevel()
+    {
+        curLevelText.text = _languageManager.GetLocalizedString("Level") + " " + Settings.CurrentLevel.ToString();
     }
 
     public void RerwardPlayerForWatchingAd()
     {
         Settings.MoneyAmount += 1000; SetMoney();
     }
+
 
     //actions
 
@@ -187,6 +193,8 @@ public class UIGameMain : SubjectMonoBehaviour
     }
     private void OnRestartLevel()
     {
+        SetLevel();
+
         gameMenuUIElement.SetActive(true);
 
         AnimateTutorial();
