@@ -18,23 +18,26 @@ namespace EditorLogics
             {
                 ClearObjects(levelObjectArray.transform);
 
+                int curProgressionValue = 0;
                 for (int i = 0; i < levelObjectArray.LevelsAmount; i++)
                 {
                     var levelGo = Instantiate(levelObjectArray.LevelTemplatePrefab, levelObjectArray.transform);
 
-                    CreateLevel(levelObjectArray.LevelStartPrefab,
-                        levelObjectArray.Prefabs, levelObjectArray.Direction, levelObjectArray.Amount, levelObjectArray.Randomize, levelGo.transform,
+                    CreateLevel(levelObjectArray.LevelStartPrefab, levelObjectArray.LevelDirection * i,
+                        levelObjectArray.Prefabs, levelObjectArray.Direction, levelObjectArray.Amount + curProgressionValue, levelObjectArray.Randomize, levelGo.transform,
                         levelObjectArray.FlagsPrefab,
                         levelObjectArray.GatesPrefabs);
 
                     AssignLevelStats(levelGo);
+
+                    if (levelObjectArray.ProgressionValue > 0 && i > (curProgressionValue + 1) * (levelObjectArray.LevelsAmount / levelObjectArray.ProgressionValue)) curProgressionValue++;
                 }
             }
 
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void CreateLevel(GameObject startLevelPartPrefab,
+        private void CreateLevel(GameObject startLevelPartPrefab, Vector3 levelDirection, 
             GameObject[] levelPartsPrefabs, Vector3 direction, int levelPartsAmount, bool levelRandomize, Transform levelParent,
             GameObject flagsPrefab, 
             GameObject[] gatesPartsPrefabs)
@@ -42,7 +45,7 @@ namespace EditorLogics
             var startLevelPartPrefabArray = new GameObject[1] { startLevelPartPrefab };
             var flagsPartPrefabArray = new GameObject[1] { flagsPrefab };
 
-            var curPartPos = CreateArrayAndGetLastPosition(startLevelPartPrefabArray, direction, 1, false, levelParent);
+            var curPartPos = CreateArrayAndGetLastPosition(startLevelPartPrefabArray, levelDirection, 1, false, levelParent);
 
             CreateLevelsPartsAndFlags(levelPartsPrefabs, direction, levelPartsAmount, levelRandomize, levelParent, flagsPartPrefabArray, ref curPartPos);
 
@@ -85,7 +88,7 @@ namespace EditorLogics
             for (int i = 0; i < levelPartsAmount / 3; i++)
             {
                 curPartPos = CreateArrayAndGetLastPosition(levelPartsPrefabs, direction, 3, levelRandomize, levelParent, curPartPos);
-                curPartPos = CreateArrayAndGetLastPosition(flagsPartPrefabArray, direction, 1, false, levelParent, curPartPos);
+                if (i + 1 < levelPartsAmount / 3) curPartPos = CreateArrayAndGetLastPosition(flagsPartPrefabArray, direction, 1, false, levelParent, curPartPos);
             }
 
             int remainingParts = levelPartsAmount % 3;

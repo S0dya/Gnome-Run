@@ -70,32 +70,14 @@ public class PlayerAnimator : SubjectMonoBehaviour
         _curStatusMeshes[_lastStatus].enabled = true;
     }
 
-    public void OnBadInteraction()
-    {
-        _curAnimator.Play(_animatorIDLose);
-    }
-    public void OnGoodInteraction()
-    {
-        _curAnimator.Play(_animatorIDVictory);
-    }
-    public void OnInteractionStopped()
-    {
-        _curAnimator.Play(_animatorIDWalk);
-    }
+    public void OnBadInteraction() => _curAnimator.Play(_animatorIDLose);
+    public void OnGoodInteraction() => _curAnimator.Play(_animatorIDVictory);
+    public void OnInteractionStopped() => _curAnimator.Play(_animatorIDWalk);
 
     //events
-    private void OnStartLevel()
-    {
-        _curAnimator.Play(_animatorIDWalk);
-    }
-    private void OnFinishLevelVictory()
-    {
-        _curAnimator.Play(_animatorIDVictory);
-    }
-    private void OnFinishLevelGameover()
-    {
-        _curAnimator.Play(_animatorIDLose);
-    }
+    private void OnStartLevel() => _curAnimator.Play(_animatorIDWalk);
+    private void OnFinishLevelVictory() => _curAnimator.Play(_animatorIDVictory);
+    private void OnFinishLevelGameover() => _curAnimator.Play(_animatorIDLose);
     private void OnRestartLevel()
     {
         _curAnimator.Play(_animatorIDIdle);

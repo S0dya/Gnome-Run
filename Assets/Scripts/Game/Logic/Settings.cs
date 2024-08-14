@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 
 public static class Settings
@@ -16,7 +15,7 @@ public static class Settings
 
     //shop
     public static int CurCharacterI;
-    public static List<int> ShopUnlockedCharacters = new();
+    public static List<int> ShopUnlockedCharacters = new() { 0 };
 
     //settings
     public static bool HasVibration;

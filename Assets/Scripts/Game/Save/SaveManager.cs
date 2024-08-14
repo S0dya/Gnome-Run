@@ -40,14 +40,8 @@ namespace Saving
 
         public void Init()
         {
-            if (YandexGame.SDKEnabled)
-            {
-                _saveSystem = new YandexSave();
-            }
-            else
-            {
-                _saveSystem = new JsonSave();
-            }
+            if (YandexGame.SDKEnabled) _saveSystem = new YandexSave();
+            else _saveSystem = new JsonSave();
 
             Load();
         }
@@ -60,23 +54,11 @@ namespace Saving
             if (YandexGame.SDKEnabled) YandexGame.GetDataEvent -= Load;
         }
     
-        private void OnDestroy()
-        {
-            Save();
-        }
-        private void OnApplicationQuit()
-        {
-            Save();
-        }
+        private void OnDestroy() => Save();
+        private void OnApplicationQuit() => Save();
 
-        public void Save()
-        {
-            _saveSystem.Save(GetGameData());
-        }
-        public void Load()
-        {
-            SetGameData(_saveSystem.Load());
-        }
+        public void Save() => _saveSystem.Save(GetGameData());
+        public void Load() => SetGameData(_saveSystem.Load());
 
         private GameData GetGameData()
         {

@@ -15,15 +15,18 @@ public class GameManager : SubjectMonoBehaviour
     private UIGameMain _uiGameMain;
     private UIInGame _uiInGame;
     private UIGameFinish _uiGameFinish;
+    private AudioManager _audioManager;
 
     [Inject]
-    public void Construct(Player player, UIGameMain uiGameMain, UIInGame uiInGame, UIGameFinish uiGameFinish)
+    public void Construct(Player player, UIGameMain uiGameMain, UIInGame uiInGame, UIGameFinish uiGameFinish, AudioManager audioManager)
     {
         _player = player;
 
         _uiGameMain = uiGameMain;
         _uiInGame = uiInGame;
         _uiGameFinish = uiGameFinish;
+
+        _audioManager = audioManager;
     }
     private void Awake()
     {
@@ -69,6 +72,8 @@ public class GameManager : SubjectMonoBehaviour
                 curGoalIndex++;
 
                 _player.SetStatus(curGoalIndex); _uiInGame.SetNewStatus(curGoalIndex);
+
+                _audioManager.PlayOneShot(SoundEventEnum.GoodCollect);
             }
         }
         else
@@ -80,6 +85,8 @@ public class GameManager : SubjectMonoBehaviour
                 curGoalIndex--;
 
                 _player.SetStatus(curGoalIndex); _uiInGame.SetStatus(curGoalIndex);
+
+                _audioManager.PlayOneShot(SoundEventEnum.BadCollect);
             }
         }
     }
@@ -103,6 +110,10 @@ public class GameManager : SubjectMonoBehaviour
 
                 Observer.OnHandleEvent(EventEnum.LevelFinishedGameover);
             }
+        }
+        else
+        {
+            _audioManager.PlayOneShot(SoundEventEnum.GateOpen);
         }
 
         return finishReached;

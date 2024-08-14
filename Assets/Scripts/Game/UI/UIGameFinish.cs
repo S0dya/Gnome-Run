@@ -72,13 +72,6 @@ public class UIGameFinish : SubjectMonoBehaviour
     }
 
     //events
-    private void OnFinishLevelVictory()
-    {
-        victoryFinish.Open();
-    }
-    private void OnFinishLevelGameover()
-    {
-        gameoverFinish.Open();
-    }
-
+    private void OnFinishLevelVictory() => victoryFinish.Open();
+    private void OnFinishLevelGameover() => gameoverFinish.Open();
 }

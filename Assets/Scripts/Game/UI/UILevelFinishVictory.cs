@@ -14,6 +14,6 @@ public class UILevelFinishVictory : UILevelFinish
     
     public void ToggleRewardAdButton(bool toggle)
     {
-        watchRewardAdCG.blocksRaycasts = toggle; watchRewardAdCG.alpha = toggle ? 1 : 0.75f;
+        watchRewardAdCG.blocksRaycasts = toggle;  watchRewardAdCG.alpha = toggle ? 1 : 0.75f;
     }
 }

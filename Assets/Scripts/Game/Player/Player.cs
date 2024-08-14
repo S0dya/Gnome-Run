@@ -92,35 +92,14 @@ public class Player : SubjectMonoBehaviour
     public void OnPlayFootstep() => _audioManager.PlayOneShot(SoundEventEnum.PlayerFootstep);
 
     //events
-    public void SetStatus(int statusIndex)
-    {
-        playerAnimator.SetStatus(statusIndex);
-    }
+    public void SetStatus(int statusIndex) => playerAnimator.SetStatus(statusIndex);
 
-    private void OnStartLevel()
-    {
-        ToggleMovement(true);
-    }
+    private void OnStartLevel() => ToggleMovement(true);
 
-    private void OnFinishLevelVictory()//rewrite later
-    {
-        ToggleMovement(false);
-    }
-    private void OnFinishLevelGameover()
-    {
-        ToggleMovement(false);
-    }
-    private void OnRestartLevel()
-    {
-        ToggleMovement(false);
-    }
+    private void OnFinishLevelVictory()=> ToggleMovement(false);
+    private void OnFinishLevelGameover() => ToggleMovement(false);
+    private void OnRestartLevel() => ToggleMovement(false);
 
-    private void OnShopOpened()
-    {
-        SpinPlayer(180);
-    }
-    private void OnShopClosed()
-    {
-        SpinPlayer(0);
-    }
+    private void OnShopOpened() => SpinPlayer(180);
+    private void OnShopClosed() => SpinPlayer(0);
 }

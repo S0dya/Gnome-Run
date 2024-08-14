@@ -85,20 +85,14 @@ public class UIGameMain : SubjectMonoBehaviour
     }
 
     //buttons
-    public void OnPressedToStartButton()
-    {
-        Observer.OnHandleEvent(EventEnum.LevelStarted);
-    }
+    public void OnPressedToStartButton() => Observer.OnHandleEvent(EventEnum.LevelStarted);
     public void OnShopButton()
     {
         ShopUIObj.SetActive(true);
 
         Observer.OnHandleEvent(EventEnum.ShopOpened);
     }
-    public void OnSettingsButton()
-    {
-        SettingsUIObj.SetActive(true);
-    }
+    public void OnSettingsButton() => SettingsUIObj.SetActive(true);
 
     //shop buttons
     public void OnSelectCharacter(int i)
@@ -116,17 +110,16 @@ public class UIGameMain : SubjectMonoBehaviour
     {
         var lockedCharactersList = Enumerable.Range(0, charactersVisual.Length).ToList();
         foreach (int unlockedCharacterI in Settings.ShopUnlockedCharacters) lockedCharactersList.Remove(unlockedCharacterI);
-        if (lockedCharactersList.Count == 0) return;
+        if (lockedCharactersList.Count == 0 || Settings.MoneyAmount < 10000) return;
+
+        Settings.MoneyAmount -= 10000; SetMoney();
 
         int randomI = lockedCharactersList[Random.Range(0, charactersVisual.Length)];
 
         Settings.ShopUnlockedCharacters.Add(randomI);
         charactersVisual[randomI].UnlockCharacter();
     }
-    public void OnShopWatchAdButton()
-    {
-        _adsManager.ShowRewardAd(OnShopRewardAdWatched);
-    }
+    public void OnShopWatchAdButton() =>_adsManager.ShowRewardAd(OnShopRewardAdWatched);
     public void OnCloseShopButton()
     {
         ShopUIObj.SetActive(false);
@@ -159,14 +152,9 @@ public class UIGameMain : SubjectMonoBehaviour
     }
 
     //main methods
-    public void SetMoney()
-    {
-        moneyText.text = Math.Min(Settings.MoneyAmount, 999999).ToString();
-    }
-    public void SetLevel()
-    {
+    public void SetMoney() => moneyText.text = Math.Min(Settings.MoneyAmount, 999999).ToString();
+    public void SetLevel() =>
         curLevelText.text = _languageManager.GetLocalizedString("Level") + " " + Settings.CurrentLevel.ToString();
-    }
 
     public void RerwardPlayerForWatchingAd()
     {
@@ -211,10 +199,7 @@ public class UIGameMain : SubjectMonoBehaviour
             .SetEase(Ease.InOutSine)
             .SetLoops(-1, LoopType.Yoyo);
     }
-    private void StopTutorial()
-    {
-        _tutorialTweener?.Kill();
-    }
+    private void StopTutorial() => _tutorialTweener?.Kill();
 
     private void SetSettingImage(Image image, Sprite[] sprites, bool value) => image.sprite = sprites[value ? 1 : 0];
     private void SetSettingLanguageImage() => languageImage.sprite = languageSprites[Settings.LanguageIndex];

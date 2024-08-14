@@ -108,15 +108,9 @@ public class UIInGame : SubjectMonoBehaviour
 
         curLevelText.text = GetLocalizedString("Level") + " " + Settings.CurrentLevel.ToString();
     }
-    private void OnFinishLevel()
-    {
-        ToggleInGameElements(false);
-    }
+    private void OnFinishLevel() => ToggleInGameElements(false);
 
-    private string GetLocalizedString(string str)
-    {
-        return _languageManager.GetLocalizedString(str);
-    }
+    private string GetLocalizedString(string str) => _languageManager.GetLocalizedString(str);
 
     private void ToggleInGameElements(bool toggle)
     {

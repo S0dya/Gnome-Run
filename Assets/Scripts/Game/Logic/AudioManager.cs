@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
-using System.Linq;
 
 public enum SoundEventEnum
 {
@@ -11,6 +10,7 @@ public enum SoundEventEnum
     GoodCollect,
     BadCollect,
     Music,
+    GateOpen,
 }
 
 [System.Serializable]
@@ -45,6 +45,7 @@ public class AudioManager : SubjectMonoBehaviour
         foreach (var kvSound in kvSounds) _enumInstancesDict.Add(kvSound.SoundEvent, CreateInstance(kvSound.Sound));
         foreach (var evSound in evSounds) _eventInstancesDict.Add(evSound.eventEnum, CreateInstance(evSound.Sound));
 
+        ToggleSound(Settings.HasSound);
         levelMusic.Init(_enumInstancesDict[SoundEventEnum.Music]);
     }
 

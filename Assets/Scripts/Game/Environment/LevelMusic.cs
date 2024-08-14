@@ -24,12 +24,6 @@ public class LevelMusic : SubjectMonoBehaviour
         _musicInstance.stop(STOP_MODE.ALLOWFADEOUT);
     }
 
-    private void OnStartLevel()
-    {
-        _musicInstance.start();
-    }
-    private void OnFinishLevel()
-    {
-        _musicInstance.stop(STOP_MODE.ALLOWFADEOUT);
-    }
+    private void OnStartLevel() => _musicInstance.start();
+    private void OnFinishLevel() => _musicInstance.stop(STOP_MODE.ALLOWFADEOUT);
 }

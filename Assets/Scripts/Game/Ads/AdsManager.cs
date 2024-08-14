@@ -14,22 +14,13 @@ namespace AdsSystem
 
         public void Init()
         {
-            if (YandexGame.SDKEnabled)
-            {
-                _adsService = new YandexAds(yandexSdk);
-            }
-            else
-            {
-                _adsService = new UnityAds();
-            }
+            if (YandexGame.SDKEnabled) _adsService = new YandexAds(yandexSdk);
+            else _adsService = new UnityAds();
 
             _adsService.OnRewardAdCompleted += OnRewardAdCompleted;
         }
 
-        public void ShowAd()
-        {
-            _adsService.ShowAd();
-        }
+        public void ShowAd() => _adsService.ShowAd();
         public void ShowRewardAd(Action action)
         {
             _rewardAction = action;
@@ -37,9 +28,6 @@ namespace AdsSystem
             _adsService.ShowRewardedAd();
         }
 
-        private void OnRewardAdCompleted()
-        {
-            _rewardAction?.Invoke();
-        }
+        private void OnRewardAdCompleted() => _rewardAction?.Invoke();
     }
 }

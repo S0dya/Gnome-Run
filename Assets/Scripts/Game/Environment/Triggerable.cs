@@ -31,10 +31,7 @@ public class Triggerable : MonoBehaviour, ITriggerable
         _aniamtorIDAnimationName = Animator.StringToHash(animationName);
     }
 
-    public TriggerableTypeEnum GetTriggerableType()
-    {
-        return triggerableType;
-    }
+    public TriggerableTypeEnum GetTriggerableType() => triggerableType;
 
     public void OnTriggered()
     {

@@ -2,7 +2,6 @@ using Cinemachine;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 [System.Serializable]
 class KVCameraPosition
@@ -30,7 +29,7 @@ public class CameraController : SubjectMonoBehaviour
 
     private Coroutine _moveToCoroutine;
 
-    void Awake()
+    private void Awake()
     {
         foreach (var cameraPosition in cameraPositions)
         {
@@ -64,20 +63,10 @@ public class CameraController : SubjectMonoBehaviour
     public void SetNewCharacter(Transform cameraLookAtTransform)
     {
         _curLookAtTransform = cameraLookAtTransform;
-        SetCameraLookAt(_curLookAtTransform);
     }
 
-    private void OnShopOpened()
-    {
-        SetCameraLookAt(cameraShopPosition);
-    }
-    private void OnShopClosed()
-    {
-        SetCameraLookAt(_curLookAtTransform);
-    }
+    private void OnShopOpened() => SetCameraLookAt(cameraShopPosition);
+    private void OnShopClosed() => SetCameraLookAt(_curLookAtTransform);
 
-    private void SetCameraLookAt(Transform transform)
-    {
-        virtualCamera.LookAt = transform;
-    }
+    private void SetCameraLookAt(Transform transform) => virtualCamera.LookAt = transform;
 }

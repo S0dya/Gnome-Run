@@ -79,12 +79,6 @@ public class PlayerTrigger : SubjectMonoBehaviour
         if (_inLevel) player.InteractionStopMovementStopped();
     }
 
-    private void OnStartLevel()
-    {
-        _inLevel = true;
-    }
-    private void OnFinishLevel()
-    {
-        _inLevel = false;
-    }
+    private void OnStartLevel() => _inLevel = true;
+    private void OnFinishLevel() => _inLevel = false;
 }

@@ -14,14 +14,8 @@ public class UIShopCharacter : MonoBehaviour
         LockedImage.enabled = false;
     }
 
-    public void SelectCharacter()
-    {
-        ToggleSelection(true);
-    }
-    public void DeselectCharacter()
-    {
-        ToggleSelection(false);
-    }
+    public void SelectCharacter() => ToggleSelection(true);
+    public void DeselectCharacter() => ToggleSelection(false);
 
     private void ToggleSelection(bool selected)
     {

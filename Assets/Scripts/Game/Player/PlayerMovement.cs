@@ -1,5 +1,4 @@
 using System;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -45,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
     {
 #if UNITY_ANDROID || UNITY_IOS || UNITY_TVOS
         _inputs.InGame.MobileMove.performed -= ctx => Move(ctx.ReadValue<Vector2>());
-//#else
+#else
         _inputs.InGame.PCMove.performed -= ctx => Move(ctx.ReadValue<Vector2>());
 #endif
 
@@ -68,10 +67,7 @@ public class PlayerMovement : MonoBehaviour
         _characterMeshesParentTransform.rotation = Quaternion.Lerp(_characterMeshesParentTransform.rotation, _curTargetRotation, rotationLerpSensitivity * Time.deltaTime);
     }
 
-    public void SetNewCharacter(Transform transform)
-    {
-        _characterMeshesParentTransform = transform;
-    }
+    public void SetNewCharacter(Transform transform) => _characterMeshesParentTransform = transform;
 
     public void MoveCharacter(Vector3 pos)
     {
@@ -80,8 +76,5 @@ public class PlayerMovement : MonoBehaviour
     }
 
     //input
-    public void Move(Vector2 direction)
-    {
-        _movementDirection = direction.x * movementInputSensitivity;
-    }
+    public void Move(Vector2 direction) => _movementDirection = direction.x * movementInputSensitivity;
 }
