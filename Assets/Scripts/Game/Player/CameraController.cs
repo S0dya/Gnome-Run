@@ -43,6 +43,11 @@ public class CameraController : SubjectMonoBehaviour
         });
     }
 
+    private void Start()
+    {
+        SetCameraLookAt(_curLookAtTransform);
+    }
+
     protected override void OnEnable() => Observer.OnEvent += OnEvent;
     protected override void OnDisable() => Observer.OnEvent -= OnEvent;
 

@@ -71,8 +71,9 @@ public class PlayerMovement : MonoBehaviour
 
     public void MoveCharacter(Vector3 pos)
     {
-        Vector3 displacement = pos - characterController.transform.position;
-        characterController.Move(displacement);
+        characterController.enabled = false;
+        characterTransform.position = pos;
+        characterController.enabled = true;
     }
 
     //input

@@ -18,8 +18,8 @@ public static class Settings
     public static List<int> ShopUnlockedCharacters = new() { 0 };
 
     //settings
-    public static bool HasVibration;
-    public static bool HasSound;
+    public static bool HasVibration = true;
+    public static bool HasSound = true;
     public static int LanguageIndex = -1;
 
 }

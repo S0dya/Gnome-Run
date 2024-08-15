@@ -99,7 +99,11 @@ public class UIGameMain : SubjectMonoBehaviour
     {
         if (_curShopCharacterI == i) return;
 
-        if (_curShopCharacterI != -1) charactersVisual[_curShopCharacterI].DeselectCharacter();
+        if (_curShopCharacterI != -1)
+        {
+            charactersVisual[_curShopCharacterI].DeselectCharacter();
+            _player.DeselectCharacter();
+        }
         Settings.CurCharacterI = _curShopCharacterI = i;
         charactersVisual[_curShopCharacterI].SelectCharacter();
 

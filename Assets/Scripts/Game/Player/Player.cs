@@ -45,10 +45,12 @@ public class Player : SubjectMonoBehaviour
 
     public void SetCharacter()
     {
-        playerAnimator.SetCharacter(Settings.CurCharacterI, out Transform newCharacterTransform, 
+        bool isDeselected = _curCharacterTransform != null;
+
+        playerAnimator.SetCharacter(Settings.CurCharacterI, out Transform newCharacterTransform,
             out Transform newCharacterMeshesParentTransform, out Transform newCameraFollowPoint);
 
-        if (_curCharacterTransform != null) _curCharacterTransform.SetParent(charactersParentTransform);
+        if (isDeselected) _curCharacterTransform.SetParent(charactersParentTransform);
         _curCharacterTransform = newCharacterTransform;
         _curCharacterTransform.SetParent(characterHolderTransform);
 
@@ -56,13 +58,11 @@ public class Player : SubjectMonoBehaviour
 
         playerMovement.SetNewCharacter(newCharacterMeshesParentTransform);
         cameraController.SetNewCharacter(newCameraFollowPoint);
-    }
 
-    public void SpinPlayer(float targetRotation)
-    {
-        StopRoutine(_spinPlayerCoroutine);
-        _spinPlayerCoroutine = StartCoroutine(LerpRotateTransform(_characterMeshesParentTransform , spinningSpeed, targetRotation));
+        if (isDeselected) SpinPlayer(180);
     }
+    public void DeselectCharacter() => SpinPlayer(0);
+
 
     public void SetPlayerSpawnPosition(Vector3 position)
     {
@@ -91,14 +91,35 @@ public class Player : SubjectMonoBehaviour
     public void ToggleMovement(bool toggle) => playerMovement.enabled = toggle;
     public void OnPlayFootstep() => _audioManager.PlayOneShot(SoundEventEnum.PlayerFootstep);
 
+    private void SpinPlayer(float targetRotation)
+    {
+        StopRoutine(_spinPlayerCoroutine);
+        _spinPlayerCoroutine = StartCoroutine(LerpRotateTransform(_characterMeshesParentTransform, spinningSpeed, targetRotation));
+    }
+
     //events
     public void SetStatus(int statusIndex) => playerAnimator.SetStatus(statusIndex);
 
-    private void OnStartLevel() => ToggleMovement(true);
+    private void OnStartLevel()
+    {
+        ToggleMovement(true);
+    }
 
-    private void OnFinishLevelVictory()=> ToggleMovement(false);
-    private void OnFinishLevelGameover() => ToggleMovement(false);
-    private void OnRestartLevel() => ToggleMovement(false);
+    private void OnFinishLevelVictory()
+    {
+        ToggleMovement(false);
+        SpinPlayer(180);
+    }
+    private void OnFinishLevelGameover()
+    {
+        ToggleMovement(false);
+        SpinPlayer(180);
+    }
+    private void OnRestartLevel()
+    {
+        ToggleMovement(false);
+        SpinPlayer(0);
+    }
 
     private void OnShopOpened() => SpinPlayer(180);
     private void OnShopClosed() => SpinPlayer(0);
