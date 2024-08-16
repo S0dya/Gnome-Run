@@ -64,6 +64,7 @@ public class UIGameMain : SubjectMonoBehaviour
         {
             { EventEnum.LevelStarted, OnStartLevel},
             { EventEnum.LevelRestarted, OnRestartLevel},
+            { EventEnum.LanguageChanged, OnLanguageChanged},
         });
 
         //menu
@@ -190,6 +191,10 @@ public class UIGameMain : SubjectMonoBehaviour
         gameMenuUIElement.SetActive(true);
 
         AnimateTutorial();
+    }
+    private void OnLanguageChanged()
+    {
+        SetLevel();
     }
 
     //other

@@ -21,9 +21,9 @@ namespace EditorLogics
                 int curProgressionValue = 0;
                 for (int i = 0; i < levelObjectArray.LevelsAmount; i++)
                 {
-                    var levelGo = Instantiate(levelObjectArray.LevelTemplatePrefab, levelObjectArray.transform);
+                    var levelGo = Instantiate(levelObjectArray.LevelTemplatePrefab, levelObjectArray.LevelDirection * i, Quaternion.identity, levelObjectArray.transform);//fix later
 
-                    CreateLevel(levelObjectArray.LevelStartPrefab, levelObjectArray.LevelDirection * i,
+                    CreateLevel(levelObjectArray.LevelStartPrefab,
                         levelObjectArray.Prefabs, levelObjectArray.Direction, levelObjectArray.Amount + curProgressionValue, levelObjectArray.Randomize, levelGo.transform,
                         levelObjectArray.FlagsPrefab,
                         levelObjectArray.GatesPrefabs);
@@ -37,7 +37,7 @@ namespace EditorLogics
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void CreateLevel(GameObject startLevelPartPrefab, Vector3 levelDirection, 
+        private void CreateLevel(GameObject startLevelPartPrefab,
             GameObject[] levelPartsPrefabs, Vector3 direction, int levelPartsAmount, bool levelRandomize, Transform levelParent,
             GameObject flagsPrefab, 
             GameObject[] gatesPartsPrefabs)
@@ -45,7 +45,7 @@ namespace EditorLogics
             var startLevelPartPrefabArray = new GameObject[1] { startLevelPartPrefab };
             var flagsPartPrefabArray = new GameObject[1] { flagsPrefab };
 
-            var curPartPos = CreateArrayAndGetLastPosition(startLevelPartPrefabArray, levelDirection, 1, false, levelParent);
+            var curPartPos = CreateArrayAndGetLastPosition(startLevelPartPrefabArray, direction, 1, false, levelParent);
 
             CreateLevelsPartsAndFlags(levelPartsPrefabs, direction, levelPartsAmount, levelRandomize, levelParent, flagsPartPrefabArray, ref curPartPos);
 

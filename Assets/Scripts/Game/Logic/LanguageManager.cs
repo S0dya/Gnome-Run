@@ -48,5 +48,6 @@ public class LanguageManager : MonoBehaviour
         LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[localeId];
 
         _changeLanguageCoroutine = null;
+        Observer.OnHandleEvent(EventEnum.LanguageChanged);
     }
 }
