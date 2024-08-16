@@ -61,8 +61,7 @@ public class LevelManager : SubjectMonoBehaviour
 
     public void SelectLevel(int levelIndex, bool indexCheck = true)
     {
-        if (indexCheck)
-            levelIndex = GetCorrectedIndex(levelIndex);
+        if (indexCheck) levelIndex = GetCorrectedIndex(levelIndex);
 
         var level = _curLevels[levelIndex];
 

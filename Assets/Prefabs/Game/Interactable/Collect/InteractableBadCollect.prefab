@@ -14524,7 +14524,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1293129891812266376}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -14532,7 +14532,7 @@ Transform:
   - {fileID: 4663212022782225427}
   - {fileID: 4681878525745662675}
   - {fileID: 7335610778918106052}
-  m_Father: {fileID: 2426147584056794659}
+  m_Father: {fileID: 1894403020166033191}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2397598099874765986
 GameObject:
@@ -14558,7 +14558,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2397598099874765986}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -14566,7 +14566,7 @@ Transform:
   - {fileID: 8353964537820822260}
   - {fileID: 9033859175555254590}
   - {fileID: 2206140696502790051}
-  m_Father: {fileID: 2426147584056794659}
+  m_Father: {fileID: 1894403020166033191}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2594843008476215295
 GameObject:
@@ -14580,7 +14580,7 @@ GameObject:
   - component: {fileID: 5052093011141442144}
   - component: {fileID: 2166136465113083776}
   m_Layer: 10
-  m_Name: Particle System
+  m_Name: ManyParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14684,7 +14684,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 2.5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -14855,8 +14855,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.2
-      minScalar: 0.01
+      scalar: 0.35
+      minScalar: 0.12
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -15172,7 +15172,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 100
+    maxNumParticles: 10
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -15438,7 +15438,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 20
+      scalar: 100
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -19410,7 +19410,7 @@ GameObject:
   - component: {fileID: 3619752922244951023}
   - component: {fileID: 7083547739573229282}
   m_Layer: 10
-  m_Name: Particle System
+  m_Name: ManyParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19514,7 +19514,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 2.5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -19685,8 +19685,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.2
-      minScalar: 0.01
+      scalar: 0.35
+      minScalar: 0.12
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -20002,7 +20002,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 100
+    maxNumParticles: 10
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -20268,7 +20268,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 20
+      scalar: 100
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -33909,6 +33909,7 @@ GameObject:
   - component: {fileID: 2426147584056794659}
   - component: {fileID: 7188259928896129892}
   - component: {fileID: 1572938108676055372}
+  - component: {fileID: 5427909113744256185}
   m_Layer: 10
   m_Name: InteractableBadCollect
   m_TagString: InteractionBadCollect
@@ -33929,8 +33930,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8529314923148029325}
-  - {fileID: 2243729259794338848}
+  - {fileID: 1894403020166033191}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7188259928896129892
@@ -33947,6 +33947,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerMoneyInfluenceValue: -6
   destroyOnInteracted: 1
+  distanceToggleObj: {fileID: 8313309214901052261}
   characterRelatedObjs:
   - {fileID: 1293129891812266376}
   - {fileID: 2397598099874765986}
@@ -33971,6 +33972,48 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.20769818, y: 1, z: 0.4033397}
   m_Center: {x: 0, y: 0.035059653, z: 0.0016698837}
+--- !u!114 &5427909113744256185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5802162431640926484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b09fae5f73d711499a0a2bb8a006f68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onTriggerEnterEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7188259928896129892}
+        m_TargetAssemblyTypeName: Interactable, Assembly-CSharp
+        m_MethodName: ToggleDistanceToggleObj
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  onTriggerExitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7188259928896129892}
+        m_TargetAssemblyTypeName: Interactable, Assembly-CSharp
+        m_MethodName: ToggleDistanceToggleObj
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5847740763453697195
 GameObject:
   m_ObjectHideFlags: 0
@@ -38801,3 +38844,36 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1 &8313309214901052261
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1894403020166033191}
+  m_Layer: 10
+  m_Name: DistanceToggleObj
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1894403020166033191
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8313309214901052261}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8529314923148029325}
+  - {fileID: 2243729259794338848}
+  m_Father: {fileID: 2426147584056794659}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

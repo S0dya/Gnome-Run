@@ -13,6 +13,8 @@ public class Interactable : MonoBehaviour, IInteractable, ICharacterRelatedChang
 
     [SerializeField] private bool destroyOnInteracted;
 
+    [SerializeField] private GameObject distanceToggleObj;
+
     [Header("Character related details")]
     [SerializeField] private GameObject[] characterRelatedObjs;
 
@@ -31,4 +33,6 @@ public class Interactable : MonoBehaviour, IInteractable, ICharacterRelatedChang
         _curCharacterRelatedObjI = characterIndex;
         characterRelatedObjs[_curCharacterRelatedObjI].SetActive(true);
     }
+
+    public void ToggleDistanceToggleObj(bool toggle) => distanceToggleObj.SetActive(toggle);
 }
