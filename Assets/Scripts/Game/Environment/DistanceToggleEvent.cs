@@ -1,11 +1,14 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class DistanceToggleEvent : MonoBehaviour
+namespace DistanceToggle
 {
-    [SerializeField] private UnityEvent onTriggerEnterEvent;
-    [SerializeField] private UnityEvent onTriggerExitEvent;
+    public class DistanceToggleEvent : MonoBehaviour
+    {
+        [SerializeField] private UnityEvent onTriggerEnterEvent;
+        [SerializeField] private UnityEvent onTriggerExitEvent;
 
-    public void InvokeEnter() => onTriggerEnterEvent?.Invoke();
-    public void InvokeExit() => onTriggerExitEvent?.Invoke();
+        public virtual void InvokeEnter() => onTriggerEnterEvent?.Invoke();
+        public virtual void InvokeExit() => onTriggerExitEvent?.Invoke();
+    }
 }

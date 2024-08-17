@@ -34,5 +34,5 @@ public class Interactable : MonoBehaviour, IInteractable, ICharacterRelatedChang
         characterRelatedObjs[_curCharacterRelatedObjI].SetActive(true);
     }
 
-    public void ToggleDistanceToggleObj(bool toggle) => distanceToggleObj.SetActive(toggle);
+    public virtual void ToggleDistanceToggleObj(bool toggle) => distanceToggleObj.SetActive(toggle);
 }

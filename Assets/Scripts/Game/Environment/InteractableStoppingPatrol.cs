@@ -20,6 +20,8 @@ public class InteractableStoppingPatrol : InteractableStopping, IInteractablePat
 
     private Vector3 _directionToTarget;
 
+    private bool _isVisible;
+
     //hash
     private int _animatorIDIdle;
     private int _animatorIDWalk;
@@ -67,12 +69,21 @@ public class InteractableStoppingPatrol : InteractableStopping, IInteractablePat
         var directionToPlayer = (playerPosition - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(new Vector3(directionToPlayer.x, 0, directionToPlayer.z));
 
-        characterRelatedAnimators[_curCharacterRelatedObjI].Play(_animatorIDIdle);
+        if (_isVisible) characterRelatedAnimators[_curCharacterRelatedObjI].Play(_animatorIDIdle);
     }
     public override void CharacterChanged(int characterIndex)
     {
         base.CharacterChanged(characterIndex);
 
-        characterRelatedAnimators[_curCharacterRelatedObjI].Play(_animatorIDWalk);
+        if (_isVisible) characterRelatedAnimators[_curCharacterRelatedObjI].Play(_animatorIDWalk);
+    }
+
+    public override void ToggleDistanceToggleObj(bool toggle)
+    {
+        _isVisible = toggle;
+
+        base.ToggleDistanceToggleObj(_isVisible);
+
+        if (_isVisible) characterRelatedAnimators[_curCharacterRelatedObjI].Play(_animatorIDWalk);
     }
 }

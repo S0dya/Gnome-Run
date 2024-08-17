@@ -51,12 +51,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23107c83865c4264fb1954d0d7164e0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementDirection: 150
-  duration: 1.5
   rectTransform: {fileID: 6273628821415169636}
   text: {fileID: 612493626456742830}
   canvasGroup: {fileID: 6232805363461882481}
   InitialScale: {x: 0.6, y: 0.6, z: 0.6}
+  movementDirection: 150
+  duration: 1.5
 --- !u!225 &6232805363461882481
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -81,7 +81,7 @@ GameObject:
   - component: {fileID: 1003775944766516142}
   - component: {fileID: 3187054930860517700}
   m_Layer: 5
-  m_Name: Dollar
+  m_Name: Coin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -134,7 +134,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9608fc8281ff46648adaf51e66174655, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 707b348d13792ab4a9f1438b35c14ef3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

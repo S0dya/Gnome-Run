@@ -11252,8 +11252,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2426147584056794659}
   - component: {fileID: 3998839795135288295}
+  - component: {fileID: 6259476000317784995}
   - component: {fileID: 1572938108676055372}
-  - component: {fileID: 7725630506466270091}
   m_Layer: 10
   m_Name: InteractableStoppingPatrolGoodCollect
   m_TagString: InteractionBadCollect
@@ -11274,8 +11274,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1521183284184093639}
-  - {fileID: 6949802264527717722}
+  - {fileID: 2428886394400858560}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3998839795135288295
@@ -11292,6 +11291,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerMoneyInfluenceValue: 2
   destroyOnInteracted: 0
+  distanceToggleObj: {fileID: 6162060477969979778}
   characterRelatedObjs:
   - {fileID: 6134862950056544029}
   - {fileID: 8659377023520286697}
@@ -11302,6 +11302,48 @@ MonoBehaviour:
   characterRelatedAnimators:
   - {fileID: 7109458394871465561}
   - {fileID: 2169411385574888556}
+--- !u!114 &6259476000317784995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5802162431640926484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b09fae5f73d711499a0a2bb8a006f68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onTriggerEnterEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3998839795135288295}
+        m_TargetAssemblyTypeName: InteractableStoppingPatrol, Assembly-CSharp
+        m_MethodName: ToggleDistanceToggleObj
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  onTriggerExitEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3998839795135288295}
+        m_TargetAssemblyTypeName: InteractableStoppingPatrol, Assembly-CSharp
+        m_MethodName: ToggleDistanceToggleObj
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!65 &1572938108676055372
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -11321,29 +11363,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.20769818, y: 1, z: 0.4033397}
+  m_Size: {x: 1.5, y: 1, z: 1.5}
   m_Center: {x: 0, y: 0.035059653, z: 0.0016698837}
---- !u!95 &7725630506466270091
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5802162431640926484}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5858415399442676701
 GameObject:
   m_ObjectHideFlags: 0
@@ -11472,7 +11493,7 @@ Transform:
   - {fileID: 4375042975005521800}
   - {fileID: 113073832085778645}
   - {fileID: 6029019055087012896}
-  m_Father: {fileID: 2426147584056794659}
+  m_Father: {fileID: 2428886394400858560}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &7109458394871465561
 Animator:
@@ -11495,6 +11516,39 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &6162060477969979778
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2428886394400858560}
+  m_Layer: 10
+  m_Name: DistanceToggle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &2428886394400858560
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6162060477969979778}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1521183284184093639}
+  - {fileID: 6949802264527717722}
+  m_Father: {fileID: 2426147584056794659}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6186857985046974944
 GameObject:
   m_ObjectHideFlags: 0
@@ -12041,7 +12095,7 @@ Transform:
   - {fileID: 9214229615786441959}
   - {fileID: 6533700161151087982}
   - {fileID: 264943439007814243}
-  m_Father: {fileID: 2426147584056794659}
+  m_Father: {fileID: 2428886394400858560}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &2169411385574888556
 Animator:

@@ -22,6 +22,7 @@ namespace EditorLogics
                 for (int i = 0; i < levelObjectArray.LevelsAmount; i++)
                 {
                     var levelGo = Instantiate(levelObjectArray.LevelTemplatePrefab, levelObjectArray.LevelDirection * i, Quaternion.identity, levelObjectArray.transform);//fix later
+                    levelGo.name = $"Level {i}.{levelObjectArray.Amount + curProgressionValue}";
 
                     CreateLevel(levelObjectArray.LevelStartPrefab,
                         levelObjectArray.Prefabs, levelObjectArray.Direction, levelObjectArray.Amount + curProgressionValue, levelObjectArray.Randomize, levelGo.transform,

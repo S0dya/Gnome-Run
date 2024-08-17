@@ -33932,8 +33932,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2426147584056794659}
   - component: {fileID: 7188259928896129892}
-  - component: {fileID: 1572938108676055372}
   - component: {fileID: 2239988849721309847}
+  - component: {fileID: 1572938108676055372}
   m_Layer: 10
   m_Name: InteractableGoodCollect
   m_TagString: InteractionGoodCollect
@@ -33975,27 +33975,6 @@ MonoBehaviour:
   characterRelatedObjs:
   - {fileID: 3740983887355157144}
   - {fileID: 1517900230991221054}
---- !u!65 &1572938108676055372
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5802162431640926484}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.20769818, y: 1, z: 0.4033397}
-  m_Center: {x: 0, y: 0.035059653, z: 0.0016698837}
 --- !u!114 &2239988849721309847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34038,6 +34017,27 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!65 &1572938108676055372
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5802162431640926484}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.20769818, y: 1, z: 0.4033397}
+  m_Center: {x: 0, y: 0.035059653, z: 0.0016698837}
 --- !u!1 &6999839003501234339
 GameObject:
   m_ObjectHideFlags: 0
