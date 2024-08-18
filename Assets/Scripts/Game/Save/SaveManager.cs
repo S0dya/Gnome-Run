@@ -1,3 +1,4 @@
+using AdsSystem;
 using System.Linq;
 using UnityEngine;
 using YG;
@@ -40,9 +41,12 @@ namespace Saving
 
         public void Init()
         {
-            if (YandexGame.SDKEnabled) _saveSystem = new YandexSave();
-            else _saveSystem = new JsonSave();
-
+#if UNITY_ANDROID || UNITY_IOS || UNITY_TVOS
+            _saveSystem = new YandexSave();
+#else
+            _saveSystem = new JsonSave();
+#endif
+            
             Load();
         }
         private void OnEnable()

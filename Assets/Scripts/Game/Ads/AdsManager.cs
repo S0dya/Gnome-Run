@@ -14,8 +14,11 @@ namespace AdsSystem
 
         public void Init()
         {
-            if (YandexGame.SDKEnabled) _adsService = new YandexAds(yandexSdk);
-            else _adsService = new UnityAds();
+#if UNITY_ANDROID || UNITY_IOS || UNITY_TVOS
+            _adsService = new YandexAds(yandexSdk);
+#else
+            _adsService = new UnityAds();
+#endif
 
             _adsService.OnRewardAdCompleted += OnRewardAdCompleted;
         }

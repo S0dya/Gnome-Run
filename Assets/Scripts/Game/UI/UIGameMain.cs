@@ -177,9 +177,7 @@ public class UIGameMain : SubjectMonoBehaviour
     //shop
     private void OnShopRewardAdWatched()
     {
-        Settings.MoneyAmount += 2000;
-
-        SetMoney();
+        Settings.MoneyAmount += 2000; SetMoney();
     }
 
     //events
