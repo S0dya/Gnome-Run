@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
 #if UNITY_ANDROID || UNITY_IOS || UNITY_TVOS
         _inputs.InGame.MobileMove.performed += ctx => Move(ctx.ReadValue<Vector2>());
-//#else
+#else
         _inputs.InGame.PCMove.performed += ctx => Move(ctx.ReadValue<Vector2>());
 #endif
 

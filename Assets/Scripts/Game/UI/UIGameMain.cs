@@ -23,6 +23,7 @@ public class UIGameMain : SubjectMonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private Image vibrationImage;
+    [SerializeField] private GameObject vibrationField;
     [SerializeField] private Image soundImage;
     [SerializeField] private Image languageImage;
 
@@ -73,6 +74,10 @@ public class UIGameMain : SubjectMonoBehaviour
         //tutorial
         _tutorialInitialPos = tutorialTransform.anchoredPosition;
         AnimateTutorial();
+
+#if !UNITY_ANDROID || !UNITY_IOS
+        vibrationField.SetActive(false);
+#endif
 
         //settings
         SetSettingImage(vibrationImage, vibrationSprites, Settings.HasVibration);

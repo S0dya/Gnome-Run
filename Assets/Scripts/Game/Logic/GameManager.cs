@@ -49,7 +49,9 @@ public class GameManager : SubjectMonoBehaviour
 
     public void ChangeMoneyAmount(int value)
     {
+#if UNITY_ANDROID || UNITY_IOS
         if (Settings.HasVibration) Handheld.Vibrate();
+#endif
 
         HandleChangeMoney(value);
 
