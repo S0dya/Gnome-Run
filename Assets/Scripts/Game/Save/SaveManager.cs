@@ -42,11 +42,11 @@ namespace Saving
         public void Init()
         {
 #if UNITY_ANDROID || UNITY_IOS || UNITY_TVOS
-            _saveSystem = new YandexSave();
-#else
             _saveSystem = new JsonSave();
+#else
+            _saveSystem = new YandexSave();
 #endif
-            
+
             Load();
         }
         private void OnEnable()
