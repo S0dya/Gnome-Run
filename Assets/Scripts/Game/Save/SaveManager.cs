@@ -1,7 +1,9 @@
 using AdsSystem;
 using System.Linq;
 using UnityEngine;
+#if UNITY_WEBGL
 using YG;
+#endif
 using Zenject;
 
 namespace Saving
@@ -49,6 +51,7 @@ namespace Saving
 
             Load();
         }
+#if UNITY_WEBGL
         private void OnEnable()
         {
             if (YandexGame.SDKEnabled) YandexGame.GetDataEvent += Load;
@@ -57,7 +60,8 @@ namespace Saving
         {
             if (YandexGame.SDKEnabled) YandexGame.GetDataEvent -= Load;
         }
-    
+#endif
+
         private void OnDestroy() => Save();
         private void OnApplicationQuit() => Save();
 

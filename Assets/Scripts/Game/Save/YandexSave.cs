@@ -1,3 +1,4 @@
+#if UNITY_WEBGL
 using YG;
 
 namespace Saving
@@ -36,3 +37,4 @@ namespace Saving
         }
     }
 }
+#endif

@@ -3,7 +3,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.Tables;
+#if UNITY_WEBGL
 using YG;
+#endif
 
 public class LanguageManager : MonoBehaviour
 {
@@ -16,8 +18,10 @@ public class LanguageManager : MonoBehaviour
     {
         if (Settings.LanguageIndex == -1)
         {
+#if UNITY_WEBGL
             YandexGame.LanguageRequest();
             Settings.LanguageIndex = Array.IndexOf(languages, YandexGame.lang);
+#endif
         }
     }
 

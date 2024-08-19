@@ -1,3 +1,4 @@
+#if UNITY_WEBGL
 using System;
 using YG;
 
@@ -38,3 +39,4 @@ namespace AdsSystem
         }
     }
 }
+#endif

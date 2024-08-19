@@ -1,12 +1,16 @@
 using System;
 using UnityEngine;
+#if UNITY_WEBGL
 using YG;
+#endif
 
 namespace AdsSystem
 {
     public class AdsManager : MonoBehaviour
     {
+#if UNITY_WEBGL
         [SerializeField] private YandexGame yandexSdk;
+#endif
 
         private IAdsService _adsService;
 
