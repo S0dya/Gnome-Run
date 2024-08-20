@@ -124,7 +124,7 @@ public class UIGameMain : SubjectMonoBehaviour
 
         Settings.MoneyAmount -= 10000; SetMoney();
 
-        int randomI = lockedCharactersList[Random.Range(0, charactersVisual.Length)];
+        int randomI = lockedCharactersList[charactersVisual.Length > 1 ? 0 : Random.Range(0, charactersVisual.Length)];
 
         Settings.ShopUnlockedCharacters.Add(randomI);
         charactersVisual[randomI].UnlockCharacter();
