@@ -53,6 +53,7 @@ public class UIGameFinish : SubjectMonoBehaviour
         if (Settings.CompleteLevelCount % 2 == 0) _adsManager.ShowAd();
 
         _levelManager.NextLevel();
+        _gameManager.AddEarnedMoney();
 
         victoryFinish.Close();
     }

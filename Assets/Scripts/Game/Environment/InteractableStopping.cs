@@ -12,7 +12,7 @@ public class InteractableStopping : Interactable, IInteractableStopping
     [Header("Settings")]
     [SerializeField] private float interactionStopDuration = 1;
 
-    [Header("OTher")]
+    [Header("Other")]
     [SerializeField] private BoxCollider interactionCollider;
 
     public event Action OnStopInteraction;

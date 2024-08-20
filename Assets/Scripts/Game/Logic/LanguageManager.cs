@@ -22,6 +22,10 @@ public class LanguageManager : MonoBehaviour
             YandexGame.LanguageRequest();
             Settings.LanguageIndex = Array.IndexOf(languages, YandexGame.lang);
 #endif
+#if UNITY_ANDROID || UNITY_IOS
+            string languageCode = Application.systemLanguage == SystemLanguage.Russian ? "ru" : "en";
+            Settings.LanguageIndex = Array.IndexOf(languages, languageCode);
+#endif
         }
     }
 

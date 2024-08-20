@@ -34,7 +34,6 @@ public class GameManager : SubjectMonoBehaviour
         Init(new Dictionary<EventEnum, Action>
         {
             { EventEnum.LevelStarted, OnStartLevel},
-            { EventEnum.LevelRestarted, OnRestartLevel},
         });
     }
 
@@ -43,14 +42,17 @@ public class GameManager : SubjectMonoBehaviour
         maxMoneyAmountOnLevel = maxMoney;
 
         for (int i = 0; i < 4; i++)
-            curMoneyGoals[i] = (int)((float)maxMoneyAmountOnLevel * (i+1) * 0.25f);
+            curMoneyGoals[i] = (int)((float)maxMoneyAmountOnLevel * (i + 1) * 0.25f);
     }
 
 
     public void ChangeMoneyAmount(int value)
     {
 #if UNITY_ANDROID || UNITY_IOS
-        if (Settings.HasVibration) Handheld.Vibrate();
+        if (Settings.HasVibration)
+        {
+            Handheld.Vibrate();
+        }
 #endif
 
         HandleChangeMoney(value);
@@ -95,7 +97,7 @@ public class GameManager : SubjectMonoBehaviour
 
     public bool FinishReached(int finishIndex)
     {
-        bool finishReached = curGoalIndex == finishIndex;
+        bool finishReached = curGoalIndex <= finishIndex;
 
         if (finishReached)
         {
@@ -127,7 +129,7 @@ public class GameManager : SubjectMonoBehaviour
 
         _uiGameFinish.SetProgressOnVictory(currentMoneyAmount);
     }
-    public void OnRestartLevel()
+    public void AddEarnedMoney()
     {
         Settings.MoneyAmount += currentMoneyAmount;
 

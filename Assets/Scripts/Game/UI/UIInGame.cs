@@ -89,9 +89,9 @@ public class UIInGame : SubjectMonoBehaviour
     public void OnMoneyCollected(int value)
     {
         if (value > 0)
-            GoodMoneyCollect.AnimateCollect('+' + value.ToString());
+            GoodMoneyCollect.AnimateCollect(value);
         else
-            BadMoneyCollect.AnimateCollect(value.ToString());
+            BadMoneyCollect.AnimateCollect(value);
     }
 
     private void SetProgressBar(float value)

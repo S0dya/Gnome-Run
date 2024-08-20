@@ -5,17 +5,25 @@ public class UIMoneyCollect : UITextEffect
 {
     [Header("Settings")]
     [SerializeField] private float movementDirection = 150;
-    [SerializeField] private float duration = 1.5f;
+    [SerializeField] private float fadeInDuration = 1.25f;
+    [SerializeField] private float fadeOutDuration = 0.5f;
 
-    public void AnimateCollect(string valueText)
+    private int _curValue;
+
+    public void AnimateCollect(int value)
     {
-        PrepareAnimate(valueText);
+        _curValue += value;
+
+        PrepareAnimate($"{(value > 0 ? "+ " : "")}{_curValue}");
 
         _tweener = DOTween.Sequence()
-            .Append(rectTransform.DOScale(1.3f, 0.2f).SetEase(Ease.OutBack))
-            .Append(rectTransform.DOAnchorPosY(movementDirection, duration).SetEase(Ease.InOutSine))
-            .Join(rectTransform.DOScale(1f, duration).SetEase(Ease.InOutSine))
-            .Join(canvasGroup.DOFade(0, duration))
-            .SetLoops(1, LoopType.Restart);
+        .Append(rectTransform.DOScale(1.4f, 0.2f).SetEase(Ease.OutBack))
+        .Append(rectTransform.DOAnchorPosY(movementDirection, fadeInDuration).SetEase(Ease.InOutSine))
+        .Join(rectTransform.DOScale(InitialScale, fadeOutDuration).SetEase(Ease.InOutSine))
+        .Join(canvasGroup.DOFade(0, fadeOutDuration))
+        .OnComplete(() =>
+        {
+            _curValue = 0;
+        });
     }
 }
