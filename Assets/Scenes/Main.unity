@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.30515686, g: 0.6259138, b: 0.98235816, a: 1}
+  m_IndirectSpecularColor: {r: 0.07554454, g: 0.34587356, b: 0.9405947, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -821,7 +821,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ff2f1cf23d5c0438c0339c9231532b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  yandexSdk: {fileID: 367244918}
 --- !u!1 &136207300
 GameObject:
   m_ObjectHideFlags: 0
@@ -853,7 +852,6 @@ Transform:
   - {fileID: 1911938541}
   - {fileID: 990178459}
   - {fileID: 463854126}
-  - {fileID: 367244916}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2285,24 +2283,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c9c2205aafe223d40ac2487a59f35135, type: 2}
   locationParent: {fileID: 492082980}
   levelParent: {fileID: 431683472}
---- !u!4 &367244916 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2211564899198745199, guid: caf9732433f4dc044845763962493607,
-    type: 3}
-  m_PrefabInstance: {fileID: 904197009}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &367244918 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2211564899198745196, guid: caf9732433f4dc044845763962493607,
-    type: 3}
-  m_PrefabInstance: {fileID: 904197009}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 404d6214ebdd58d43a94c7ed650dc2f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &386376882
 GameObject:
   m_ObjectHideFlags: 0
@@ -8485,7 +8465,7 @@ MonoBehaviour:
   moneyText: {fileID: 1981656515}
   curLevelText: {fileID: 278058386}
   tutorialTransform: {fileID: 1156482873}
-  tutorialDistance: -160
+  tutorialDistance: -170
   vibrationImage: {fileID: 1348652697}
   vibrationField: {fileID: 393692}
   soundImage: {fileID: 671920535}
@@ -9051,7 +9031,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &733860844
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14394,75 +14374,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -279.91943}
   m_SizeDelta: {x: 0, y: 560}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1001 &904197009
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 136207301}
-    m_Modifications:
-    - target: {fileID: 2211564899198745197, guid: caf9732433f4dc044845763962493607,
-        type: 3}
-      propertyPath: m_Name
-      value: YandexGame
-      objectReference: {fileID: 0}
-    - target: {fileID: 2211564899198745199, guid: caf9732433f4dc044845763962493607,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2211564899198745199, guid: caf9732433f4dc044845763962493607,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2211564899198745199, guid: caf9732433f4dc044845763962493607,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2211564899198745199, guid: caf9732433f4dc044845763962493607,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2211564899198745199, guid: caf9732433f4dc044845763962493607,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2211564899198745199, guid: caf9732433f4dc044845763962493607,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2211564899198745199, guid: caf9732433f4dc044845763962493607,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2211564899198745199, guid: caf9732433f4dc044845763962493607,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2211564899198745199, guid: caf9732433f4dc044845763962493607,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2211564899198745199, guid: caf9732433f4dc044845763962493607,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2211564899198745199, guid: caf9732433f4dc044845763962493607,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: caf9732433f4dc044845763962493607, type: 3}
 --- !u!1 &906895866
 GameObject:
   m_ObjectHideFlags: 0
@@ -15033,7 +14944,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 960076766}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 662341293}
+        m_TargetAssemblyTypeName: UIGameMain, Assembly-CSharp
+        m_MethodName: OnPressedToStartButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &960076766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15086,19 +15009,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventToInvoke:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 662341293}
-        m_TargetAssemblyTypeName: UIGameMain, Assembly-CSharp
-        m_MethodName: OnPressedToStartButton
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -15404,6 +15315,7 @@ GameObject:
   - component: {fileID: 966521834}
   - component: {fileID: 966521836}
   - component: {fileID: 966521837}
+  - component: {fileID: 966521838}
   m_Layer: 5
   m_Name: Body
   m_TagString: Untagged
@@ -15529,6 +15441,46 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &966521838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 966521833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:d09261ff33cbf614391decf5cfb897c3
+    m_TableEntryReference:
+      m_KeyId: 6748038269620224
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 966521837}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &990178455
 GameObject:
   m_ObjectHideFlags: 0
@@ -17138,19 +17090,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventOnAnimationEnd:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 919132149615872727}
-        m_TargetAssemblyTypeName: Player, Assembly-CSharp
-        m_MethodName: OnPlayFootstep
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &1345254449
 GameObject:
   m_ObjectHideFlags: 0
@@ -17514,9 +17454,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58346da348a80344aa882d4c2ebee93d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxMoneyAmountOnLevel: 10
+  maxMoneyAmountOnLevel: 0
   currentMoneyAmount: 0
-  curMoneyGoals: 02000000000000000000000000000000
+  curMoneyGoals: 00000000000000000000000000000000
   curGoalIndex: 0
 --- !u!1 &1396223465
 GameObject:
@@ -24234,10 +24174,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de9724d0bfaf9cc489c315bd743ab8f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moneyText: {fileID: 1981656515}
   inGameUIElements:
   - {fileID: 733860843}
   - {fileID: 1360141902}
+  - {fileID: 257027240}
   curLevelText: {fileID: 314042364}
   curMoneyText: {fileID: 16970452}
   playerProgressBarText: {fileID: 1399343169}
@@ -24897,6 +24837,8 @@ MonoBehaviour:
   cameraTransform: {fileID: 768354847}
   cameraPositions:
   - CameraPositionEventEnum: 0
+    CameraPositionTransform: {fileID: 283243013}
+  - CameraPositionEventEnum: 3
     CameraPositionTransform: {fileID: 283243013}
   - CameraPositionEventEnum: 1
     CameraPositionTransform: {fileID: 611147044}
@@ -25580,7 +25522,7 @@ MonoBehaviour:
     m_TableReference:
       m_TableCollectionName: GUID:d09261ff33cbf614391decf5cfb897c3
     m_TableEntryReference:
-      m_KeyId: 17561407488
+      m_KeyId: 6747878407917568
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -25589,7 +25531,7 @@ MonoBehaviour:
   m_UpdateString:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 747644897}
+      - m_Target: {fileID: 1906700622}
         m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
         m_MethodName: set_text
         m_Mode: 0
@@ -31687,12 +31629,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 6.5
-  movementBoundsRange: 2.85
-  movementInputSensitivity: 0.1
-  movementLerpSensitivity: 10
+  movementBoundsRange: 2.9
+  movementInputSensitivity: 0.075
+  movementLerpSensitivity: 6
   rotationSpeed: 5
-  rotationBoundsRange: 30
-  rotationLerpSensitivity: 10
+  rotationBoundsRange: 40
+  rotationLerpSensitivity: 30
   characterController: {fileID: 1793885759}
   characterTransform: {fileID: 1793885758}
 --- !u!114 &919132149615872726

@@ -1,12 +1,10 @@
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public enum TriggerableTypeEnum
 {
     none,
     Finish,
     Rotate,
-
 }
 
 public interface ITriggerable
@@ -25,6 +23,8 @@ public class Triggerable : MonoBehaviour, ITriggerable
     [SerializeField] private Animator animator;
 
     private int _aniamtorIDAnimationName;
+
+    private bool _isTriggered;
 
     private void Start()
     {

@@ -11,26 +11,6 @@ namespace Saving
     public class SaveManager : MonoBehaviour
     {
 
-
-        //game
-        private const string MoneyAmount_Key = "Money Amount";
-
-        //level
-        private const string CurrentLevel_Key = "Current Level";
-        private const string CompleteLevelCount_Key = "Complete Lvl Count";
-        private const string LastLevelIndex_Key = "Last Level Index";
-        private const string CurrentLocation_Key = "Current Location Index";
-        private const string CurrentAttempt_Key = "Current Attempt";
-
-        //settings
-        private const string HasVibration_Key = "Has Vibration";
-        private const string HasSound_Key = "Has Sound";
-
-        //shop
-        private const string CurCharacterI_Key = "Current Character Index";
-        private const string ShopUnlockedCharacters_Key = "Shop Unlocked Characters";
-
-
         private ISaveSystem _saveSystem;
 
         private LevelManager _levelManager;
@@ -43,10 +23,10 @@ namespace Saving
 
         public void Init()
         {
-#if UNITY_ANDROID || UNITY_IOS || UNITY_TVOS
-            _saveSystem = new JsonSave();
-#else
+#if UNITY_WEBGL
             _saveSystem = new YandexSave();
+#else
+            _saveSystem = new PrefsSave();
 #endif
 
             Load();
@@ -64,6 +44,15 @@ namespace Saving
 
         private void OnDestroy() => Save();
         private void OnApplicationQuit() => Save();
+        void OnApplicationPause(bool pauseStatus)
+        {
+            if (pauseStatus) Save();
+        }
+        void OnApplicationFocus(bool hasFocus)
+        {
+            if (!hasFocus) Save();
+        }
+
 
         public void Save() => _saveSystem.Save(GetGameData());
         public void Load() => SetGameData(_saveSystem.Load());
@@ -73,22 +62,22 @@ namespace Saving
             GameData gameData = new();
 
             //game
-            gameData.IntDict.Add(MoneyAmount_Key, Settings.MoneyAmount);
+            gameData.IntDict.Add(Settings.MoneyAmount_Key, Settings.MoneyAmount);
 
             //level
-            gameData.IntDict.Add(CurrentLevel_Key, Settings.CurrentLevel);
-            gameData.IntDict.Add(CompleteLevelCount_Key, Settings.CompleteLevelCount);
-            gameData.IntDict.Add(LastLevelIndex_Key, _levelManager.CurrentLevelIndex);
-            gameData.IntDict.Add(CurrentLocation_Key, Settings.CurrentLocation);
-            gameData.IntDict.Add(CurrentAttempt_Key, Settings.CurrentAttempt);
+            gameData.IntDict.Add(Settings.CurrentLevel_Key, Settings.CurrentLevel);
+            gameData.IntDict.Add(Settings.CompleteLevelCount_Key, Settings.CompleteLevelCount);
+            gameData.IntDict.Add(Settings.LastLevelIndex_Key, _levelManager.CurrentLevelIndex);
+            gameData.IntDict.Add(Settings.CurrentLocation_Key, Settings.CurrentLocation);
+            gameData.IntDict.Add(Settings.CurrentAttempt_Key, Settings.CurrentAttempt);
 
             //settings
-            gameData.boolDict.Add(HasVibration_Key, Settings.HasVibration);
-            gameData.boolDict.Add(HasSound_Key, Settings.HasSound);
+            gameData.BoolDict.Add(Settings.HasVibration_Key, Settings.HasVibration);
+            gameData.BoolDict.Add(Settings.HasSound_Key, Settings.HasSound);
 
             //shop
-            gameData.IntDict.Add(CurCharacterI_Key, Settings.CurCharacterI);
-            gameData.IntsDict.Add(ShopUnlockedCharacters_Key, Settings.ShopUnlockedCharacters.ToArray());
+            gameData.IntDict.Add(Settings.CurCharacterI_Key, Settings.CurCharacterI);
+            gameData.IntsDict.Add(Settings.ShopUnlockedCharacters_Key, Settings.ShopUnlockedCharacters.ToArray());
 
             return gameData;
         }
@@ -97,22 +86,22 @@ namespace Saving
             if (gameData == null) return;
 
             //game
-            gameData.IntDict.TryGetValue(MoneyAmount_Key, out Settings.MoneyAmount);
+            gameData.IntDict.TryGetValue(Settings.MoneyAmount_Key, out Settings.MoneyAmount);
 
             //level
-            gameData.IntDict.TryGetValue(CurrentLevel_Key, out Settings.CurrentLevel);
-            gameData.IntDict.TryGetValue(CompleteLevelCount_Key, out Settings.CompleteLevelCount);
-            gameData.IntDict.TryGetValue(LastLevelIndex_Key, out Settings.LastLevelIndex);
-            gameData.IntDict.TryGetValue(CurrentLocation_Key, out Settings.CurrentLocation);
-            gameData.IntDict.TryGetValue(CurrentAttempt_Key, out Settings.CurrentAttempt);
+            gameData.IntDict.TryGetValue(Settings.CurrentLevel_Key, out Settings.CurrentLevel);
+            gameData.IntDict.TryGetValue(Settings.CompleteLevelCount_Key, out Settings.CompleteLevelCount);
+            gameData.IntDict.TryGetValue(Settings.LastLevelIndex_Key, out Settings.LastLevelIndex);
+            gameData.IntDict.TryGetValue(Settings.CurrentLocation_Key, out Settings.CurrentLocation);
+            gameData.IntDict.TryGetValue(Settings.CurrentAttempt_Key, out Settings.CurrentAttempt);
 
             //settings
-            gameData.boolDict.TryGetValue(HasVibration_Key, out Settings.HasVibration);
-            gameData.boolDict.TryGetValue(HasSound_Key, out Settings.HasSound);
+            gameData.BoolDict.TryGetValue(Settings.HasVibration_Key, out Settings.HasVibration);
+            gameData.BoolDict.TryGetValue(Settings.HasSound_Key, out Settings.HasSound);
 
             //shop
-            gameData.IntDict.TryGetValue(CurCharacterI_Key, out Settings.CurCharacterI);
-            if (gameData.IntsDict.TryGetValue(ShopUnlockedCharacters_Key, out int[] shopUnlockedCharactersArray))
+            gameData.IntDict.TryGetValue(Settings.CurCharacterI_Key, out Settings.CurCharacterI);
+            if (gameData.IntsDict.TryGetValue(Settings.ShopUnlockedCharacters_Key, out int[] shopUnlockedCharactersArray))
                 Settings.ShopUnlockedCharacters = shopUnlockedCharactersArray.ToList();
         }
     }

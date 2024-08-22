@@ -7,8 +7,6 @@ using Zenject;
 
 public class UIInGame : SubjectMonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI moneyText;
-
     [SerializeField] private GameObject[] inGameUIElements;
 
     [Header("Head")]

@@ -75,7 +75,7 @@ public class UIGameMain : SubjectMonoBehaviour
         _tutorialInitialPos = tutorialTransform.anchoredPosition;
         AnimateTutorial();
 
-#if !UNITY_ANDROID || !UNITY_IOS
+#if UNITY_WEBGL
         vibrationField.SetActive(false);
 #endif
 

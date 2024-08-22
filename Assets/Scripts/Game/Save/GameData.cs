@@ -9,6 +9,6 @@ namespace Saving
         [SerializeField] public Dictionary<string, int> IntDict = new();
         [SerializeField] public Dictionary<string, int[]> IntsDict = new();
      
-        [SerializeField] public Dictionary<string, bool> boolDict = new();
+        [SerializeField] public Dictionary<string, bool> BoolDict = new();
     }
 }

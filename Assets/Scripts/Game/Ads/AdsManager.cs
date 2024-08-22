@@ -18,10 +18,10 @@ namespace AdsSystem
 
         public void Init()
         {
-#if UNITY_ANDROID || UNITY_IOS || UNITY_TVOS
-            _adsService = new UnityAds();
-#else
+#if UNITY_WEBGL
             _adsService = new YandexAds(yandexSdk);
+#else
+            _adsService = new UnityAds();
 #endif
 
             _adsService.OnRewardAdCompleted += OnRewardAdCompleted;
