@@ -36,6 +36,7 @@ public static class Settings
     //settings
     public const string HasVibration_Key = "Has Vibration";
     public const string HasSound_Key = "Has Sound";
+    public const string LanguageIndex_Key = "Language Index";
 
     //shop
     public const string CurCharacterI_Key = "Current Character Index";

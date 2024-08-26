@@ -6,8 +6,14 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     [SerializeField] private float movementSpeed = 4;
     [SerializeField] private float movementBoundsRange = 3;
+    
+    [Header("PC Settings")]
     [SerializeField] private float movementInputSensitivity = 0.1f;
     [SerializeField] private float movementLerpSensitivity = 1;
+    
+    [Header("Mobile Settings")]
+    [SerializeField] private float mobileMovementInputSensitivity = 0.1f;
+    [SerializeField] private float mobileMovementLerpSensitivity = 1;
 
     [Header("Rotation")]
     [SerializeField] private float rotationSpeed = 5;
@@ -26,6 +32,9 @@ public class PlayerMovement : MonoBehaviour
     //reusable
     private Vector3 _curMovementPosition;
     private Quaternion _curTargetRotation;
+
+    private float _curMovementInputSensitivity;
+    private float _curMovementLerpSensitivity;
 
     private void OnEnable()
     {
@@ -55,10 +64,21 @@ public class PlayerMovement : MonoBehaviour
         _characterMeshesParentTransform.rotation = _curTargetRotation = Quaternion.identity;
     }
 
+    private void Start()
+    {
+#if UNITY_ANDROID || UNITY_IOS || UNITY_TVOS
+        _curMovementInputSensitivity = mobileMovementInputSensitivity;
+        _curMovementLerpSensitivity = mobileMovementLerpSensitivity;
+#else
+        _curMovementInputSensitivity = movementInputSensitivity;
+        _curMovementLerpSensitivity = movementLerpSensitivity;
+#endif
+    }
+
     private void Update()
     {
         _movementDirection = Math.Abs(_movementDirection) < 0.04f ? 0 
-            : Mathf.Lerp(_movementDirection, 0, movementLerpSensitivity * Time.deltaTime);
+            : Mathf.Lerp(_movementDirection, 0, _curMovementLerpSensitivity * Time.deltaTime);
 
         _curMovementPosition = characterTransform.position + new Vector3(_movementDirection, 0, 1) * movementSpeed * Time.deltaTime;
         _curMovementPosition.x = Mathf.Clamp(_curMovementPosition.x, -movementBoundsRange, movementBoundsRange);
@@ -79,5 +99,5 @@ public class PlayerMovement : MonoBehaviour
     }
 
     //input
-    public void Move(Vector2 direction) => _movementDirection = direction.x * movementInputSensitivity;
+    public void Move(Vector2 direction) => _movementDirection = direction.x * _curMovementInputSensitivity;
 }

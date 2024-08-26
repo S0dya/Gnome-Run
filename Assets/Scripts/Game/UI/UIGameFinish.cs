@@ -17,13 +17,15 @@ public class UIGameFinish : SubjectMonoBehaviour
     private LevelManager _levelManager;
     private GameManager _gameManager;
     private AdsManager _adsManager;
+    private LanguageManager _languageManager;
 
     [Inject]
-    public void Constuct(LevelManager levelManager, GameManager gameManager, AdsManager adsManager)
+    public void Constuct(LevelManager levelManager, GameManager gameManager, AdsManager adsManager, LanguageManager languageManager)
     {
         _levelManager = levelManager;
         _gameManager = gameManager;
         _adsManager = adsManager;
+        _languageManager = languageManager;
     }
 
     private void Awake()
@@ -39,7 +41,7 @@ public class UIGameFinish : SubjectMonoBehaviour
     public void SetProgressOnVictory(int moneyAmount)
     {
         moneyAmountText.text = moneyAmount.ToString();
-        levelIndexText.text = "Level " + _levelManager.CurrentLevelIndex.ToString();
+        levelIndexText.text = _languageManager.GetLocalizedString("Level") + _levelManager.CurrentLevelIndex.ToString();
     }
 
     public void OnWatchRewardAdButton()

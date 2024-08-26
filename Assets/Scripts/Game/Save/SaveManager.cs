@@ -74,6 +74,7 @@ namespace Saving
             //settings
             gameData.BoolDict.Add(Settings.HasVibration_Key, Settings.HasVibration);
             gameData.BoolDict.Add(Settings.HasSound_Key, Settings.HasSound);
+            gameData.IntDict.Add(Settings.LanguageIndex_Key, Settings.LanguageIndex);
 
             //shop
             gameData.IntDict.Add(Settings.CurCharacterI_Key, Settings.CurCharacterI);
@@ -98,6 +99,7 @@ namespace Saving
             //settings
             gameData.BoolDict.TryGetValue(Settings.HasVibration_Key, out Settings.HasVibration);
             gameData.BoolDict.TryGetValue(Settings.HasSound_Key, out Settings.HasSound);
+            gameData.IntDict.TryGetValue(Settings.LanguageIndex_Key, out Settings.LanguageIndex);
 
             //shop
             gameData.IntDict.TryGetValue(Settings.CurCharacterI_Key, out Settings.CurCharacterI);

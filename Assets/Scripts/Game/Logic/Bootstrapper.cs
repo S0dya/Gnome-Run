@@ -3,6 +3,7 @@ using Zenject;
 
 using Saving;
 using AdsSystem;
+using YG;
 
 public class Bootstrapper : MonoBehaviour
 {
@@ -15,6 +16,22 @@ public class Bootstrapper : MonoBehaviour
     }
 
     private void Awake()
+    {
+#if UNITY_WEBGL
+        YandexGame.GetDataEvent += OnCloudSaveLoaded;
+#else
+        InitializeGame();
+#endif
+    }
+
+    private void OnCloudSaveLoaded()
+    {
+        YandexGame.GetDataEvent -= OnCloudSaveLoaded;
+
+        InitializeGame();
+    }
+
+    private void InitializeGame()
     {
         _container.Resolve<SaveManager>().Init();
         _container.Resolve<AdsManager>().Init();

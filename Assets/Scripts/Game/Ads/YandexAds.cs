@@ -8,34 +8,28 @@ namespace AdsSystem
     {
         public event Action OnRewardAdCompleted;
 
-        private readonly YandexGame _sdk;
-
         public YandexAds(YandexGame sdk)
         {
-            _sdk = sdk;
-
-            YandexGame.CloseVideoEvent += OnRewardAdClosed;
+            YandexGame.RewardVideoEvent += OnRewardAdClosed;
+        }
+        ~YandexAds()
+        {
+            YandexGame.RewardVideoEvent -= OnRewardAdClosed;
         }
          
         public void ShowAd()
         {
-            _sdk._FullscreenShow();
+            YandexGame.FullscreenShow();
         }
 
         public void ShowRewardedAd()
         {
-            _sdk._RewardedShow(1);
+            YandexGame.RewVideoShow(1);
         }
 
-        private void OnRewardAdClosed()
+        private void OnRewardAdClosed(int i)
         {
             OnRewardAdCompleted?.Invoke();
-        }
-
-        ~YandexAds()
-        {
-            // Unsubscribe to avoid memory leaks
-            YandexGame.CloseVideoEvent -= OnRewardAdClosed;
         }
     }
 }

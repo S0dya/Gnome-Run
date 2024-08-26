@@ -45,6 +45,7 @@ namespace Saving
             //settings
             gameData.BoolDict.Add(Settings.HasVibration_Key, PlayerPrefs.GetInt(Settings.HasVibration_Key) == 1);
             gameData.BoolDict.Add(Settings.HasSound_Key, PlayerPrefs.GetInt(Settings.HasSound_Key) == 1);
+            gameData.IntDict.Add(Settings.LanguageIndex_Key, PlayerPrefs.GetInt(Settings.LanguageIndex_Key));
 
             //shop
             gameData.IntDict.Add(Settings.CurCharacterI_Key, PlayerPrefs.GetInt(Settings.CurCharacterI_Key));
