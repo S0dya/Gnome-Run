@@ -27,6 +27,7 @@ namespace Saving
             _saveSystem = new YandexSave();
 #else
             _saveSystem = new PrefsSave();
+      
 #endif
 
             Load();

@@ -18,14 +18,13 @@ namespace YG
 
         // Ваши сохранения
 
-        public string[] IntDictKeys = new string[20];
-        public int[] IntDictValues = new int[20];
+        public string[] IntDictKeys;
+        public int[] IntDictValues;
 
-        public string[] IntsDictKeys = new string[20];
-        public int[][] IntsDictValues = new int[5][];
+        public int[] IntsShopUnlockedCharacters;
 
-        public string[] BoolDictKeys = new string[20];
-        public bool[] BoolDictValues = new bool[20];
+        public string[] BoolDictKeys;
+        public bool[] BoolDictValues;
 
         // Поля (сохранения) можно удалять и создавать новые. При обновлении игры сохранения ломаться не должны
 

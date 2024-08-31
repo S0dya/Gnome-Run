@@ -14,37 +14,32 @@ namespace Saving
         }
         public GameData Load()
         {
-            return ConvertToGameData(YandexGame.savesData);
+            return ConvertToGameData();
         }
 
         private SavesYG ConvertToSavesYG(GameData gameData)
         {
             SeparateDictionaryIntoLists(gameData.IntDict, out List<string> intDictKeys, out List<int> intDictValues);
-            SeparateDictionaryIntoLists(gameData.IntsDict, out List<string> intsDictKeys, out List<int[]> intsDictValues);
             SeparateDictionaryIntoLists(gameData.BoolDict, out List<string> boolDictKeys, out List<bool> boolDictValues);
 
-            var savesYG = new SavesYG
-            {
-                IntDictKeys = intDictKeys.ToArray(),
-                IntDictValues = intDictValues.ToArray(),
+            YandexGame.savesData.IntDictKeys = intDictKeys.ToArray(); YandexGame.savesData.IntDictValues = intDictValues.ToArray();
+            YandexGame.savesData.IntsShopUnlockedCharacters = gameData.IntsDict[Settings.ShopUnlockedCharacters_Key];
+            YandexGame.savesData.BoolDictKeys = boolDictKeys.ToArray(); YandexGame.savesData.BoolDictValues = boolDictValues.ToArray();
 
-                IntsDictKeys = intsDictKeys.ToArray(),
-                IntsDictValues = intsDictValues.ToArray(),
-
-                BoolDictKeys = boolDictKeys.ToArray(),
-                BoolDictValues = boolDictValues.ToArray(),
-            };
-
-            return savesYG;
+            return YandexGame.savesData;
         }
-        private GameData ConvertToGameData(SavesYG savesYg)
+        private GameData ConvertToGameData()
         {
-            if (savesYg.isFirstSession || savesYg.IntsDictKeys == null) return null;
+            var savesYg = YandexGame.savesData;
+            if (savesYg.IntDictKeys.Length == 0) return null;
 
             var gameData = new GameData
             {
                 IntDict = FormDictionaryFromKeysAndValues(savesYg.IntDictKeys, savesYg.IntDictValues),
-                IntsDict = FormDictionaryFromKeysAndValues(savesYg.IntsDictKeys, savesYg.IntsDictValues),
+                IntsDict = new Dictionary<string, int[]>
+                {
+                    { Settings.ShopUnlockedCharacters_Key, savesYg.IntsShopUnlockedCharacters },
+                },
                 BoolDict = FormDictionaryFromKeysAndValues(savesYg.BoolDictKeys, savesYg.BoolDictValues),
             };
 
@@ -68,7 +63,10 @@ namespace Saving
 
             for (int i = 0; i < keys.Length; i++)
             {
-                if (!result.ContainsKey(keys[i])) result.Add(keys[i], values[i]);
+                if (keys[i] != "" && !result.ContainsKey(keys[i]))
+                {
+                    result.Add(keys[i], values[i]);
+                }
             }
 
             return result;
