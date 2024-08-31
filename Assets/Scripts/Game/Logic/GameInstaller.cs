@@ -22,18 +22,18 @@ public class GameInstaller : MonoInstaller
 
     public override void InstallBindings()
     {
-        Container.Bind<Player>().FromInstance(player).AsSingle().NonLazy();
+        Container.Bind<Player>().FromInstance(player).AsSingle();
 
-        Container.Bind<SaveManager>().FromInstance(saveManager).AsSingle().NonLazy();
-        Container.Bind<AdsManager>().FromInstance(adsManager).AsSingle().NonLazy();
-        Container.Bind<LanguageManager>().FromInstance(languageManager).AsSingle().NonLazy();
-        Container.Bind<AudioManager>().FromInstance(audioManager).AsSingle().NonLazy();
+        Container.Bind<SaveManager>().FromInstance(saveManager).AsSingle();
+        Container.Bind<AdsManager>().FromInstance(adsManager).AsSingle();
+        Container.Bind<LanguageManager>().FromInstance(languageManager).AsSingle();
+        Container.Bind<AudioManager>().FromInstance(audioManager).AsSingle();
 
-        Container.Bind<GameManager>().FromInstance(gameManager).AsSingle().NonLazy();
-        Container.Bind<LevelManager>().FromInstance(levelManager).AsSingle().NonLazy();
+        Container.Bind<GameManager>().FromInstance(gameManager).AsSingle();
+        Container.Bind<LevelManager>().FromInstance(levelManager).AsSingle();
 
-        Container.Bind<UIGameMain>().FromInstance(uiGameMain).AsSingle().NonLazy();
-        Container.Bind<UIInGame>().FromInstance(uiInGame).AsSingle().NonLazy();
-        Container.Bind<UIGameFinish>().FromInstance(uiGameFinish).AsSingle().NonLazy();
+        Container.Bind<UIGameMain>().FromInstance(uiGameMain).AsSingle();
+        Container.Bind<UIInGame>().FromInstance(uiInGame).AsSingle();
+        Container.Bind<UIGameFinish>().FromInstance(uiGameFinish).AsSingle();
     }
 }

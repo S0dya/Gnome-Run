@@ -129,7 +129,7 @@ public class UIGameMain : SubjectMonoBehaviour
         Settings.ShopUnlockedCharacters.Add(randomI);
         charactersVisual[randomI].UnlockCharacter();
     }
-    public void OnShopWatchAdButton() =>_adsManager.ShowRewardAd(OnShopRewardAdWatched);
+    public void OnShopWatchAdButton() => _adsManager.ShowRewardAd(OnShopRewardAdWatched);
     public void OnCloseShopButton()
     {
         ShopUIObj.SetActive(false);
@@ -164,7 +164,7 @@ public class UIGameMain : SubjectMonoBehaviour
     //main methods
     public void SetMoney() => moneyText.text = Math.Min(Settings.MoneyAmount, 999999).ToString();
     public void SetLevel() =>
-        curLevelText.text = _languageManager.GetLocalizedString("Level") + " " + Settings.CurrentLevel.ToString();
+        curLevelText.text = _languageManager.GetLocalizedString("Level") + " " + (Settings.CurrentLevel + 1).ToString();
 
     public void RerwardPlayerForWatchingAd()
     {

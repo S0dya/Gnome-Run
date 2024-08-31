@@ -68,7 +68,7 @@ namespace Saving
 
             for (int i = 0; i < keys.Length; i++)
             {
-                result.Add(keys[i], values[i]);
+                if (!result.ContainsKey(keys[i])) result.Add(keys[i], values[i]);
             }
 
             return result;

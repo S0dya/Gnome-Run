@@ -41,7 +41,7 @@ public class UIGameFinish : SubjectMonoBehaviour
     public void SetProgressOnVictory(int moneyAmount)
     {
         moneyAmountText.text = moneyAmount.ToString();
-        levelIndexText.text = _languageManager.GetLocalizedString("Level") + _levelManager.CurrentLevelIndex.ToString();
+        levelIndexText.text = _languageManager.GetLocalizedString("Level") + " " + _levelManager.CurrentLevelIndex.ToString();
     }
 
     public void OnWatchRewardAdButton()
