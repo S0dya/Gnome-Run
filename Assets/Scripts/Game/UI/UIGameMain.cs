@@ -163,14 +163,12 @@ public class UIGameMain : SubjectMonoBehaviour
 
     //main methods
     public void SetMoney() => moneyText.text = Math.Min(Settings.MoneyAmount, 999999).ToString();
-    public void SetLevel() =>
-        curLevelText.text = _languageManager.GetLocalizedString("Level") + " " + (Settings.CurrentLevel + 1).ToString();
+    public void SetLevel() => curLevelText.text = _languageManager.GetLocalizedString("Level") + " " + (Settings.CurrentLevel + 1).ToString();
 
     public void RerwardPlayerForWatchingAd()
     {
         Settings.MoneyAmount += 1000; SetMoney();
     }
-
 
     //actions
 

@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.Tables;
+
 #if UNITY_WEBGL
 using YG;
 #endif
@@ -11,6 +13,8 @@ public class LanguageManager : MonoBehaviour
 {
     [SerializeField] private string[] languages;
     [SerializeField] private LocalizationTable localizationTable;
+
+    [SerializeField] private AdditionalKVLocalization[] additionalKVLocalizations;
 
     private Coroutine _changeLanguageCoroutine;
 
@@ -45,9 +49,7 @@ public class LanguageManager : MonoBehaviour
 
     public string GetLocalizedString(string key)
     {
-        var stringTable = LocalizationSettings.StringDatabase.GetTable(localizationTable.TableCollectionName);
-
-        return stringTable.GetEntry(key).GetLocalizedString();
+        return additionalKVLocalizations.First(x => x.LocalizationKey == key).LocalizationValues[Settings.LanguageIndex];
     }
 
     IEnumerator ChangeLanguageCoroutine(int localeId)
@@ -58,4 +60,13 @@ public class LanguageManager : MonoBehaviour
         _changeLanguageCoroutine = null;
         Observer.OnHandleEvent(EventEnum.LanguageChanged);
     }
+
+
+    [System.Serializable]
+    class AdditionalKVLocalization
+    {
+        [SerializeField] public string LocalizationKey;
+        [SerializeField] public string[] LocalizationValues;
+    }
 }
+

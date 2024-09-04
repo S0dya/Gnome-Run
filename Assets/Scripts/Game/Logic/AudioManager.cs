@@ -39,7 +39,6 @@ public class AudioManager : SubjectMonoBehaviour
     private Dictionary<SoundEventEnum, EventInstance> _enumInstancesDict = new();
     private Dictionary<EventEnum, EventInstance> _eventInstancesDict = new();
 
-    //initialization
     public void Init()
     {
         foreach (var kvSound in kvSounds) _enumInstancesDict.Add(kvSound.SoundEvent, CreateInstance(kvSound.Sound));
@@ -54,7 +53,7 @@ public class AudioManager : SubjectMonoBehaviour
         return RuntimeManager.CreateInstance(sound);
     }
 
-    //main methods
+    //main 
     public void PlayOneShot(SoundEventEnum soundEventEnum)
     {
         if (Settings.HasSound) _enumInstancesDict[soundEventEnum].start();
@@ -69,8 +68,21 @@ public class AudioManager : SubjectMonoBehaviour
     //settings
     public void ToggleSound(bool toggle)
     {
-        RuntimeManager.GetBus("bus:/").setVolume(toggle ? 1 : 0);
+        ToggleSetBus("bus:/", toggle);
 
         levelMusic.enabled = toggle;
     }
+
+    //other
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        if (levelMusic.enabled) ToggleSetBus("bus:/", pauseStatus);
+    }
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        if (levelMusic.enabled) ToggleSetBus("bus:/", hasFocus);
+    }
+
+    private void ToggleSetBus(string busName, bool toggle) => RuntimeManager.GetBus(busName).setVolume(toggle ? 1 : 0);
+
 }
