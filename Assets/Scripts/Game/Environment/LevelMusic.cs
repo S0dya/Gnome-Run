@@ -11,6 +11,8 @@ public class LevelMusic : SubjectMonoBehaviour
         Init(new Dictionary<EventEnum, Action>
         {
             { EventEnum.LevelStarted, OnStartLevel},
+            { EventEnum.LevelFinishedVictory, OnFinishLevel},
+            { EventEnum.LevelFinishedGameover, OnFinishLevel},
             { EventEnum.LevelRestarted, OnFinishLevel},
         });
         

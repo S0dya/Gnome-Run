@@ -10,6 +10,8 @@ public enum EventEnum
     ShopClosed,
 
     LanguageChanged,
+    AdOpened,
+    AdClosed,
 }
 
 public static class Observer

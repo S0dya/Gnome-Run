@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
+using System;
 
 public enum SoundEventEnum
 {
@@ -46,8 +47,14 @@ public class AudioManager : SubjectMonoBehaviour
 
         ToggleSound(Settings.HasSound);
         levelMusic.Init(_enumInstancesDict[SoundEventEnum.Music]);
-    }
 
+        Init(new Dictionary<EventEnum, Action>
+        {
+            { EventEnum.AdOpened, OnAdOpened},
+            { EventEnum.AdClosed, OnAdClosed},
+        });
+
+    }
     private EventInstance CreateInstance(EventReference sound)
     {
         return RuntimeManager.CreateInstance(sound);
@@ -63,7 +70,12 @@ public class AudioManager : SubjectMonoBehaviour
         if (Settings.HasSound && _eventInstancesDict.ContainsKey(enumAction)) _eventInstancesDict[enumAction].start();
     }
 
-    protected override void OnEvent(EventEnum actionEnum) => PlayOneShot(actionEnum);
+    protected override void OnEvent(EventEnum actionEnum)
+    {
+        base.OnEvent(actionEnum);
+
+        PlayOneShot(actionEnum);
+    }
 
     //settings
     public void ToggleSound(bool toggle)
@@ -73,14 +85,25 @@ public class AudioManager : SubjectMonoBehaviour
         levelMusic.enabled = toggle;
     }
 
-    //other
-    private void OnApplicationPause(bool pauseStatus)
+    //events
+    private void OnAdOpened()
     {
-        if (levelMusic.enabled) ToggleSetBus("bus:/", pauseStatus);
+        ToggleSetBus("bus:/", false);
     }
-    private void OnApplicationFocus(bool hasFocus)
+    private void OnAdClosed()
     {
-        if (levelMusic.enabled) ToggleSetBus("bus:/", hasFocus);
+        ToggleSetBus("bus:/", true);
+    }
+
+    //other
+
+    private void OnApplicationPause(bool value)
+    {
+        if (levelMusic.enabled) ToggleSetBus("bus:/", !value);
+    }
+    private void OnApplicationFocus(bool value)
+    {
+        if (levelMusic.enabled) ToggleSetBus("bus:/", value);
     }
 
     private void ToggleSetBus(string busName, bool toggle) => RuntimeManager.GetBus(busName).setVolume(toggle ? 1 : 0);

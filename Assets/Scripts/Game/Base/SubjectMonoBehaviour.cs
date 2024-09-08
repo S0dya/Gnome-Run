@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public abstract class SubjectMonoBehaviour : MonoBehaviourExtended
 {
-    private Dictionary<EventEnum, Action> _eventActionDict = new();
+    public Dictionary<EventEnum, Action> _eventActionDict = new();
 
     protected virtual void Init(Dictionary<EventEnum, Action> eventActionDict) => _eventActionDict = eventActionDict;
 

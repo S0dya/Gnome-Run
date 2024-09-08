@@ -17,6 +17,7 @@ namespace AdsSystem
 #endif
 
         public event Action OnRewardAdCompleted;
+        public event Action OnAdCompleted;
 
         public UnityAds()
         {
@@ -57,7 +58,6 @@ namespace AdsSystem
         {
             Debug.Log($"OnUnityAdsShowFailure: [{error}]: {message}");
         }
-
         public void OnUnityAdsShowStart(string placementId)
         {
         }
@@ -69,7 +69,8 @@ namespace AdsSystem
         public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState)
         {
             if (showCompletionState == UnityAdsShowCompletionState.COMPLETED && placementId == _rewardedVideo) 
-                OnRewardAdCompleted?.Invoke(); 
+                OnRewardAdCompleted?.Invoke();
+            else if (placementId == _interstitialVideo) OnAdCompleted?.Invoke();
         }
         #endregion
 
