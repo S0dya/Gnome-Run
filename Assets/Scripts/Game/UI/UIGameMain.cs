@@ -23,7 +23,6 @@ public class UIGameMain : SubjectMonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private Image vibrationImage;
-    [SerializeField] private GameObject vibrationField;
     [SerializeField] private Image soundImage;
     [SerializeField] private Image languageImage;
 
@@ -75,14 +74,10 @@ public class UIGameMain : SubjectMonoBehaviour
         _tutorialInitialPos = tutorialTransform.anchoredPosition;
         AnimateTutorial();
 
-#if UNITY_WEBGL
-        vibrationField.SetActive(false);
-#endif
-
         //settings
         SetSettingImage(vibrationImage, vibrationSprites, Settings.HasVibration);
         SetSettingImage(soundImage, soundSprites, Settings.HasSound);
-        if (Settings.LanguageIndex != -1) SetSettingLanguageImage();
+        if (Settings.LanguageIndex != -1) _languageManager.ChangeLanguageIfPossible(Settings.LanguageIndex);
 
         //shop
         foreach (int i in Settings.ShopUnlockedCharacters)
@@ -154,7 +149,7 @@ public class UIGameMain : SubjectMonoBehaviour
     }
     public void OnSettingsLanguageButton()
     {
-        if (_languageManager.ChangeLanguageIfPossible()) SetSettingLanguageImage();
+        if (_languageManager.ChangeLanguageIfPossible(Settings.LanguageIndex == 1 ? 0 : Settings.LanguageIndex + 1)) SetSettingLanguageImage();
     }
     public void OnCloseSettingsButton()
     {

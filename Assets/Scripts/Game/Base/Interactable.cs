@@ -1,4 +1,5 @@
 using UnityEngine;
+using YG;
 
 public interface IInteractable
 {
@@ -39,7 +40,7 @@ public class Interactable : MonoBehaviour, IInteractable, ICharacterRelatedChang
 
     public virtual void CharacterChanged(int characterIndex)
     {
-        if (setsPlayerMoneyInfluence && _curCharacterRelatedObjI != -1) characterRelatedObjs[_curCharacterRelatedObjI].SetActive(false);
+        if (_curCharacterRelatedObjI != -1) characterRelatedObjs[_curCharacterRelatedObjI].SetActive(false);
         _curCharacterRelatedObjI = characterIndex;
         characterRelatedObjs[_curCharacterRelatedObjI].SetActive(true);
     }

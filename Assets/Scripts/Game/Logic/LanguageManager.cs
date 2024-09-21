@@ -11,20 +11,26 @@ using YG;
 
 public class LanguageManager : MonoBehaviour
 {
-    [SerializeField] private string[] languages;
+    [SerializeField] private string[] languages = new string[] { "en", "ru" };
     [SerializeField] private LocalizationTable localizationTable;
 
     [SerializeField] private AdditionalKVLocalization[] additionalKVLocalizations;
 
     private Coroutine _changeLanguageCoroutine;
 
-    private void Start()
+    public void Init()
     {
         if (Settings.LanguageIndex == -1)
         {
 #if UNITY_WEBGL
-            YandexGame.LanguageRequest();
-            Settings.LanguageIndex = Array.IndexOf(languages, YandexGame.lang);
+            if (Settings.CurrentPlatformType == Settings.PlatformType.Yandex)
+            {
+                YandexGame.LanguageRequest();
+
+                if (Array.Exists(languages, x => x == YandexGame.lang)) Settings.LanguageIndex = Array.IndexOf(languages, YandexGame.lang);
+                else Settings.LanguageIndex = 0;
+            }
+            else Settings.LanguageIndex = 0;
 #endif
 #if UNITY_ANDROID || UNITY_IOS
             string languageCode = Application.systemLanguage == SystemLanguage.Russian ? "ru" : "en";
@@ -33,13 +39,13 @@ public class LanguageManager : MonoBehaviour
         }
     }
 
-    public bool ChangeLanguageIfPossible()
+    public bool ChangeLanguageIfPossible(int i)
     {
         bool canChangeLanguage = _changeLanguageCoroutine == null;
 
         if (canChangeLanguage)
         {
-            Settings.LanguageIndex = Settings.LanguageIndex == languages.Length - 1 ? 0 : Settings.LanguageIndex + 1;
+            Settings.LanguageIndex = i;
 
             _changeLanguageCoroutine = StartCoroutine(ChangeLanguageCoroutine(Settings.LanguageIndex));
         }

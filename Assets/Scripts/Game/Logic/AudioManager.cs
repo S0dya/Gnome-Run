@@ -3,6 +3,8 @@ using UnityEngine;
 using FMODUnity;
 using FMOD.Studio;
 using System;
+using YG;
+using System.Collections;
 
 public enum SoundEventEnum
 {
@@ -36,24 +38,47 @@ public class AudioManager : SubjectMonoBehaviour
 
     [Header("Other")]
     [SerializeField] private LevelMusic levelMusic;
+    [SerializeField] private Bank banks;
 
     private Dictionary<SoundEventEnum, EventInstance> _enumInstancesDict = new();
     private Dictionary<EventEnum, EventInstance> _eventInstancesDict = new();
 
-    public void Init()
+    private void Awake()
+    {
+        StartCoroutine(LoadGameCoroutine());
+    }
+    IEnumerator LoadGameCoroutine()
+    {
+        while (!RuntimeManager.HaveAllBanksLoaded)
+        {
+            yield return null;
+        }
+
+        while (RuntimeManager.AnySampleDataLoading())
+        {
+            yield return null;
+        }
+
+        InitAudio();
+    }
+    private void InitAudio()
     {
         foreach (var kvSound in kvSounds) _enumInstancesDict.Add(kvSound.SoundEvent, CreateInstance(kvSound.Sound));
         foreach (var evSound in evSounds) _eventInstancesDict.Add(evSound.eventEnum, CreateInstance(evSound.Sound));
 
-        ToggleSound(Settings.HasSound);
         levelMusic.Init(_enumInstancesDict[SoundEventEnum.Music]);
 
         Init(new Dictionary<EventEnum, Action>
         {
             { EventEnum.AdOpened, OnAdOpened},
             { EventEnum.AdClosed, OnAdClosed},
-        });
 
+            { EventEnum.LevelStarted, OnLevelStart},
+        });
+    }
+    public void Init()
+    {
+        ToggleSound(Settings.HasSound);
     }
     private EventInstance CreateInstance(EventReference sound)
     {
@@ -80,32 +105,34 @@ public class AudioManager : SubjectMonoBehaviour
     //settings
     public void ToggleSound(bool toggle)
     {
-        ToggleSetBus("bus:/", toggle);
+        RuntimeManager.GetBus("bus:/").setVolume(toggle ? 1 : 0);
 
         levelMusic.enabled = toggle;
     }
 
     //events
-    private void OnAdOpened()
-    {
-        ToggleSetBus("bus:/", false);
-    }
-    private void OnAdClosed()
-    {
-        ToggleSetBus("bus:/", true);
-    }
+    private void OnAdOpened() => ToggleResumeSound(false);
+    private void OnAdClosed() => ToggleResumeSound(true);
+    private void OnLevelStart() => ToggleResumeSound(true);
 
     //other
 
     private void OnApplicationPause(bool value)
     {
-        if (levelMusic.enabled) ToggleSetBus("bus:/", !value);
+        if (Settings.HasSound) ToggleResumeSound(!value);
     }
     private void OnApplicationFocus(bool value)
     {
-        if (levelMusic.enabled) ToggleSetBus("bus:/", value);
+        if (Settings.HasSound) ToggleResumeSound(value);
     }
+    
+    public void ToggleResumeSound(bool toggle)
+    {
+        RuntimeManager.PauseAllEvents(!toggle);
 
-    private void ToggleSetBus(string busName, bool toggle) => RuntimeManager.GetBus(busName).setVolume(toggle ? 1 : 0);
+        if (toggle) RuntimeManager.CoreSystem.mixerResume();
+        else RuntimeManager.CoreSystem.mixerSuspend();
 
+        RuntimeManager.MuteAllEvents(!toggle);
+    }
 }

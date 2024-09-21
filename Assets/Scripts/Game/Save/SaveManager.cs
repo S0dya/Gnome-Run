@@ -15,6 +15,8 @@ namespace Saving
 
         private LevelManager _levelManager;
 
+        private bool _canSave;
+
         [Inject]
         public void Construct(LevelManager levelManager)
         {
@@ -24,22 +26,27 @@ namespace Saving
         public void Init()
         {
 #if UNITY_WEBGL
-            _saveSystem = new YandexSave();
+            if (Settings.CurrentPlatformType == Settings.PlatformType.Yandex)
+                _saveSystem = new YandexSave();
 #else
             _saveSystem = new PrefsSave();
-      
-#endif
 
             Load();
+#endif
+            //YandexGame.ResetSaveProgress(); YandexGame.SaveProgress();
         }
+
 #if UNITY_WEBGL
-        private void OnEnable()
+        void OnEnable()
         {
-            if (YandexGame.SDKEnabled) YandexGame.GetDataEvent += Load;
+            if (Settings.CurrentPlatformType == Settings.PlatformType.Yandex)
+                YandexGame.GetDataEvent += Load;
+
         }
-        private void OnDisable()
+        void OnDisable()
         {
-            if (YandexGame.SDKEnabled) YandexGame.GetDataEvent -= Load;
+            if (Settings.CurrentPlatformType == Settings.PlatformType.Yandex)
+                YandexGame.GetDataEvent -= Load;
         }
 #endif
 
@@ -55,8 +62,15 @@ namespace Saving
         }
 
 
-        public void Save() => _saveSystem.Save(GetGameData());
-        public void Load() => SetGameData(_saveSystem.Load());
+        public void Save()
+        {
+            if (_canSave) _saveSystem?.Save(GetGameData());
+        }
+        public void Load()
+        {
+            SetGameData(_saveSystem?.Load());
+            _canSave = true;
+        }
 
         private GameData GetGameData()
         {
@@ -85,7 +99,7 @@ namespace Saving
         }
         private void SetGameData(GameData gameData)
         {
-            if (gameData == null) return;
+            if (gameData == null || gameData.IntDict == null || gameData.IntDict.Count == 0) return;
 
             //game
             gameData.IntDict.TryGetValue(Settings.MoneyAmount_Key, out Settings.MoneyAmount);

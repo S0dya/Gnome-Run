@@ -1,4 +1,5 @@
 using AdsSystem;
+using Saving;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -18,14 +19,16 @@ public class UIGameFinish : SubjectMonoBehaviour
     private GameManager _gameManager;
     private AdsManager _adsManager;
     private LanguageManager _languageManager;
+    private SaveManager _saveManager;
 
     [Inject]
-    public void Constuct(LevelManager levelManager, GameManager gameManager, AdsManager adsManager, LanguageManager languageManager)
+    public void Constuct(LevelManager levelManager, GameManager gameManager, AdsManager adsManager, LanguageManager languageManager, SaveManager saveManager)
     {
         _levelManager = levelManager;
         _gameManager = gameManager;
         _adsManager = adsManager;
         _languageManager = languageManager;
+        _saveManager = saveManager;
     }
 
     private void Awake()
@@ -58,6 +61,8 @@ public class UIGameFinish : SubjectMonoBehaviour
         _gameManager.AddEarnedMoney();
 
         victoryFinish.Close();
+
+        _saveManager.Save();
     }
     public void OnRestartGameButton()
     {
@@ -72,6 +77,8 @@ public class UIGameFinish : SubjectMonoBehaviour
         victoryFinish.ToggleRewardAdButton(false);
 
         _gameManager.MultiplyEarnedMoney(3);
+
+        OnNextLevelButton();
     }
 
     //events

@@ -10,7 +10,7 @@ namespace AdsSystem
         public event Action OnRewardAdCompleted;
         public event Action OnAdCompleted;
 
-        public YandexAds(YandexGame sdk)
+        public YandexAds()
         {
             YandexGame.RewardVideoEvent += OnRewardAdClosed;
             YandexGame.CloseFullAdEvent += OnAdCompleted;

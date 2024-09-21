@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using Zenject;
 using System.Collections.Generic;
+using YG;
 
 public class GameManager : SubjectMonoBehaviour
 {
@@ -30,6 +31,13 @@ public class GameManager : SubjectMonoBehaviour
     }
     private void Awake()
     {
+#if UNITY_WEBGL
+        if (Settings.CurrentPlatformType == Settings.PlatformType.Yandex)
+            Settings.IsMobileDevice = YandexGame.EnvironmentData.deviceType == "mobile";
+
+        Debug.Log("DEVICE IS MOBILE : " + (Settings.CurrentPlatformType == Settings.PlatformType.Mobile
+            || (Settings.CurrentPlatformType == Settings.PlatformType.Yandex && Settings.IsMobileDevice)));
+#endif
 
         Init(new Dictionary<EventEnum, Action>
         {
@@ -49,10 +57,7 @@ public class GameManager : SubjectMonoBehaviour
     public void ChangeMoneyAmount(int value)
     {
 #if UNITY_ANDROID || UNITY_IOS
-        if (Settings.HasVibration)
-        {
-            Handheld.Vibrate();
-        }
+        if (Settings.HasVibration) Handheld.Vibrate();
 #endif
 
         HandleChangeMoney(value);
@@ -126,7 +131,7 @@ public class GameManager : SubjectMonoBehaviour
     public void MultiplyEarnedMoney(int n)
     {
         currentMoneyAmount *= n;
-
+        Debug.Log(currentMoneyAmount);
         _uiGameFinish.SetProgressOnVictory(currentMoneyAmount);
     }
     public void AddEarnedMoney()

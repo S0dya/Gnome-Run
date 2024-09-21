@@ -40,24 +40,28 @@ public class PlayerMovement : MonoBehaviour
     {
         _inputs = new Inputs();
 
-#if UNITY_ANDROID || UNITY_IOS || UNITY_TVOS || UNITY_EDITOR
-        _inputs.InGame.MobileMove.performed += ctx => Move(ctx.ReadValue<Vector2>());
-#endif
-#if UNITY_WEBGL || UNITY_EDITOR
-        _inputs.InGame.PCMove.performed += ctx => Move(ctx.ReadValue<Vector2>());
-#endif
+        if (Settings.CurrentPlatformType == Settings.PlatformType.Mobile || Settings.IsMobileDevice)
+        {
+            _inputs.InGame.MobileMove.performed += ctx => Move(ctx.ReadValue<Vector2>());
+        }
+        else
+        {
+            _inputs.InGame.PCMove.performed += ctx => Move(ctx.ReadValue<Vector2>());
+        }
 
         _inputs.Enable();
     }
 
     private void OnDisable()
     {
-#if UNITY_ANDROID || UNITY_IOS || UNITY_TVOS || UNITY_EDITOR
-        _inputs.InGame.MobileMove.performed -= ctx => Move(ctx.ReadValue<Vector2>());
-#endif
-#if UNITY_WEBGL || UNITY_EDITOR
-        _inputs.InGame.PCMove.performed -= ctx => Move(ctx.ReadValue<Vector2>());
-#endif
+        if (Settings.CurrentPlatformType == Settings.PlatformType.Mobile || Settings.IsMobileDevice)
+        {
+            _inputs.InGame.MobileMove.performed -= ctx => Move(ctx.ReadValue<Vector2>());
+        }
+        else
+        {
+            _inputs.InGame.PCMove.performed -= ctx => Move(ctx.ReadValue<Vector2>());
+        }
 
         _inputs.Disable();
 
@@ -66,13 +70,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-#if UNITY_ANDROID || UNITY_IOS || UNITY_TVOS
-        _curMovementInputSensitivity = mobileMovementInputSensitivity;
-        _curMovementLerpSensitivity = mobileMovementLerpSensitivity;
-#else
-        _curMovementInputSensitivity = movementInputSensitivity;
-        _curMovementLerpSensitivity = movementLerpSensitivity;
-#endif
+        if (Settings.CurrentPlatformType == Settings.PlatformType.Mobile || Settings.IsMobileDevice)
+        {
+            _curMovementInputSensitivity = mobileMovementInputSensitivity;
+            _curMovementLerpSensitivity = mobileMovementLerpSensitivity;
+        }
+        else
+        {
+            _curMovementInputSensitivity = movementInputSensitivity;
+            _curMovementLerpSensitivity = movementLerpSensitivity; 
+        }
     }
 
     private void Update()

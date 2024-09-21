@@ -8,37 +8,38 @@ namespace AdsSystem
 {
     public class AdsManager : MonoBehaviour
     {
-#if UNITY_WEBGL
-        [SerializeField] private YandexGame yandexSdk;
-#endif
-
         private IAdsService _adsService;
 
         private Action _rewardAction;
         private Action _adClosedAction;
 
+        private bool _takesBreakFromAd;
+
         public void Init()
         {
 #if UNITY_WEBGL
-            _adsService = new YandexAds(yandexSdk);
+            if (Settings.CurrentPlatformType == Settings.PlatformType.Yandex)
+                _adsService = new YandexAds();
 #else
             _adsService = new UnityAds();
 #endif
 
+            if (_adsService == null) return;
             _adsService.OnRewardAdCompleted += OnRewardAdCompleted;
-            _adsService.OnAdCompleted += OnAdCompleted;
-        }
-
-        private void Start()
-        {
-            ShowAd();
+            _adsService.OnAdCompleted += _adClosedAction;
         }
 
         public void ShowAd()
         {
-            Observer.OnHandleEvent(EventEnum.AdOpened);
+            if (_takesBreakFromAd)
+            {
+                _takesBreakFromAd = false;
+                return;
+            }
 
-            _adsService.ShowAd();
+            Observer.OnHandleEvent(EventEnum.AdOpened); 
+
+            _adsService?.ShowAd();
         }
         public void ShowRewardAd(Action action)
         {
@@ -46,11 +47,13 @@ namespace AdsSystem
 
             _rewardAction = action;
 
-            _adsService.ShowRewardedAd();
+            _adsService?.ShowRewardedAd();
         }
 
         private void OnRewardAdCompleted()
         {
+            _takesBreakFromAd = true;
+
             _rewardAction?.Invoke();
 
             OnAdCompleted();

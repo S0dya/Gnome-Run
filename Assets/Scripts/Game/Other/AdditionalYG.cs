@@ -18,6 +18,11 @@ public class AdditionalYG : SubjectMonoBehaviour
         });
     }
 
+    private void Start()
+    {
+        YandexGame.InitGRA();
+    }
+
     private void OnStartLevel()
     {
         YandexGame.GameplayStart();

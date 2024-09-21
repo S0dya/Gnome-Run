@@ -2,7 +2,11 @@ using System.Collections.Generic;
 
 public static class Settings
 {
-    
+    public static PlatformType CurrentPlatformType = PlatformType.Yandex;
+    public enum PlatformType { Mobile = 0, WebGL = 1, Yandex = 2 }
+
+    public static bool IsMobileDevice;
+
     //game
     public static int MoneyAmount;
 
